@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Isabelle Bueno Ribeiro Vital | Portfólio UGC Creator</title>
+<meta name="description" content="Portfólio de Isabelle Bueno Ribeiro Vital, UGC Creator. Vídeos autênticos com toque de criatividade para marcas de beleza, moda, casa, pet e muito mais.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ===== RESET E BASE ===== */
+  :root{
+    --dark: #121212;
+    --dark-2: #1a1a1a;
+    --dark-3: #202020;
+    --pink: #e91e8c;
+    --lime: #b5e843;
+    --cream: #f7efe2;
+    --glass-bg: rgba(255,255,255,0.05);
+    --glass-border: rgba(255,255,255,0.12);
+    --radius: 18px;
+    --font-head: 'Montserrat', sans-serif;
+    --font-body: 'Poppins', sans-serif;
+    --nav-height: 76px;
+  }
+
+  *,*::before,*::after{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin: 0;
+    background: var(--dark);
+    color: var(--cream);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  img,svg{ max-width: 100%; display: block; }
+  a{ color: inherit; text-decoration: none; }
+  ul{ list-style: none; margin: 0; padding: 0; }
+  h1,h2,h3,h4{ font-family: var(--font-head); margin: 0; line-height: 1.15; }
+  section{ scroll-margin-top: var(--nav-height); }
+  .container{ max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+  :focus-visible{
+    outline: 3px solid var(--lime);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .skip-link{
+    position: absolute;
+    left: -999px;
+    top: 0;
+    background: var(--lime);
+    color: var(--dark);
+    padding: 10px 18px;
+    font-weight: 700;
+    z-index: 999;
+    border-radius: 0 0 8px 0;
+  }
+  .skip-link:focus{ left: 0; }
+
+  .section-pad{ padding: 100px 0; }
+  @media (max-width: 768px){ .section-pad{ padding: 70px 0; } }
+
+  .eyebrow{
+    display: inline-block;
+    font-family: var(--font-head);
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    color: var(--lime);
+    margin-bottom: 12px;
+  }
+  .section-title{
+    font-size: clamp(1.9rem, 4vw, 2.8rem);
+    font-weight: 800;
+    color: var(--cream);
+    margin-bottom: 14px;
+  }
+  .section-title span{ color: var(--pink); }
+  .section-intro{
+    max-width: 640px;
+    color: rgba(247,239,226,0.75);
+    font-size: 1.02rem;
+    margin-bottom: 48px;
+  }
+
+  /* ===== GLASS CARD ===== */
+  .glass{
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: var(--radius);
+  }
+
+  /* ===== BOTOES ===== */
+  .btn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 30px;
+    border-radius: 100px;
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+    white-space: nowrap;
+  }
+  .btn:hover{ transform: translateY(-3px); }
+  .btn-primary{
+    background: var(--lime);
+    color: var(--dark);
+    box-shadow: 0 8px 24px rgba(181,232,67,0.25);
+  }
+  .btn-primary:hover{ box-shadow: 0 12px 28px rgba(181,232,67,0.4); }
+  .btn-outline{
+    background: transparent;
+    border-color: var(--pink);
+    color: var(--cream);
+  }
+  .btn-outline:hover{ background: rgba(233,30,140,0.15); }
+  .btn-pink{
+    background: var(--pink);
+    color: var(--cream);
+    box-shadow: 0 8px 24px rgba(233,30,140,0.3);
+  }
+  .btn-block{ width: 100%; }
+
+  /* ===== NAV ===== */
+  .navbar{
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 500;
+    height: var(--nav-height);
+    display: flex;
+    align-items: center;
+    background: rgba(18,18,18,0.72);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .nav-inner{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-logo{
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 1.15rem;
+    color: var(--cream);
+    letter-spacing: 0.5px;
+  }
+  .nav-logo span{ color: var(--lime); }
+  .nav-links{
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+  .nav-links a{
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: rgba(247,239,226,0.85);
+    position: relative;
+    padding: 4px 2px;
+  }
+  .nav-links a:hover{ color: var(--lime); }
+  .nav-cta{
+    background: var(--pink);
+    color: var(--cream) !important;
+    padding: 10px 22px;
+    border-radius: 100px;
+    font-weight: 700 !important;
+  }
+  .hamburger{
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 42px;
+    height: 42px;
+    background: transparent;
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .hamburger span{
+    width: 20px;
+    height: 2px;
+    background: var(--cream);
+    margin: 0 auto;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+  .hamburger.active span:nth-child(1){ transform: translateY(7px) rotate(45deg); }
+  .hamburger.active span:nth-child(2){ opacity: 0; }
+  .hamburger.active span:nth-child(3){ transform: translateY(-7px) rotate(-45deg); }
+
+  @media (max-width: 860px){
+    .hamburger{ display: flex; }
+    .nav-links{
+      position: fixed;
+      top: var(--nav-height);
+      left: 0; right: 0;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+      background: rgba(18,18,18,0.97);
+      backdrop-filter: blur(16px);
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .nav-links.open{ max-height: 420px; }
+    .nav-links a{
+      width: 100%;
+      padding: 16px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .nav-cta{ margin: 16px 24px; text-align: center; }
+  }
+
+  /* ===== HERO ===== */
+  .hero{
+    padding: calc(var(--nav-height) + 60px) 0 60px;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 50px;
+    align-items: center;
+    min-height: 90vh;
+    position: relative;
+  }
+  .hero::before{
+    content: '';
+    position: absolute;
+    top: -100px; right: -150px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(233,30,140,0.25), transparent 70%);
+    z-index: -1;
+    pointer-events: none;
+  }
+  .hero::after{
+    content: '';
+    position: absolute;
+    bottom: -150px; left: -150px;
+    width: 450px; height: 450px;
+    background: radial-gradient(circle, rgba(181,232,67,0.18), transparent 70%);
+    z-index: -1;
+    pointer-events: none;
+  }
+  .hero-name{
+    font-size: clamp(2.4rem, 6vw, 4.3rem);
+    font-weight: 900;
+    letter-spacing: -1px;
+  }
+  .hero-name .highlight{ color: var(--lime); }
+  .hero-tagline{
+    margin-top: 20px;
+    font-size: clamp(1.05rem, 2vw, 1.3rem);
+    color: rgba(247,239,226,0.8);
+    max-width: 520px;
+  }
+  .hero-buttons{
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 34px;
+  }
+  .hero-stats{
+    display: flex;
+    gap: 36px;
+    margin-top: 56px;
+    flex-wrap: wrap;
+  }
+  .hero-stat-num{
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 2rem;
+    color: var(--pink);
+  }
+  .hero-stat-label{
+    font-size: 0.82rem;
+    color: rgba(247,239,226,0.65);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .hero-photo-wrap{ position: relative; }
+  .photo-block{
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    border-radius: 24px;
+    background: linear-gradient(145deg, var(--pink), #7a0f4f 45%, var(--dark-2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: rgba(247,239,226,0.85);
+    font-weight: 600;
+    padding: 20px;
+    border: 1px solid var(--glass-border);
+    position: relative;
+    overflow: hidden;
+  }
+  .photo-block::after{
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(45deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 14px);
+  }
+  .photo-block-text{ position: relative; z-index: 1; font-size: 0.95rem; }
+
+  @media (max-width: 900px){
+    .hero{ grid-template-columns: 1fr; text-align: left; padding-top: calc(var(--nav-height) + 40px); }
+    .hero-photo-wrap{ order: -1; max-width: 320px; margin: 0 auto; }
+  }
+
+  /* ===== FAIXA DE MARCAS ===== */
+  .brand-strip{
+    border-top: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 22px 0;
+    background: var(--dark-2);
+    overflow: hidden;
+  }
+  .marquee{
+    display: flex;
+    width: max-content;
+    gap: 48px;
+    animation: marquee-scroll 60s linear infinite;
+  }
+  .marquee span{
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: rgba(247,239,226,0.5);
+    white-space: nowrap;
+  }
+  @keyframes marquee-scroll{
+    from{ transform: translateX(0); }
+    to{ transform: translateX(-50%); }
+  }
+
+  /* ===== SOBRE ===== */
+  .about-grid{
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 56px;
+    align-items: center;
+  }
+  .about-photo{ aspect-ratio: 4/5; }
+  .promise-list{ margin: 26px 0; display: flex; flex-direction: column; gap: 14px; }
+  .promise-item{
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-weight: 500;
+  }
+  .promise-check{
+    flex-shrink: 0;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--lime);
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.85rem;
+    margin-top: 2px;
+  }
+  .signature{
+    margin-top: 30px;
+    font-family: 'Montserrat', cursive;
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--pink);
+    font-weight: 700;
+  }
+  @media (max-width: 860px){
+    .about-grid{ grid-template-columns: 1fr; }
+    .about-photo{ max-width: 320px; margin: 0 auto; }
+  }
+
+  /* ===== DESTAQUES ===== */
+  .highlights-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+  @media (max-width: 900px){
+    .highlights-grid{ grid-template-columns: 1fr; max-width: 380px; margin: 0 auto; }
+  }
+  .highlight-card{
+    display: block;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--dark-3);
+    border: 1px solid var(--glass-border);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .highlight-card:hover{
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(233,30,140,0.2);
+  }
+  .highlight-cover{
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    background: linear-gradient(160deg, var(--pink), var(--dark) 70%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .highlight-cover::before{
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 20%, rgba(181,232,67,0.3), transparent 60%);
+  }
+  .highlight-cover-text{
+    position: relative;
+    z-index: 1;
+    color: rgba(247,239,226,0.85);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 0 20px;
+  }
+  .play-btn{
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: rgba(247,239,226,0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: transform 0.25s ease, background 0.25s ease;
+  }
+  .highlight-card:hover .play-btn{ transform: translate(-50%,-50%) scale(1.1); background: var(--lime); }
+  .play-btn svg{ width: 22px; height: 22px; margin-left: 3px; }
+  .highlight-info{ padding: 20px; }
+  .highlight-stat{
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 1.6rem;
+    color: var(--lime);
+  }
+  .highlight-stat-label{
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(247,239,226,0.6);
+    margin-bottom: 14px;
+  }
+  .highlight-title{ font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
+  .highlight-context{ font-size: 0.88rem; color: rgba(247,239,226,0.65); }
+
+  /* ===== TRABALHOS / FILTROS ===== */
+  .filter-bar{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+  .filter-btn{
+    padding: 9px 20px;
+    border-radius: 100px;
+    border: 1px solid var(--glass-border);
+    background: transparent;
+    color: rgba(247,239,226,0.75);
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: capitalize;
+  }
+  .filter-btn:hover{ border-color: var(--lime); color: var(--cream); }
+  .filter-btn.active{
+    background: var(--lime);
+    border-color: var(--lime);
+    color: var(--dark);
+    font-weight: 700;
+  }
+  .works-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+  }
+  .work-card{
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+  .work-card:hover{ transform: translateY(-4px); border-color: var(--pink); }
+  .work-cover{
+    aspect-ratio: 4/3;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--dark-2), var(--pink) 130%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(247,239,226,0.7);
+    font-size: 0.8rem;
+    text-align: center;
+    padding: 12px;
+    margin-bottom: 6px;
+  }
+  .work-niche-tag{
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--lime);
+    font-weight: 700;
+  }
+  .work-brand{ font-family: var(--font-head); font-weight: 700; font-size: 1.05rem; }
+  .work-desc{ font-size: 0.85rem; color: rgba(247,239,226,0.65); }
+  .work-card[hidden]{ display: none; }
+
+  /* ===== SERVICOS ===== */
+  .services-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 26px;
+  }
+  @media (max-width: 900px){ .services-grid{ grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px){ .services-grid{ grid-template-columns: 1fr; } }
+  .service-card{
+    padding: 30px 26px;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .service-card:hover{ transform: translateY(-6px); box-shadow: 0 16px 34px rgba(0,0,0,0.35); }
+  .service-num{
+    font-family: var(--font-head);
+    font-weight: 900;
+    font-size: 1.8rem;
+    color: var(--pink);
+    opacity: 0.8;
+    margin-bottom: 14px;
+  }
+  .service-title{ font-size: 1.15rem; font-weight: 700; margin-bottom: 10px; }
+  .service-desc{ font-size: 0.9rem; color: rgba(247,239,226,0.68); }
+
+  /* ===== NUMEROS E DEPOIMENTOS ===== */
+  .metrics-grid{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 70px;
+  }
+  @media (max-width: 860px){ .metrics-grid{ grid-template-columns: repeat(2, 1fr); } }
+  .metric-card{
+    text-align: center;
+    padding: 34px 16px;
+  }
+  .metric-value{
+    font-family: var(--font-head);
+    font-weight: 900;
+    font-size: clamp(2rem, 4vw, 2.6rem);
+    color: var(--lime);
+  }
+  .metric-label{
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: rgba(247,239,226,0.65);
+  }
+
+  .subsection-title{
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 1.4rem;
+    margin-bottom: 24px;
+    color: var(--cream);
+  }
+  .campaigns-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    margin-bottom: 70px;
+  }
+  @media (max-width: 900px){ .campaigns-grid{ grid-template-columns: 1fr; } }
+  .campaign-card{ padding: 26px; border-left: 3px solid var(--pink); }
+  .campaign-brand{ font-weight: 700; font-family: var(--font-head); margin-bottom: 8px; }
+  .campaign-result{ color: var(--lime); font-weight: 700; font-size: 0.95rem; margin-bottom: 10px; }
+  .campaign-context{ font-size: 0.85rem; color: rgba(247,239,226,0.65); }
+
+  .testimonials-grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+  }
+  @media (max-width: 700px){ .testimonials-grid{ grid-template-columns: 1fr; } }
+  .testimonial-card{ padding: 26px; }
+  .testimonial-text{ font-size: 0.95rem; color: rgba(247,239,226,0.85); margin-bottom: 16px; font-style: italic; }
+  .testimonial-name{ font-weight: 700; font-family: var(--font-head); }
+  .testimonial-company{ font-size: 0.8rem; color: var(--pink); }
+
+  /* ===== CONTATO ===== */
+  .contact-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: flex-start;
+  }
+  @media (max-width: 860px){ .contact-grid{ grid-template-columns: 1fr; } }
+  .form-card{ padding: 34px; }
+  .field{ margin-bottom: 20px; display: flex; flex-direction: column; gap: 8px; }
+  .field label{ font-size: 0.85rem; font-weight: 600; color: rgba(247,239,226,0.8); }
+  .field input, .field textarea{
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    padding: 13px 14px;
+    color: var(--cream);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    resize: vertical;
+  }
+  .field input:focus, .field textarea:focus{ border-color: var(--lime); }
+  .contact-side{ display: flex; flex-direction: column; gap: 16px; }
+  .contact-link-card{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px;
+    transition: transform 0.25s ease, border-color 0.25s ease;
+  }
+  .contact-link-card:hover{ transform: translateX(6px); border-color: var(--lime); }
+  .contact-icon{
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--pink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .contact-icon svg{ width: 20px; height: 20px; fill: var(--cream); }
+  .contact-link-title{ font-weight: 700; }
+  .contact-link-value{ font-size: 0.82rem; color: rgba(247,239,226,0.6); }
+  .form-msg{
+    display: none;
+    margin-top: 16px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    background: rgba(181,232,67,0.15);
+    border: 1px solid var(--lime);
+    color: var(--lime);
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .form-msg.visible{ display: block; }
+
+  /* ===== FOOTER ===== */
+  footer{
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 40px 0;
+    text-align: center;
+  }
+  .footer-name{ font-family: var(--font-head); font-weight: 800; font-size: 1.1rem; margin-bottom: 14px; }
+  .footer-socials{ display: flex; justify-content: center; gap: 18px; margin-bottom: 16px; flex-wrap: wrap; }
+  .footer-socials a{ font-size: 0.85rem; color: rgba(247,239,226,0.65); font-weight: 500; }
+  .footer-socials a:hover{ color: var(--lime); }
+  .footer-year{ font-size: 0.78rem; color: rgba(247,239,226,0.4); }
+
+  /* ===== ANIMACAO DE ENTRADA ===== */
+  .reveal{
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible{ opacity: 1; transform: translateY(0); }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    .reveal{ opacity: 1; transform: none; transition: none; }
+    .marquee{ animation: none; }
+    *{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+
+  /* ===== MODAL CAPTURA ===== */
+  .capture-overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 900;
+    padding: 20px;
+  }
+  .capture-overlay.visible{ display: flex; }
+  .capture-modal{
+    position: relative;
+    max-width: 420px;
+    width: 100%;
+    padding: 36px 30px;
+    background: var(--dark-3);
+    text-align: center;
+  }
+  .capture-close{
+    position: absolute;
+    top: 14px; right: 14px;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    border: none;
+    color: var(--cream);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .capture-close:hover{ background: var(--pink); }
+  .capture-modal h3{ font-size: 1.3rem; margin-bottom: 10px; }
+  .capture-modal p{ font-size: 0.88rem; color: rgba(247,239,226,0.7); margin-bottom: 22px; }
+  .capture-modal .field{ text-align: left; }
+</style>
+</head>
+<body>
+
+<a href="#conteudo-principal" class="skip-link">Pular para o conteúdo</a>
+
+<!-- ===================== NAV ===================== -->
+<header class="navbar">
+  <div class="container nav-inner">
+    <a href="#topo" class="nav-logo">Isabelle <span>Bueno</span></a>
+    <nav>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#sobre" class="nav-link-item">Sobre</a></li>
+        <li><a href="#destaques" class="nav-link-item">Destaques</a></li>
+        <li><a href="#trabalhos" class="nav-link-item">Trabalhos</a></li>
+        <li><a href="#servicos" class="nav-link-item">Serviços</a></li>
+        <li><a href="#numeros" class="nav-link-item">Números</a></li>
+        <li><a href="#contato" class="nav-link-item nav-cta">Contato</a></li>
+      </ul>
+    </nav>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menu" aria-expanded="false" aria-controls="navLinks">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="conteudo-principal">
+
+  <!-- ===================== CAPA / HERO ===================== -->
+  <section id="topo">
+    <div class="container hero">
+      <div class="hero-text">
+        <h1 class="hero-name">Isabelle Bueno <span class="highlight">Ribeiro Vital</span></h1>
+        <p class="hero-tagline">Entrego vídeos de alta qualidade com toque de criatividade para marcas de beleza, skincare, moda, comida, casa e decoração, maternidade, pet, viagem e tech.</p>
+        <div class="hero-buttons">
+          <a href="#contato" class="btn btn-primary">Falar comigo</a>
+          <a href="#trabalhos" class="btn btn-outline">Ver os trabalhos</a>
+        </div>
+        <div class="hero-stats" id="heroStats"></div>
+      </div>
+      <div class="hero-photo-wrap">
+        <!-- Troque este bloco por uma <img src="sua-foto.jpg" alt="Isabelle Bueno Ribeiro Vital"> quando tiver a foto real -->
+        <div class="photo-block" role="img" aria-label="Foto da creator, formato 4:5">
+          <span class="photo-block-text">Foto da creator (formato 4:5)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="brand-strip">
+      <div class="marquee" id="brandMarquee" aria-label="Marcas que já trabalharam comigo"></div>
+    </div>
+  </section>
+
+  <!-- ===================== SOBRE MIM ===================== -->
+  <section id="sobre" class="section-pad">
+    <div class="container about-grid">
+      <!-- Troque este bloco por uma <img src="sua-foto-sobre.jpg" alt="Isabelle Bueno Ribeiro Vital sorrindo"> quando tiver a foto real -->
+      <div class="photo-block about-photo reveal" role="img" aria-label="Foto da creator, formato 4:5">
+        <span class="photo-block-text">Foto da creator (formato 4:5)</span>
+      </div>
+      <div class="reveal">
+        <span class="eyebrow">Sobre mim</span>
+        <h2 class="section-title">Quem cria com você</h2>
+        <p>Oi, eu sou a Isabelle! Crio conteúdo autêntico para marcas que querem se conectar de verdade com as pessoas. Gosto de contar histórias simples, com leveza e um toque de criatividade, sempre pensando no que faz mais sentido para o seu público. Já são mais de 300 vídeos entregues e 150 marcas atendidas, e cada projeto novo eu levo com o mesmo cuidado do primeiro.</p>
+        <div class="promise-list">
+          <div class="promise-item"><span class="promise-check">✓</span> Roteiro aprovado antes de gravar</div>
+          <div class="promise-item"><span class="promise-check">✓</span> Uma rodada de ajuste inclusa</div>
+          <div class="promise-item"><span class="promise-check">✓</span> Entrega em até 72 horas úteis</div>
+        </div>
+        <p class="signature">Isabelle Bueno Ribeiro Vital</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONTEUDOS DE DESTAQUE ===================== -->
+  <section id="destaques" class="section-pad">
+    <div class="container">
+      <span class="eyebrow reveal">Destaques</span>
+      <h2 class="section-title reveal">Conteúdos que <span>viralizaram</span></h2>
+      <p class="section-intro reveal">Uma seleção dos vídeos com mais alcance entre os conteúdos que já produzi.</p>
+      <!-- Cada card é gerado a partir do array HIGHLIGHTS no início do script.
+           videoUrl = link para onde o card abre ao clicar (reels, tiktok, youtube shorts).
+           coverLabel = texto do bloco de capa; troque o bloco .highlight-cover por uma <img> real quando tiver a capa em 9:16. -->
+      <div class="highlights-grid" id="highlightsGrid"></div>
+    </div>
+  </section>
+
+  <!-- ===================== TRABALHOS POR NICHO ===================== -->
+  <section id="trabalhos" class="section-pad">
+    <div class="container">
+      <span class="eyebrow reveal">Portfólio</span>
+      <h2 class="section-title reveal">Trabalhos por <span>nicho</span></h2>
+      <p class="section-intro reveal">Filtre por nicho para ver os trabalhos feitos para cada tipo de marca.</p>
+      <div class="filter-bar" id="filterBar"></div>
+      <div class="works-grid" id="worksGrid"></div>
+    </div>
+  </section>
+
+  <!-- ===================== COMO EU TE AJUDO ===================== -->
+  <section id="servicos" class="section-pad">
+    <div class="container">
+      <span class="eyebrow reveal">Serviços</span>
+      <h2 class="section-title reveal">Como eu te <span>ajudo</span></h2>
+      <p class="section-intro reveal">Formatos de conteúdo que costumo entregar para as marcas parceiras.</p>
+      <div class="services-grid" id="servicesGrid"></div>
+    </div>
+  </section>
+
+  <!-- ===================== NUMEROS E DEPOIMENTOS ===================== -->
+  <section id="numeros" class="section-pad">
+    <div class="container">
+      <span class="eyebrow reveal">Resultados</span>
+      <h2 class="section-title reveal">Números e <span>depoimentos</span></h2>
+      <p class="section-intro reveal">O que os números mostram e o que quem já trabalhou comigo tem a dizer.</p>
+
+      <div class="metrics-grid" id="metricsGrid"></div>
+
+      <h3 class="subsection-title reveal">Resultados de campanha</h3>
+      <div class="campaigns-grid" id="campaignsGrid"></div>
+
+      <h3 class="subsection-title reveal">Depoimentos</h3>
+      <div class="testimonials-grid" id="testimonialsGrid"></div>
+    </div>
+  </section>
+
+  <!-- ===================== BORA CRIAR JUNTOS ===================== -->
+  <section id="contato" class="section-pad">
+    <div class="container">
+      <span class="eyebrow reveal">Contato</span>
+      <h2 class="section-title reveal">Bora criar <span>juntos</span></h2>
+      <p class="section-intro reveal">Conta um pouco sobre a sua marca e o que você precisa. Respondo o mais rápido possível.</p>
+
+      <div class="contact-grid">
+        <form class="glass form-card reveal" id="contactForm" novalidate>
+          <div class="field">
+            <label for="nomeInput">Nome</label>
+            <input type="text" id="nomeInput" name="nome" required autocomplete="name">
+          </div>
+          <div class="field">
+            <label for="emailInput">E-mail</label>
+            <input type="email" id="emailInput" name="email" required autocomplete="email">
+          </div>
+          <div class="field">
+            <label for="mensagemInput">Mensagem</label>
+            <textarea id="mensagemInput" name="mensagem" rows="4" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Enviar mensagem</button>
+          <div class="form-msg" id="formMsg" role="status">Mensagem enviada! Em breve entro em contato por e-mail ou WhatsApp.</div>
+        </form>
+
+        <div class="contact-side reveal">
+          <a class="glass contact-link-card" id="whatsappLink" href="#" target="_blank" rel="noopener">
+            <span class="contact-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.1a8.1 8.1 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.1 8.1 0 1 1 12 20.1zm4.4-6.1c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.7.9-.3.2-.5.1a6.6 6.6 0 0 1-2-1.2 7.3 7.3 0 0 1-1.3-1.7c-.1-.2 0-.4.1-.5l.4-.4.2-.3v-.3c0-.1-.5-1.3-.7-1.8s-.4-.4-.5-.4h-.5a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.9 2 4.7 4.7 0 0 0 1 2.5 10.8 10.8 0 0 0 4.2 3.7c1.5.6 2 .7 2.5.6a2.1 2.1 0 0 0 1.4-1 1.7 1.7 0 0 0 .1-1c-.1-.1-.2-.2-.5-.3z"/></svg></span>
+            <span>
+              <span class="contact-link-title" style="display:block">WhatsApp</span>
+              <span class="contact-link-value">(21) 99905-2606</span>
+            </span>
+          </a>
+          <a class="glass contact-link-card" href="mailto:bellevital@icloud.com">
+            <span class="contact-icon"><svg viewBox="0 0 24 24"><path d="M2 4h20v16H2zm2 2v.01L12 12l8-5.99V6H4zm16 12V8.24l-8 6-8-6V18z"/></svg></span>
+            <span>
+              <span class="contact-link-title" style="display:block">E-mail</span>
+              <span class="contact-link-value">bellevital@icloud.com</span>
+            </span>
+          </a>
+          <a class="glass contact-link-card" href="https://instagram.com/bellebuenosilveira" target="_blank" rel="noopener">
+            <span class="contact-icon"><svg viewBox="0 0 24 24"><path d="M12 2c-2.7 0-3.1 0-4.1.1a7.3 7.3 0 0 0-2.4.5 5 5 0 0 0-1.8 1.2 5 5 0 0 0-1.2 1.8 7.3 7.3 0 0 0-.5 2.4C2 9 2 9.4 2 12s0 3.1.1 4.1a7.3 7.3 0 0 0 .5 2.4 5 5 0 0 0 1.2 1.8 5 5 0 0 0 1.8 1.2 7.3 7.3 0 0 0 2.4.5c1 .1 1.4.1 4.1.1s3.1 0 4.1-.1a7.3 7.3 0 0 0 2.4-.5 5.2 5.2 0 0 0 3-3 7.3 7.3 0 0 0 .5-2.4c.1-1 .1-1.4.1-4.1s0-3.1-.1-4.1a7.3 7.3 0 0 0-.5-2.4 5 5 0 0 0-1.2-1.8 5 5 0 0 0-1.8-1.2 7.3 7.3 0 0 0-2.4-.5C15.1 2 14.7 2 12 2zm0 1.8c2.7 0 3 0 4 .1a5.6 5.6 0 0 1 1.9.3 3.4 3.4 0 0 1 1.9 1.9 5.6 5.6 0 0 1 .3 1.9c.1 1 .1 1.3.1 4s0 3-.1 4a5.6 5.6 0 0 1-.3 1.9 3.4 3.4 0 0 1-1.9 1.9 5.6 5.6 0 0 1-1.9.3c-1 .1-1.3.1-4 .1s-3 0-4-.1a5.6 5.6 0 0 1-1.9-.3 3.4 3.4 0 0 1-1.9-1.9 5.6 5.6 0 0 1-.3-1.9c-.1-1-.1-1.3-.1-4s0-3 .1-4a5.6 5.6 0 0 1 .3-1.9 3.4 3.4 0 0 1 1.9-1.9 5.6 5.6 0 0 1 1.9-.3c1-.1 1.3-.1 4-.1zm0 3.2a5 5 0 1 0 5 5 5 5 0 0 0-5-5zm0 8.2a3.2 3.2 0 1 1 3.2-3.2 3.2 3.2 0 0 1-3.2 3.2zm5.2-8.4a1.2 1.2 0 1 1-1.2-1.2 1.2 1.2 0 0 1 1.2 1.2z"/></svg></span>
+            <span>
+              <span class="contact-link-title" style="display:block">Instagram</span>
+              <span class="contact-link-value">@bellebuenosilveira</span>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===================== RODAPE ===================== -->
+<footer>
+  <div class="container">
+    <p class="footer-name">Isabelle Bueno Ribeiro Vital</p>
+    <div class="footer-socials">
+      <a href="https://instagram.com/bellebuenosilveira" target="_blank" rel="noopener">Instagram: @bellebuenosilveira</a>
+      <a href="mailto:bellevital@icloud.com">bellevital@icloud.com</a>
+      <a href="#" id="footerWhatsapp" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+    <p class="footer-year">© <span id="anoAtual"></span> Isabelle Bueno Ribeiro Vital. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<!-- ===================== CARD DE CAPTURA ===================== -->
+<div class="capture-overlay" id="captureOverlay">
+  <div class="glass capture-modal" role="dialog" aria-modal="true" aria-labelledby="captureTitle">
+    <button class="capture-close" id="captureClose" aria-label="Fechar">✕</button>
+    <div id="captureFormWrap">
+      <h3 id="captureTitle">Quer meu mídia kit completo?</h3>
+      <p>Preencha os campos abaixo e receba meu mídia kit com números, formatos de entrega e valores.</p>
+      <form id="captureForm">
+        <div class="field">
+          <label for="captureNome">Nome</label>
+          <input type="text" id="captureNome" required autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="captureEmail">E-mail</label>
+          <input type="email" id="captureEmail" required autocomplete="email">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Quero receber</button>
+      </form>
+    </div>
+    <div id="captureSuccess" style="display:none">
+      <h3>Recebido!</h3>
+      <p>Assim que possível, envio o mídia kit completo para o seu e-mail.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =====================================================================
+     DADOS: edite os arrays abaixo para atualizar o conteúdo do site.
+     ===================================================================== */
+
+  // Marcas que já trabalharam com a Isabelle (faixa de rolagem no topo)
+  const BRANDS = [
+    "Pé de Algodão","Growth","Glim Acessórios","Ela É","The Coffee","Zeal Company","Guma","Muna",
+    "The Good Villages","Tuyo","Luze Skincare","Aura Esmalteria","Rexona","Batiste","Duo Gourmet",
+    "Brae","Hidratei","Magalu","Use Dut","OLX","Pair Beauty","Pantene","Marina Enxovais","Party Games",
+    "Auriella Joias","Cittamobi","Seda","Dove","L'Oréal Professionnel","L'Oréal Paris","Creamy",
+    "Renova Pisos","Rosa Ativa Lingerie","Eco e Bags","Antolie","VB Camisetas","Zap Imóveis","Mahi",
+    "Quintal Dermo","Elástica","Use MR Acessórios","Violeta Joias","Queima Diária","Japate Shop",
+    "Evaristo","Shopee","TCL","Hommy","Meu Dossiê","Omo","Eudora","Savi","Joingo","Resolvvi",
+    "Brigadelícia","Saint Germain Secrets","Tá Brasileira","Cotih","Ollie Collagen Beauty",
+    "Beauty Vhita","Choupana","Vichy","Casa Beauty","Meu Sapato Colorido","Via Mia","Gocase",
+    "Bisyou Skincare Basic Oficial","Zerezes","Mama Vintage","Real Seguro Viagem","Amazon",
+    "Mercado Livre","Gol","Flowfa","SRA Beauty","Feito Perfeito","Purpose","Papper","Lancôme",
+    "ECT Idiomas","La Cort Tricot","Duda Serenine","Alianças Rose","Sante Acessórios",
+    "Agora Sou Mãe","Barro Minas","Lucas Carvalho Chile","PicPay","Emma Colchões","Avocado",
+    "Deutsch Pro","Oral-B"
+  ];
+
+  // Números rápidos da capa (primeira dobra)
+  const HERO_STATS = [
+    { target: 300, suffix: "+", label: "vídeos entregues" },
+    { target: 150, suffix: "+", label: "marcas atendidas" },
+    { target: 0, suffix: "", label: "views somadas (adicione seu número)", placeholder: true }
+  ];
+
+  // Conteúdos de destaque (3 vídeos). videoUrl = link do vídeo. coverLabel = texto do bloco de capa.
+  const HIGHLIGHTS = [
+    {
+      title: "Título do conteúdo 01",
+      context: "Escreva aqui uma linha curta sobre este conteúdo e o resultado dele.",
+      stat: "SEU NÚMERO",
+      statLabel: "views no reels (exemplo)",
+      videoUrl: "#", // TROQUE pelo link do vídeo (reels, tiktok, youtube shorts)
+      coverLabel: "capa vertical do vídeo, formato 9:16" // TROQUE este bloco por uma <img> real com a capa do vídeo
+    },
+    {
+      title: "Título do conteúdo 02",
+      context: "Escreva aqui uma linha curta sobre este conteúdo e o resultado dele.",
+      stat: "SEU NÚMERO",
+      statLabel: "visualizações (exemplo)",
+      videoUrl: "#", // TROQUE pelo link do vídeo
+      coverLabel: "capa vertical do vídeo, formato 9:16" // TROQUE este bloco por uma <img> real com a capa do vídeo
+    },
+    {
+      title: "Título do conteúdo 03",
+      context: "Escreva aqui uma linha curta sobre este conteúdo e o resultado dele.",
+      stat: "SEU NÚMERO",
+      statLabel: "curtidas (exemplo)",
+      videoUrl: "#", // TROQUE pelo link do vídeo
+      coverLabel: "capa vertical do vídeo, formato 9:16" // TROQUE este bloco por uma <img> real com a capa do vídeo
+    }
+  ];
+
+  // Nichos atendidos, na ordem em que devem aparecer nos filtros
+  const NICHES = ["beleza","skincare","moda","comida","casa e decoração","maternidade","pet","viagem","tech"];
+
+  // Trabalhos por nicho (galeria com filtro)
+  const WORKS = [
+    { niche: "beleza", brand: "Rexona", title: "Vídeo UGC de lançamento", desc: "Conteúdo espontâneo mostrando o uso do produto no dia a dia." },
+    { niche: "beleza", brand: "Pantene", title: "Corte para anúncio em vídeo", desc: "Edição rápida e chamativa pensada para rodar como anúncio pago." },
+    { niche: "skincare", brand: "Vichy", title: "Rotina de skincare em vídeo", desc: "Demonstração real da rotina usando os produtos da linha." },
+    { niche: "skincare", brand: "Eudora", title: "Unboxing e primeiras impressões", desc: "Abertura do produto com reações autênticas para o Instagram." },
+    { niche: "moda", brand: "VB Camisetas", title: "Prova de roupa em vídeo", desc: "Combinações de looks mostrando caimento e qualidade do tecido." },
+    { niche: "moda", brand: "Rosa Ativa Lingerie", title: "Fotos de produto para o catálogo", desc: "Ensaio fotográfico com foco em conforto e caimento das peças." },
+    { niche: "comida", brand: "Duo Gourmet", title: "Vídeo de degustação", desc: "Prova do produto com reação natural, pensado para redes sociais." },
+    { niche: "comida", brand: "Brigadelícia", title: "Publicação no meu perfil", desc: "Divulgação do produto direto no feed e nos stories." },
+    { niche: "casa e decoração", brand: "Renova Pisos", title: "Antes e depois em vídeo", desc: "Registro da transformação do ambiente com o produto aplicado." },
+    { niche: "casa e decoração", brand: "Zap Imóveis", title: "Tour em vídeo pelo imóvel", desc: "Apresentação do espaço destacando os pontos fortes do ambiente." },
+    { niche: "maternidade", brand: "Agora Sou Mãe", title: "Rotina com o bebê", desc: "Conteúdo leve mostrando o produto no dia a dia com a família." },
+    { niche: "maternidade", brand: "Marina Enxovais", title: "Unboxing do enxoval", desc: "Abertura das peças do enxoval com atenção aos detalhes e ao cuidado." },
+    { niche: "pet", brand: "Marca 01", title: "Vídeo UGC com pet", desc: "Substitua por um trabalho real feito para uma marca do nicho pet." },
+    { niche: "pet", brand: "Marca 02", title: "Fotos de produto pet", desc: "Substitua por um trabalho real feito para uma marca do nicho pet." },
+    { niche: "viagem", brand: "Real Seguro Viagem", title: "Dicas em vídeo para viajantes", desc: "Conteúdo explicando de forma simples os benefícios do serviço." },
+    { niche: "viagem", brand: "Gol", title: "Vídeo de experiência de viagem", desc: "Registro autêntico de uma experiência de embarque e voo." },
+    { niche: "tech", brand: "TCL", title: "Vídeo de unboxing e review", desc: "Primeiras impressões e demonstração das funções do aparelho." },
+    { niche: "tech", brand: "PicPay", title: "Vídeo explicando o aplicativo", desc: "Demonstração simples de como usar o aplicativo no dia a dia." }
+  ];
+
+  // Serviços oferecidos
+  const SERVICES = [
+    { num: "01", title: "Vídeo UGC", desc: "Conteúdo autêntico e espontâneo, gravado no estilo que gera confiança e conexão com o público." },
+    { num: "02", title: "Corte para Anúncio", desc: "Vídeo editado no formato ideal para rodar como anúncio pago em redes sociais." },
+    { num: "03", title: "Fotos do Produto", desc: "Fotos claras e bem compostas para usar no site, no catálogo ou nas redes da marca." },
+    { num: "04", title: "Unboxing", desc: "Vídeo mostrando a abertura e a primeira impressão do produto, de um jeito natural." },
+    { num: "05", title: "Publicação no Meu Perfil", desc: "Divulgação do produto ou serviço direto no meu Instagram, alcançando meu público." },
+    { num: "06", title: "Pacote Mensal", desc: "Conjunto de conteúdos entregues todo mês, ideal para marcas que querem presença constante." }
+  ];
+
+  // Métricas com contador animado (não invente números além dos informados; use placeholder onde não houver dado)
+  const METRICS = [
+    { target: 300, suffix: "+", label: "vídeos entregues" },
+    { target: 150, suffix: "+", label: "marcas atendidas" },
+    { target: 0, suffix: "", label: "adicione seu número (ex: views somadas)", placeholder: true },
+    { target: 0, suffix: "", label: "adicione seu número (ex: anos de experiência)", placeholder: true }
+  ];
+
+  // Resultados de campanha (placeholders, preencha com dados reais)
+  const CAMPAIGNS = [
+    { brand: "Marca 01", result: "Adicione o resultado desta campanha", context: "Conte aqui o que foi feito e qual era o objetivo da campanha." },
+    { brand: "Marca 02", result: "Adicione o resultado desta campanha", context: "Conte aqui o que foi feito e qual era o objetivo da campanha." },
+    { brand: "Marca 03", result: "Adicione o resultado desta campanha", context: "Conte aqui o que foi feito e qual era o objetivo da campanha." }
+  ];
+
+  // Depoimentos de clientes (placeholders, preencha com depoimentos reais)
+  const TESTIMONIALS = [
+    { name: "Cliente 01", company: "Empresa 01", text: "Escreva aqui o depoimento deste cliente sobre a experiência de trabalhar com a Isabelle." },
+    { name: "Cliente 02", company: "Empresa 02", text: "Escreva aqui o depoimento deste cliente sobre a experiência de trabalhar com a Isabelle." },
+    { name: "Cliente 03", company: "Empresa 03", text: "Escreva aqui o depoimento deste cliente sobre a experiência de trabalhar com a Isabelle." },
+    { name: "Cliente 04", company: "Empresa 04", text: "Escreva aqui o depoimento deste cliente sobre a experiência de trabalhar com a Isabelle." }
+  ];
+
+  const WHATSAPP_NUMERO = "5521999052606";
+  const WHATSAPP_LINK = "https://wa.me/" + WHATSAPP_NUMERO;
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* =====================================================================
+     RENDERIZACAO
+     ===================================================================== */
+
+  // Faixa de marcas (duplicada para rolagem contínua)
+  function renderBrands(){
+    const el = document.getElementById("brandMarquee");
+    const items = BRANDS.concat(BRANDS).map(b => "<span>" + escapeHtml(b) + "</span>").join("");
+    el.innerHTML = items;
+  }
+
+  function statCardHtml(item, idClass){
+    const value = item.placeholder ? "0" : item.target;
+    return '<div class="' + idClass + '">' +
+      '<div class="metric-value" data-target="' + value + '" data-suffix="' + item.suffix + '" data-placeholder="' + (item.placeholder ? "1" : "0") + '">0</div>' +
+      '<div class="metric-label">' + escapeHtml(item.label) + '</div>' +
+    '</div>';
+  }
+
+  function renderHeroStats(){
+    const wrap = document.getElementById("heroStats");
+    wrap.innerHTML = HERO_STATS.map(function(item){
+      const value = item.placeholder ? "0" : item.target;
+      return '<div>' +
+        '<div class="hero-stat-num metric-value" data-target="' + value + '" data-suffix="' + item.suffix + '" data-placeholder="' + (item.placeholder ? "1" : "0") + '">0</div>' +
+        '<div class="hero-stat-label">' + escapeHtml(item.label) + '</div>' +
+      '</div>';
+    }).join("");
+  }
+
+  function renderMetrics(){
+    const wrap = document.getElementById("metricsGrid");
+    wrap.innerHTML = METRICS.map(function(item){ return statCardHtml(item, "glass metric-card"); }).join("");
+  }
+
+  function renderHighlights(){
+    const wrap = document.getElementById("highlightsGrid");
+    wrap.innerHTML = HIGHLIGHTS.map(function(item, i){
+      return '<a class="highlight-card reveal" href="' + escapeAttr(item.videoUrl) + '" target="_blank" rel="noopener" aria-label="Assistir: ' + escapeAttr(item.title) + '">' +
+        '<div class="highlight-cover">' +
+          '<span class="highlight-cover-text">' + escapeHtml(item.coverLabel) + '</span>' +
+          '<span class="play-btn" aria-hidden="true"><svg viewBox="0 0 24 24" fill="#121212"><path d="M8 5v14l11-7z"/></svg></span>' +
+        '</div>' +
+        '<div class="highlight-info">' +
+          '<div class="highlight-stat">' + escapeHtml(item.stat) + '</div>' +
+          '<div class="highlight-stat-label">' + escapeHtml(item.statLabel) + '</div>' +
+          '<div class="highlight-title">' + escapeHtml(item.title) + '</div>' +
+          '<div class="highlight-context">' + escapeHtml(item.context) + '</div>' +
+        '</div>' +
+      '</a>';
+    }).join("");
+  }
+
+  let currentFilter = "todos";
+
+  function renderFilterBar(){
+    const wrap = document.getElementById("filterBar");
+    const all = ["todos"].concat(NICHES);
+    wrap.innerHTML = all.map(function(n){
+      const active = n === currentFilter ? " active" : "";
+      return '<button type="button" class="filter-btn' + active + '" data-niche="' + escapeAttr(n) + '">' + escapeHtml(n) + '</button>';
+    }).join("");
+    wrap.querySelectorAll(".filter-btn").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        currentFilter = btn.getAttribute("data-niche");
+        renderFilterBar();
+        applyFilter();
+      });
+    });
+  }
+
+  function renderWorks(){
+    const wrap = document.getElementById("worksGrid");
+    wrap.innerHTML = WORKS.map(function(w){
+      return '<article class="glass work-card" data-niche="' + escapeAttr(w.niche) + '">' +
+        '<div class="work-cover" role="img" aria-label="Foto do trabalho para ' + escapeAttr(w.brand) + ', formato 4:3">foto do trabalho (formato 4:3)</div>' +
+        '<span class="work-niche-tag">' + escapeHtml(w.niche) + '</span>' +
+        '<h3 class="work-brand">' + escapeHtml(w.brand) + '</h3>' +
+        '<p class="work-desc"><strong>' + escapeHtml(w.title) + '.</strong> ' + escapeHtml(w.desc) + '</p>' +
+      '</article>';
+    }).join("");
+    applyFilter();
+  }
+
+  function applyFilter(){
+    document.querySelectorAll("#worksGrid .work-card").forEach(function(card){
+      const show = currentFilter === "todos" || card.getAttribute("data-niche") === currentFilter;
+      card.hidden = !show;
+    });
+  }
+
+  function renderServices(){
+    const wrap = document.getElementById("servicesGrid");
+    wrap.innerHTML = SERVICES.map(function(s){
+      return '<div class="glass service-card reveal">' +
+        '<div class="service-num">' + s.num + '</div>' +
+        '<h3 class="service-title">' + escapeHtml(s.title) + '</h3>' +
+        '<p class="service-desc">' + escapeHtml(s.desc) + '</p>' +
+      '</div>';
+    }).join("");
+  }
+
+  function renderCampaigns(){
+    const wrap = document.getElementById("campaignsGrid");
+    wrap.innerHTML = CAMPAIGNS.map(function(c){
+      return '<div class="glass campaign-card reveal">' +
+        '<div class="campaign-brand">' + escapeHtml(c.brand) + '</div>' +
+        '<div class="campaign-result">' + escapeHtml(c.result) + '</div>' +
+        '<div class="campaign-context">' + escapeHtml(c.context) + '</div>' +
+      '</div>';
+    }).join("");
+  }
+
+  function renderTestimonials(){
+    const wrap = document.getElementById("testimonialsGrid");
+    wrap.innerHTML = TESTIMONIALS.map(function(t){
+      return '<div class="glass testimonial-card reveal">' +
+        '<p class="testimonial-text">' + escapeHtml(t.text) + '</p>' +
+        '<div class="testimonial-name">' + escapeHtml(t.name) + '</div>' +
+        '<div class="testimonial-company">' + escapeHtml(t.company) + '</div>' +
+      '</div>';
+    }).join("");
+  }
+
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, function(c){
+      return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
+    });
+  }
+  function escapeAttr(str){ return escapeHtml(str); }
+
+  /* =====================================================================
+     INTERACOES
+     ===================================================================== */
+
+  function setupNav(){
+    const btn = document.getElementById("hamburgerBtn");
+    const links = document.getElementById("navLinks");
+    btn.addEventListener("click", function(){
+      const isOpen = links.classList.toggle("open");
+      btn.classList.toggle("active", isOpen);
+      btn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+    links.querySelectorAll("a").forEach(function(a){
+      a.addEventListener("click", function(){
+        links.classList.remove("open");
+        btn.classList.remove("active");
+        btn.setAttribute("aria-expanded", "false");
+      });
+    });
+  }
+
+  function setupWhatsappLinks(){
+    document.getElementById("whatsappLink").setAttribute("href", WHATSAPP_LINK);
+    document.getElementById("footerWhatsapp").setAttribute("href", WHATSAPP_LINK);
+  }
+
+  function setupContactForm(){
+    const form = document.getElementById("contactForm");
+    const msg = document.getElementById("formMsg");
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      if (!form.checkValidity()){
+        form.reportValidity();
+        return;
+      }
+      msg.classList.add("visible");
+      form.reset();
+    });
+  }
+
+  function setupCaptureModal(){
+    const overlay = document.getElementById("captureOverlay");
+    const closeBtn = document.getElementById("captureClose");
+    const form = document.getElementById("captureForm");
+    const formWrap = document.getElementById("captureFormWrap");
+    const success = document.getElementById("captureSuccess");
+    const STORAGE_KEY = "ugcMidiaKitCaptureShown";
+
+    function openModal(){
+      overlay.classList.add("visible");
+      try { sessionStorage.setItem(STORAGE_KEY, "1"); } catch(err){}
+    }
+    function closeModal(){ overlay.classList.remove("visible"); }
+
+    let alreadyShown = false;
+    try { alreadyShown = sessionStorage.getItem(STORAGE_KEY) === "1"; } catch(err){}
+
+    if (!alreadyShown){
+      window.setTimeout(openModal, 7000);
+    }
+
+    closeBtn.addEventListener("click", closeModal);
+    overlay.addEventListener("click", function(e){
+      if (e.target === overlay) closeModal();
+    });
+    document.addEventListener("keydown", function(e){
+      if (e.key === "Escape" && overlay.classList.contains("visible")) closeModal();
+    });
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      if (!form.checkValidity()){
+        form.reportValidity();
+        return;
+      }
+      formWrap.style.display = "none";
+      success.style.display = "block";
+    });
+  }
+
+  function setupCounters(){
+    const counters = document.querySelectorAll(".metric-value");
+    if (!counters.length) return;
+
+    function animate(el){
+      const target = parseInt(el.getAttribute("data-target"), 10) || 0;
+      const suffix = el.getAttribute("data-suffix") || "";
+      const isPlaceholder = el.getAttribute("data-placeholder") === "1";
+
+      if (isPlaceholder){
+        el.textContent = "ADICIONE";
+        return;
+      }
+      if (reduceMotion){
+        el.textContent = target + suffix;
+        return;
+      }
+      const duration = 1400;
+      const start = performance.now();
+      function step(now){
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(eased * target) + suffix;
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    const observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          animate(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.4 });
+
+    counters.forEach(function(c){ observer.observe(c); });
+  }
+
+  function setupReveal(){
+    const items = document.querySelectorAll(".reveal");
+    if (reduceMotion || !items.length) return;
+    const observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    items.forEach(function(item){ observer.observe(item); });
+  }
+
+  function markRevealOnDynamicContent(){
+    // Elementos criados dinamicamente (destaques, serviços, cartas, depoimentos) já nascem com a classe reveal;
+    // reaplicamos o observer depois de renderizar tudo.
+    setupReveal();
+  }
+
+  function setupFooterYear(){
+    document.getElementById("anoAtual").textContent = new Date().getFullYear();
+  }
+
+  /* =====================================================================
+     INICIALIZACAO
+     ===================================================================== */
+  document.addEventListener("DOMContentLoaded", function(){
+    renderBrands();
+    renderHeroStats();
+    renderHighlights();
+    renderFilterBar();
+    renderWorks();
+    renderServices();
+    renderMetrics();
+    renderCampaigns();
+    renderTestimonials();
+
+    setupNav();
+    setupWhatsappLinks();
+    setupContactForm();
+    setupCaptureModal();
+    setupCounters();
+    setupFooterYear();
+    markRevealOnDynamicContent();
+  });
+})();
+</script>
+</body>
+</html>
