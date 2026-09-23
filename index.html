@@ -8,419 +8,401 @@
 <meta name="theme-color" content="#f3eee9">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,700..900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   /* =========================================================
      PALETA E VARIÁVEIS (Editorial creme & azul)
      ========================================================= */
   :root{
     --creme: #f3eee9;
-    --creme-2: #ebe4dc;
-    --papel: #faf7f3;
+    --creme-2: #ece5dd;
+    --branco: #ffffff;
     --tinta: #14110d;
-    --tinta-suave: #4a443c;
+    --tinta-suave: #4d463e;
     --azul: #0049a4;
-    --azul-escuro: #003878;
+    --azul-escuro: #003578;
     --laranja: #df7900;
     --linha: rgba(20,17,13,.12);
-    --sombra: 0 1px 2px rgba(20,17,13,.04), 0 12px 32px -12px rgba(20,17,13,.14);
-    --sombra-forte: 0 2px 4px rgba(20,17,13,.05), 0 24px 48px -16px rgba(20,17,13,.22);
-    --raio: 10px;
-    --raio-g: 16px;
-    --serifa: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --sombra: 0 1px 2px rgba(20,17,13,.05), 0 10px 28px -12px rgba(20,17,13,.18);
+    --sombra-forte: 0 2px 6px rgba(20,17,13,.06), 0 24px 48px -18px rgba(20,17,13,.30);
+    --sombra-azul: 0 12px 26px -10px rgba(0,73,164,.55);
+    --raio-g: 26px;
+    --serifa: 'Fraunces', Georgia, serif;
     --sans: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     --menu-h: 72px;
-    --largura: 1200px;
+    --largura: 932px;
+
+    /* Degradês dos blocos de foto e vídeo */
+    --g-azul: radial-gradient(90% 60% at 30% 18%, rgba(255,255,255,.22), transparent 60%), linear-gradient(160deg, #1d5cb4 0%, #003b86 50%, #002a66 100%);
+    --g-laranja: radial-gradient(90% 60% at 30% 18%, rgba(255,255,255,.22), transparent 60%), linear-gradient(160deg, #d98a2b 0%, #bd6508 50%, #7d4a1c 100%);
+    --g-escuro: radial-gradient(90% 60% at 35% 18%, rgba(255,255,255,.16), transparent 60%), linear-gradient(160deg, #2d261f 0%, #231d17 55%, #4a3a2b 100%);
+    --g-misto: radial-gradient(90% 60% at 30% 18%, rgba(255,255,255,.18), transparent 60%), linear-gradient(165deg, #2f63ab 0%, #5a6474 55%, #df7900 100%);
+    --g-capa: radial-gradient(70% 45% at 28% 20%, rgba(255,255,255,.2), transparent 60%), linear-gradient(155deg, #1b56ad 0%, #003478 48%, #2a3350 78%, #8a5320 100%);
   }
 
   *,*::before,*::after{ box-sizing: border-box; }
   html{ -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--menu-h) + 12px); }
   @media (prefers-reduced-motion: no-preference){ html{ scroll-behavior: smooth; } }
   body{
-    margin: 0;
-    background: var(--creme);
-    color: var(--tinta);
-    font-family: var(--sans);
-    font-size: 16px;
-    line-height: 1.65;
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
+    margin: 0; background: var(--creme); color: var(--tinta);
+    font-family: var(--sans); font-size: 15px; line-height: 1.6;
+    overflow-x: hidden; -webkit-font-smoothing: antialiased;
   }
   img{ max-width: 100%; display: block; }
   a{ color: inherit; }
   button, input, textarea{ font: inherit; color: inherit; }
-  h1,h2,h3{ font-family: var(--serifa); font-weight: 400; line-height: 1.08; margin: 0; letter-spacing: -.01em; font-optical-sizing: auto; }
-  h1 em, h2 em, h3 em{ font-style: italic; color: var(--azul); }
+  h1,h2,h3{ font-family: var(--sans); font-weight: 800; line-height: 1.05; margin: 0; letter-spacing: -.035em; }
+  /* Palavra de destaque: serifada itálica azul */
+  .italico{ font-family: var(--serifa); font-style: italic; font-weight: 800; color: var(--azul); letter-spacing: -.01em; }
   p{ margin: 0 0 1em; }
+  strong{ font-weight: 700; color: var(--tinta); }
   ul{ margin: 0; padding: 0; list-style: none; }
 
-  /* Foco visível para quem navega pelo teclado */
-  :focus-visible{ outline: 2px solid var(--azul); outline-offset: 3px; border-radius: 4px; }
-  .skip{ position: absolute; left: 16px; top: -60px; background: var(--tinta); color: var(--creme); padding: 10px 16px; border-radius: var(--raio); z-index: 200; text-decoration: none; }
+  :focus-visible{ outline: 2px solid var(--azul); outline-offset: 3px; border-radius: 6px; }
+  .skip{ position: absolute; left: 16px; top: -60px; background: var(--tinta); color: var(--creme); padding: 10px 16px; border-radius: 999px; z-index: 200; text-decoration: none; }
   .skip:focus{ top: 12px; }
-  .sr-only{ position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
   .container{ width: 100%; max-width: var(--largura); margin: 0 auto; padding: 0 24px; }
-  section{ padding: 120px 0; }
-  .secao-topo{ display: flex; align-items: end; justify-content: space-between; gap: 32px; margin-bottom: 56px; flex-wrap: wrap; }
-  .sobretitulo{
-    display: inline-flex; align-items: center; gap: 10px;
-    font-size: 12px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--azul);
-    margin-bottom: 18px;
-  }
-  .sobretitulo::before{ content: ""; width: 28px; height: 1px; background: var(--laranja); }
-  .titulo-secao{ font-size: clamp(2.2rem, 5vw, 3.8rem); max-width: 16ch; }
-  .intro-secao{ max-width: 44ch; color: var(--tinta-suave); margin: 0; }
+  section{ padding: 96px 0; }
+  .rotulo{ display: block; font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--azul); margin-bottom: 10px; }
+  .titulo-secao{ font-size: clamp(2rem, 4.4vw, 2.75rem); }
+  .intro-secao{ max-width: 46ch; color: var(--tinta-suave); margin: 10px 0 0; }
+  .secao-topo{ margin-bottom: 36px; }
+  .secao-junta{ padding-top: 40px; }
 
   /* Botões */
   .btn{
-    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-    padding: 15px 26px; border-radius: 999px; font-weight: 600; font-size: 15px;
-    text-decoration: none; border: 1px solid transparent; cursor: pointer;
-    transition: background .25s ease, color .25s ease, border-color .25s ease, transform .25s ease;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 14px 22px; border-radius: 999px; font-weight: 700; font-size: 14px; letter-spacing: -.01em;
+    text-decoration: none; border: 1.5px solid transparent; cursor: pointer;
+    transition: background .25s ease, color .25s ease, transform .25s ease, box-shadow .25s ease;
   }
   .btn:hover{ transform: translateY(-2px); }
-  .btn-azul{ background: var(--azul); color: #fff; }
+  .btn-azul{ background: var(--azul); color: #fff; box-shadow: var(--sombra-azul); }
   .btn-azul:hover{ background: var(--azul-escuro); }
+  .btn-escuro{ background: var(--tinta); color: #fff; }
+  .btn-escuro:hover{ background: #2b251e; }
   .btn-linha{ border-color: var(--tinta); color: var(--tinta); background: transparent; }
-  .btn-linha:hover{ background: var(--tinta); color: var(--creme); }
-  .btn svg{ width: 18px; height: 18px; flex: none; }
+  .btn-linha:hover{ background: var(--tinta); color: #fff; }
 
-  /* Blocos de foto/vídeo provisórios (degradê + legenda com o formato) */
-  .midia{
-    position: relative; overflow: hidden; border-radius: var(--raio-g);
-    background:
-      radial-gradient(120% 80% at 20% 10%, rgba(255,255,255,.55), transparent 55%),
-      linear-gradient(155deg, #d9cfc4 0%, #c3cfe0 55%, #8fa9cf 100%);
-    box-shadow: var(--sombra);
+  /* Pílulas e etiquetas */
+  .pilula{
+    display: inline-flex; align-items: center; gap: 6px; background: var(--branco); color: var(--tinta);
+    font-size: 12px; font-weight: 700; padding: 8px 14px; border-radius: 999px; box-shadow: var(--sombra);
   }
+  .tag-escura{
+    position: absolute; top: 10px; left: 10px; z-index: 2;
+    background: rgba(20,17,13,.82); color: #fff; font-size: 10.5px; font-weight: 700;
+    padding: 4px 9px; border-radius: 999px;
+  }
+  .play{
+    position: absolute; top: 50%; left: 50%; width: 36px; height: 36px; margin: -18px 0 0 -18px; z-index: 2;
+    border-radius: 50%; background: rgba(255,255,255,.94); display: grid; place-items: center;
+    box-shadow: 0 6px 16px rgba(0,0,0,.2); transition: transform .3s ease;
+  }
+  .play svg{ width: 12px; height: 12px; margin-left: 2px; fill: var(--azul); }
+
+  /* Blocos de foto/vídeo provisórios (troque por imagens reais, veja os comentários) */
+  .midia{ position: relative; overflow: hidden; border-radius: 18px; background: var(--g-azul); }
   .midia img{ width: 100%; height: 100%; object-fit: cover; }
-  .midia-legenda{
-    position: absolute; left: 14px; bottom: 14px; right: 14px;
-    font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
-    color: var(--tinta); background: rgba(250,247,243,.85); padding: 7px 12px; border-radius: 999px;
-    width: fit-content; max-width: calc(100% - 28px);
-  }
-  .midia.quente{ background: radial-gradient(120% 80% at 80% 0%, rgba(255,255,255,.5), transparent 55%), linear-gradient(160deg, #efd9c0 0%, #e6b98a 50%, #c98f5a 100%); }
-  .midia.fria{ background: radial-gradient(120% 80% at 20% 0%, rgba(255,255,255,.45), transparent 55%), linear-gradient(160deg, #cfdcef 0%, #7f9fcf 55%, #0049a4 100%); }
-  .midia.neutra{ background: radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.55), transparent 55%), linear-gradient(160deg, #eee7df 0%, #d6cabd 60%, #b9a898 100%); }
+  .midia.azul{ background: var(--g-azul); }
+  .midia.laranja{ background: var(--g-laranja); }
+  .midia.escuro{ background: var(--g-escuro); }
+  .midia.misto{ background: var(--g-misto); }
 
   /* Animação de entrada */
-  .revela{ opacity: 0; transform: translateY(28px); transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); }
+  .revela{ opacity: 0; transform: translateY(24px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
   .revela.visivel{ opacity: 1; transform: none; }
-  .revela[data-atraso="1"]{ transition-delay: .1s; }
-  .revela[data-atraso="2"]{ transition-delay: .2s; }
-  .revela[data-atraso="3"]{ transition-delay: .3s; }
+  .revela[data-atraso="1"]{ transition-delay: .08s; }
+  .revela[data-atraso="2"]{ transition-delay: .16s; }
+  .revela[data-atraso="3"]{ transition-delay: .24s; }
 
   /* =========================================================
      1. MENU FIXO
      ========================================================= */
   .menu{
     position: fixed; inset: 0 0 auto 0; height: var(--menu-h); z-index: 100;
-    background: rgba(243,238,233,.82);
+    background: rgba(243,238,233,.9);
     -webkit-backdrop-filter: saturate(140%) blur(12px); backdrop-filter: saturate(140%) blur(12px);
-    border-bottom: 1px solid transparent; transition: border-color .3s ease;
+    transition: box-shadow .3s ease;
   }
-  .menu.rolou{ border-bottom-color: var(--linha); }
-  .menu .container{ height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-  .marca-nome{ font-family: var(--serifa); font-size: 22px; text-decoration: none; white-space: nowrap; }
-  .marca-nome em{ color: var(--azul); }
-  .menu-links{ display: flex; align-items: center; gap: 30px; }
-  .menu-links a{ text-decoration: none; font-size: 14px; font-weight: 500; color: var(--tinta-suave); position: relative; padding: 4px 0; }
-  .menu-links a::after{ content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 1px; background: var(--azul); transform: scaleX(0); transform-origin: left; transition: transform .3s ease; }
-  .menu-links a:hover, .menu-links a:focus-visible{ color: var(--tinta); }
-  .menu-links a:hover::after{ transform: scaleX(1); }
-  .menu-links .btn{ padding: 10px 20px; font-size: 14px; color: #fff; }
-  .menu-links .btn::after{ display: none; }
+  .menu.rolou{ box-shadow: 0 1px 0 var(--linha), 0 8px 24px -16px rgba(20,17,13,.25); }
+  .menu .container{ height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  .logo{ display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; font-size: 13px; letter-spacing: .01em; text-transform: uppercase; white-space: nowrap; }
+  .logo-icone{
+    width: 30px; height: 30px; border-radius: 8px; background: var(--azul); color: #fff; flex: none;
+    display: grid; place-items: center; font-family: var(--serifa); font-style: italic; font-weight: 900; font-size: 13px; letter-spacing: -.02em;
+  }
+  .menu-links{ display: flex; align-items: center; gap: 26px; }
+  .menu-links a{ text-decoration: none; font-size: 13px; font-weight: 500; color: var(--tinta); transition: color .2s; }
+  .menu-links a:hover{ color: var(--azul); }
+  .menu-links .btn{ padding: 9px 16px; font-size: 13px; color: #fff; }
+  .menu-links .btn:hover{ color: #fff; }
   .hamburguer{
-    display: none; width: 44px; height: 44px; border: 1px solid var(--linha); border-radius: 999px;
-    background: transparent; cursor: pointer; position: relative;
+    display: none; width: 42px; height: 42px; border: 0; border-radius: 12px;
+    background: var(--branco); box-shadow: var(--sombra); cursor: pointer; position: relative;
   }
-  .hamburguer span{ position: absolute; left: 13px; right: 13px; height: 1.5px; background: var(--tinta); transition: transform .3s ease, opacity .3s ease; }
-  .hamburguer span:nth-child(1){ top: 16px; }
-  .hamburguer span:nth-child(2){ top: 21px; }
+  .hamburguer span{ position: absolute; left: 12px; right: 12px; height: 2px; border-radius: 2px; background: var(--tinta); transition: transform .3s ease, opacity .3s ease; }
+  .hamburguer span:nth-child(1){ top: 14px; }
+  .hamburguer span:nth-child(2){ top: 20px; }
   .hamburguer span:nth-child(3){ top: 26px; }
-  .hamburguer[aria-expanded="true"] span:nth-child(1){ transform: translateY(5px) rotate(45deg); }
+  .hamburguer[aria-expanded="true"] span:nth-child(1){ transform: translateY(6px) rotate(45deg); }
   .hamburguer[aria-expanded="true"] span:nth-child(2){ opacity: 0; }
-  .hamburguer[aria-expanded="true"] span:nth-child(3){ transform: translateY(-5px) rotate(-45deg); }
+  .hamburguer[aria-expanded="true"] span:nth-child(3){ transform: translateY(-6px) rotate(-45deg); }
 
-  @media (max-width: 920px){
+  @media (max-width: 820px){
     .hamburguer{ display: block; }
     .menu-links{
       position: fixed; top: var(--menu-h); left: 0; right: 0; bottom: 0;
-      flex-direction: column; align-items: flex-start; gap: 6px;
-      background: var(--creme); padding: 32px 24px; overflow-y: auto;
-      transform: translateY(-8px); opacity: 0; visibility: hidden;
+      flex-direction: column; align-items: flex-start; gap: 4px;
+      background: var(--creme); padding: 28px 24px; overflow-y: auto;
+      opacity: 0; visibility: hidden; transform: translateY(-8px);
       transition: opacity .3s ease, transform .3s ease, visibility .3s;
     }
-    .menu-links.aberto{ opacity: 1; transform: none; visibility: visible; }
-    .menu-links a{ font-family: var(--serifa); font-size: 30px; color: var(--tinta); padding: 8px 0; }
-    .menu-links .btn{ font-family: var(--sans); font-size: 16px; margin-top: 18px; padding: 14px 26px; }
+    .menu-links.aberto{ opacity: 1; visibility: visible; transform: none; }
+    .menu-links a{ font-size: 26px; font-weight: 800; letter-spacing: -.03em; padding: 6px 0; }
+    .menu-links .btn{ font-size: 15px; margin-top: 16px; padding: 14px 24px; letter-spacing: 0; }
   }
 
   /* =========================================================
      1. CAPA
      ========================================================= */
-  .capa{ padding: calc(var(--menu-h) + 64px) 0 0; }
-  .capa-grade{ display: grid; grid-template-columns: 1.25fr .75fr; gap: 64px; align-items: end; }
-  .capa-etiqueta{ display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 13px; color: var(--tinta-suave); margin-bottom: 28px; }
-  .capa-etiqueta span{ display: inline-flex; align-items: center; gap: 8px; }
-  .ponto{ width: 7px; height: 7px; border-radius: 50%; background: var(--laranja); display: inline-block; }
-  .capa h1{ font-size: clamp(3rem, 8.4vw, 7rem); line-height: .95; letter-spacing: -.025em; font-weight: 350; }
-  .capa h1 .linha-2{ display: block; font-style: italic; color: var(--azul); }
-  .capa h1 .sobrenome{ display: block; font-size: .36em; letter-spacing: 0; margin-top: 18px; font-style: normal; color: var(--tinta-suave); font-weight: 400; }
-  .capa-frase{ font-size: clamp(1.1rem, 1.8vw, 1.3rem); max-width: 34ch; margin: 30px 0 36px; color: var(--tinta-suave); }
-  .capa-frase strong{ color: var(--tinta); font-weight: 600; }
+  .capa{ padding: calc(var(--menu-h) + 36px) 0 56px; }
+  .capa-grade{ display: grid; grid-template-columns: 1.08fr .92fr; gap: 56px; align-items: center; }
+  .capa h1{ font-size: clamp(2.8rem, 6.2vw, 4.4rem); line-height: 1; letter-spacing: -.05em; margin: 22px 0; }
+  .capa h1 .italico{ letter-spacing: -.02em; }
+  .capa-texto{ font-size: 14.5px; color: var(--tinta-suave); max-width: 42ch; margin-bottom: 20px; }
+  .capa-numeros{ display: flex; align-items: stretch; margin-bottom: 30px; }
+  .capa-numeros div{ padding: 0 16px; line-height: 1.1; }
+  .capa-numeros div:first-child{ padding-left: 0; }
+  .capa-numeros div + div{ border-left: 1px solid var(--linha); }
+  .capa-numeros strong{ display: block; font-size: 19px; font-weight: 800; letter-spacing: -.03em; }
+  .capa-numeros div > span{ font-size: 11px; color: var(--tinta-suave); }
   .capa-botoes{ display: flex; flex-wrap: wrap; gap: 12px; }
-  .capa-foto{ aspect-ratio: 4/5; width: 100%; }
-  .capa-foto-moldura{ position: relative; }
-  .capa-foto-moldura::before{
-    content: ""; position: absolute; inset: 18px -18px -18px 18px; border: 1px solid var(--azul); border-radius: var(--raio-g); z-index: -1;
-  }
-  .capa-selo{
-    position: absolute; top: -22px; left: -22px; width: 104px; height: 104px; border-radius: 50%;
-    background: var(--laranja); color: var(--tinta); display: grid; place-items: center; text-align: center;
-    font-family: var(--serifa); font-style: italic; font-size: 17px; line-height: 1.1; box-shadow: var(--sombra);
-    transform: rotate(-10deg);
-  }
-  .capa-numeros{ display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 88px; border-top: 1px solid var(--linha); }
-  .capa-numeros div{ padding: 28px 24px 32px 0; }
-  .capa-numeros div + div{ padding-left: 24px; border-left: 1px solid var(--linha); }
-  .capa-numeros strong{ display: block; font-family: var(--serifa); font-weight: 400; font-size: clamp(2rem, 4vw, 3rem); line-height: 1; }
-  .capa-numeros div > span{ font-size: 14px; color: var(--tinta-suave); }
+  .capa-visual{ position: relative; }
+  .capa-foto{ aspect-ratio: 4/5.2; width: 100%; border-radius: var(--raio-g); background: var(--g-capa); box-shadow: var(--sombra-forte); object-fit: cover; }
+  .capa-visual .pilula{ position: absolute; }
+  .capa-visual .pilula-topo{ top: 38px; left: -22px; }
+  .capa-visual .pilula-base{ bottom: 46px; right: -18px; color: var(--azul); }
+  .capa-visual .pilula svg{ width: 11px; height: 11px; fill: currentColor; }
 
-  /* Faixa de marcas */
-  .faixa{ border-top: 1px solid var(--tinta); border-bottom: 1px solid var(--tinta); background: var(--tinta); color: var(--creme); overflow: hidden; margin-top: 8px; }
-  .faixa-trilho{ display: flex; width: max-content; animation: desliza 140s linear infinite; }
-  .faixa:hover .faixa-trilho{ animation-play-state: paused; }
-  .faixa ul{ display: flex; align-items: center; flex: none; }
-  .faixa li{ padding: 16px 0; font-family: var(--serifa); font-size: 18px; white-space: nowrap; display: flex; align-items: center; }
-  .faixa li::after{ content: "✦"; color: var(--laranja); font-size: 11px; margin: 0 26px; }
+  /* Faixa escura de serviços */
+  .faixa-escura{ background: var(--tinta); color: #fff; overflow: hidden; }
+  .trilho{ display: flex; width: max-content; animation: desliza 45s linear infinite; }
+  .trilho ul{ display: flex; align-items: center; flex: none; }
+  .faixa-escura li{ font-family: var(--serifa); font-style: italic; font-weight: 800; font-size: 17px; padding: 13px 0; white-space: nowrap; display: flex; align-items: center; }
+  .faixa-escura li::after{ content: "✦"; font-style: normal; color: var(--laranja); font-size: 15px; margin: 0 30px; }
   @keyframes desliza{ to{ transform: translateX(-50%); } }
 
-  @media (max-width: 860px){
-    .capa{ padding-top: calc(var(--menu-h) + 40px); }
-    .capa-grade{ grid-template-columns: 1fr; gap: 56px; }
-    .capa-foto-moldura{ width: calc(100% - 22px); max-width: 380px; margin: 0 auto 0 22px; }
-    .capa-numeros{ margin-top: 64px; }
+  /* Marcas em pílulas */
+  .marcas{ padding: 52px 0 24px; }
+  .marcas-titulo{ text-align: center; font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--tinta-suave); margin: 0 0 22px; }
+  .marcas-janela{ overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+  .marcas .trilho{ animation-duration: 220s; }
+  .marcas:hover .trilho{ animation-play-state: paused; }
+  .marcas li{ padding: 8px 7px; }
+  .marca-pilula{ display: inline-flex; align-items: center; gap: 8px; background: var(--branco); border-radius: 999px; padding: 10px 17px; font-size: 13px; font-weight: 700; white-space: nowrap; box-shadow: 0 1px 2px rgba(20,17,13,.05); }
+  .marca-pilula::before{ content: ""; width: 7px; height: 7px; background: var(--azul); transform: rotate(45deg); border-radius: 1px; flex: none; }
+
+  @media (max-width: 820px){
+    .capa{ padding-top: calc(var(--menu-h) + 24px); }
+    .capa-grade{ grid-template-columns: 1fr; gap: 44px; }
+    .capa-visual{ max-width: 400px; width: calc(100% - 28px); margin: 0 auto; }
   }
-  @media (max-width: 520px){
-    .capa-numeros div{ padding: 22px 10px 24px 0; }
-    .capa-numeros div + div{ padding-left: 12px; }
-    .capa-numeros div > span{ font-size: 12px; display: block; line-height: 1.35; margin-top: 6px; }
+  @media (max-width: 480px){
     .capa-botoes .btn{ flex: 1 1 100%; }
-    .capa-selo{ width: 84px; height: 84px; font-size: 14px; top: -16px; left: -16px; }
+    .capa-numeros div{ padding: 0 12px; }
+    .capa-visual .pilula-topo{ left: -14px; }
+    .capa-visual .pilula-base{ right: -14px; }
   }
 
   /* =========================================================
      2. SOBRE MIM
      ========================================================= */
-  .sobre-grade{ display: grid; grid-template-columns: .9fr 1.1fr; gap: 88px; align-items: center; }
-  .sobre-foto{ aspect-ratio: 4/5; }
-  .sobre-texto .titulo-secao{ margin-bottom: 28px; }
-  .sobre-texto p{ font-size: 17px; color: var(--tinta-suave); max-width: 52ch; }
-  .promessas{ margin: 36px 0 40px; border-top: 1px solid var(--linha); }
-  .promessas li{ display: grid; grid-template-columns: 48px 1fr; gap: 12px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid var(--linha); }
-  .promessas .num{ font-family: var(--serifa); font-style: italic; color: var(--azul); font-size: 20px; }
-  .promessas strong{ font-weight: 600; }
-  .assinatura{ font-family: var(--serifa); font-style: italic; font-size: 34px; color: var(--azul); line-height: 1; }
-  .assinatura small{ display: block; font-family: var(--sans); font-style: normal; font-size: 13px; color: var(--tinta-suave); margin-top: 10px; letter-spacing: .04em; }
-  @media (max-width: 860px){
-    .sobre-grade{ grid-template-columns: 1fr; gap: 48px; }
-    .sobre-foto{ max-width: 440px; }
+  .sobre-grade{ display: grid; grid-template-columns: .82fr 1.18fr; gap: 48px; align-items: center; }
+  .sobre-foto{ aspect-ratio: 4/5; width: 100%; border-radius: var(--raio-g); background: var(--g-capa); box-shadow: var(--sombra-forte); object-fit: cover; }
+  .sobre-texto .titulo-secao{ margin-bottom: 18px; }
+  .sobre-texto p{ color: var(--tinta-suave); font-size: 14px; max-width: 54ch; }
+  .chips{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .chip{ display: inline-flex; align-items: center; gap: 6px; padding: 7px 13px; border-radius: 999px; background: var(--creme-2); border: 1px solid rgba(20,17,13,.1); font-size: 12px; font-weight: 600; }
+  .chip svg{ width: 13px; height: 13px; stroke: var(--azul); fill: none; stroke-width: 2.4; flex: none; }
+  .sobre-texto .promessas-titulo{ font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--tinta-suave); margin: 24px 0 0; }
+  .sobre-texto .assinatura{ margin: 24px 0 0; font-family: var(--serifa); font-style: italic; font-weight: 800; font-size: 24px; color: var(--azul); line-height: 1; }
+  .assinatura small{ display: block; font-family: var(--sans); font-style: normal; font-weight: 500; font-size: 12px; color: var(--tinta-suave); margin-top: 6px; }
+  @media (max-width: 820px){
+    .sobre-grade{ grid-template-columns: 1fr; gap: 40px; }
+    .sobre-foto{ max-width: 380px; }
   }
 
   /* =========================================================
      3. CONTEÚDOS DE DESTAQUE
      ========================================================= */
-  .destaques{ background: var(--papel); }
-  .destaques-grade{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
-  .destaque{
-    display: block; text-decoration: none; color: inherit; border-radius: var(--raio-g);
-    transition: transform .4s ease;
-  }
-  .destaque:hover{ transform: translateY(-6px); }
-  .destaque-capa{ aspect-ratio: 9/16; transition: box-shadow .4s ease; }
-  .destaque:hover .destaque-capa{ box-shadow: var(--sombra-forte); }
-  .play{
-    position: absolute; top: 50%; left: 50%; width: 76px; height: 76px; margin: -38px 0 0 -38px;
-    border-radius: 50%; background: rgba(250,247,243,.92); display: grid; place-items: center;
-    box-shadow: var(--sombra); transition: transform .35s ease, background .35s ease;
-  }
-  .play svg{ width: 24px; height: 24px; margin-left: 4px; fill: var(--azul); transition: fill .35s ease; }
-  .destaque:hover .play{ transform: scale(1.08); background: var(--azul); }
-  .destaque:hover .play svg{ fill: #fff; }
-  .destaque-num{ font-family: var(--serifa); font-size: clamp(2.4rem, 4vw, 3.2rem); line-height: 1; margin-top: 26px; color: var(--azul); }
-  .destaque-rotulo{ font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--tinta-suave); margin-top: 8px; }
-  .destaque h3{ font-size: 24px; margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--linha); }
-  .destaque p{ margin: 8px 0 0; color: var(--tinta-suave); font-size: 15px; }
-  .destaque-ver{ display: inline-flex; gap: 8px; align-items: center; margin-top: 14px; font-size: 14px; font-weight: 600; color: var(--azul); }
-  @media (max-width: 860px){
-    .destaques-grade{ grid-template-columns: 1fr; gap: 64px; max-width: 420px; margin: 0 auto; }
+  .destaques-grade{ display: grid; grid-template-columns: repeat(3, 224px); justify-content: center; gap: 16px; }
+  .destaque{ display: block; text-decoration: none; color: inherit; }
+  .destaque-card{ background: var(--branco); border-radius: 20px; padding: 2px; box-shadow: var(--sombra); transition: transform .35s ease, box-shadow .35s ease; }
+  .destaque:hover .destaque-card{ transform: translateY(-5px); box-shadow: var(--sombra-forte); }
+  .destaque:hover .play{ transform: scale(1.12); }
+  .destaque-capa{ aspect-ratio: 9/11.5; }
+  .destaque-titulo{ font-size: 12px; font-weight: 700; padding: 13px 12px 14px; margin: 0; letter-spacing: -.01em; }
+  .destaque-num{ font-size: 21px; font-weight: 800; letter-spacing: -.03em; margin: 12px 0 0; line-height: 1; }
+  .destaque-rotulo{ font-size: 9.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--tinta-suave); margin: 4px 0 0; }
+  .destaque-contexto{ font-size: 12.5px; color: var(--tinta-suave); margin: 8px 0 0; }
+  @media (max-width: 820px){
+    .destaques-grade{ grid-template-columns: minmax(0, 320px); gap: 44px; }
+    .destaque-capa{ aspect-ratio: 9/16; }
   }
 
   /* =========================================================
      4. TRABALHOS POR NICHO
      ========================================================= */
-  .filtros{ display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 44px; }
+  .filtros{ display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
   .filtro{
-    padding: 10px 18px; border-radius: 999px; border: 1px solid var(--linha); background: transparent;
-    font-size: 14px; font-weight: 500; cursor: pointer; transition: background .25s, color .25s, border-color .25s;
+    padding: 7px 15px; border-radius: 999px; border: 1px solid rgba(20,17,13,.1); background: var(--branco);
+    font-size: 12px; font-weight: 700; cursor: pointer;
+    transition: background .2s, color .2s, border-color .2s;
   }
-  .filtro:hover{ border-color: var(--tinta); }
-  .filtro[aria-pressed="true"]{ background: var(--tinta); color: var(--creme); border-color: var(--tinta); }
-  .galeria{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px 24px; }
-  .trabalho{ animation: surge .5s ease both; }
+  .filtro:hover{ border-color: var(--azul); }
+  .filtro[aria-pressed="true"]{ background: var(--azul); color: #fff; border-color: var(--azul); }
+  .galeria{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .trabalho{ animation: surge .45s ease both; }
   .trabalho[hidden]{ display: none; }
-  .trabalho a{ text-decoration: none; color: inherit; display: block; }
-  .trabalho .midia{ aspect-ratio: 4/5; transition: transform .4s ease, box-shadow .4s ease; }
-  .trabalho a:hover .midia{ transform: translateY(-4px); box-shadow: var(--sombra-forte); }
-  .trabalho-nicho{ display: inline-block; margin-top: 16px; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--azul); }
-  .trabalho h3{ font-size: 20px; margin-top: 6px; }
-  .trabalho p{ font-size: 14px; color: var(--tinta-suave); margin: 4px 0 0; }
+  .trabalho a{ display: block; text-decoration: none; color: inherit; }
+  .trabalho .moldura{ background: var(--branco); padding: 2px; border-radius: 20px; box-shadow: var(--sombra); transition: transform .35s ease, box-shadow .35s ease; }
+  .trabalho a:hover .moldura{ transform: translateY(-4px); box-shadow: var(--sombra-forte); }
+  .trabalho a:hover .play{ transform: scale(1.12); }
+  .trabalho .midia{ aspect-ratio: 9/16; }
+  .trabalho h3{ font-size: 13.5px; font-weight: 700; letter-spacing: -.01em; margin-top: 12px; line-height: 1.3; }
+  .trabalho p{ font-size: 12px; color: var(--tinta-suave); margin: 2px 0 0; }
   .galeria-vazia{ grid-column: 1 / -1; color: var(--tinta-suave); }
-  @keyframes surge{ from{ opacity: 0; transform: translateY(12px); } to{ opacity: 1; transform: none; } }
-  @media (max-width: 1024px){ .galeria{ grid-template-columns: repeat(3, 1fr); } }
-  @media (max-width: 760px){ .galeria{ grid-template-columns: repeat(2, 1fr); gap: 24px 14px; } .trabalho h3{ font-size: 17px; } }
+  @keyframes surge{ from{ opacity: 0; transform: translateY(10px); } to{ opacity: 1; transform: none; } }
+  @media (max-width: 820px){ .galeria{ grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 560px){ .galeria{ grid-template-columns: repeat(2, 1fr); gap: 14px; } }
 
   /* =========================================================
      5. COMO EU TE AJUDO
      ========================================================= */
-  .servicos{ background: var(--tinta); color: var(--creme); }
-  .servicos .sobretitulo{ color: #9dbcf0; }
-  .servicos h2 em{ color: #9dbcf0; }
-  .servicos .intro-secao{ color: rgba(243,238,233,.72); }
-  .servicos-grade{ display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid rgba(243,238,233,.18); }
-  .servico{ padding: 40px 32px 44px 0; border-bottom: 1px solid rgba(243,238,233,.18); }
-  .servico:not(:nth-child(3n+1)){ padding-left: 32px; border-left: 1px solid rgba(243,238,233,.18); }
-  .servico-num{ font-family: var(--serifa); font-style: italic; font-size: 18px; color: var(--laranja); }
-  .servico h3{ font-size: 28px; margin: 22px 0 14px; }
-  .servico p{ color: rgba(243,238,233,.72); margin: 0; font-size: 15px; }
-  @media (max-width: 960px){
-    .servicos-grade{ grid-template-columns: repeat(2, 1fr); }
-    .servico:not(:nth-child(3n+1)){ padding-left: 0; border-left: 0; }
-    .servico:nth-child(even){ padding-left: 28px; border-left: 1px solid rgba(243,238,233,.18); }
-  }
-  @media (max-width: 600px){
-    .servicos-grade{ grid-template-columns: 1fr; }
-    .servico, .servico:nth-child(even){ padding: 32px 0; border-left: 0; }
-  }
+  .servicos-grade{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .servico{ background: var(--branco); border-radius: 20px; padding: 26px 22px; box-shadow: var(--sombra); transition: transform .3s ease; }
+  .servico:hover{ transform: translateY(-4px); }
+  .servico-num{ display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: var(--azul); color: #fff; font-family: var(--serifa); font-style: italic; font-weight: 800; font-size: 14px; }
+  .servico:nth-child(3n+2) .servico-num{ background: var(--laranja); color: var(--tinta); }
+  .servico:nth-child(3n) .servico-num{ background: var(--tinta); }
+  .servico h3{ font-size: 18px; margin: 18px 0 8px; letter-spacing: -.03em; }
+  .servico p{ color: var(--tinta-suave); margin: 0; font-size: 13.5px; }
+  @media (max-width: 820px){ .servicos-grade{ grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px){ .servicos-grade{ grid-template-columns: 1fr; } }
 
   /* =========================================================
      6. NÚMEROS E DEPOIMENTOS
      ========================================================= */
-  .metricas{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-  .metrica{ background: var(--papel); border-radius: var(--raio-g); padding: 32px 28px; box-shadow: var(--sombra); }
-  .metrica strong{ display: block; font-family: var(--serifa); font-weight: 400; font-size: clamp(2.6rem, 4.4vw, 3.6rem); line-height: 1; color: var(--azul); }
-  .metrica > span{ display: block; margin-top: 12px; font-size: 14px; color: var(--tinta-suave); }
-  .subtitulo{ font-family: var(--serifa); font-size: clamp(1.5rem, 2.6vw, 2rem); margin: 88px 0 28px; display: flex; align-items: center; gap: 18px; }
-  .subtitulo::after{ content: ""; flex: 1; height: 1px; background: var(--linha); }
-  .resultados{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .resultado{ border: 1px solid var(--linha); border-radius: var(--raio-g); padding: 32px 28px; background: transparent; }
-  .resultado-marca{ font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--tinta-suave); }
-  .resultado strong{ display: block; font-family: var(--serifa); font-weight: 400; font-style: italic; font-size: 44px; line-height: 1; margin: 18px 0 10px; color: var(--tinta); }
-  .resultado strong::after{ content: ""; display: block; width: 32px; height: 2px; background: var(--laranja); margin-top: 16px; }
-  .resultado p{ margin: 0; color: var(--tinta-suave); font-size: 15px; }
-  .depoimentos{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-  .depoimento{ background: var(--papel); border-radius: var(--raio-g); padding: 36px 34px; box-shadow: var(--sombra); display: flex; flex-direction: column; margin: 0; }
-  .depoimento blockquote{ margin: 0 0 26px; font-family: var(--serifa); font-size: 20px; line-height: 1.45; flex: 1; }
-  .depoimento blockquote::before{ content: "“"; display: block; font-size: 56px; line-height: .6; color: var(--azul); margin-bottom: 12px; }
-  .depoimento figcaption{ display: flex; align-items: center; gap: 14px; font-size: 14px; }
-  .avatar{ width: 44px; height: 44px; border-radius: 50%; flex: none; display: grid; place-items: center; background: var(--azul); color: #fff; font-weight: 600; font-size: 14px; }
-  .depoimento figcaption strong{ display: block; font-weight: 600; }
-  .depoimento figcaption span{ color: var(--tinta-suave); }
-  @media (max-width: 960px){ .metricas{ grid-template-columns: repeat(2, 1fr); } .resultados{ grid-template-columns: 1fr; } }
-  @media (max-width: 700px){ .depoimentos{ grid-template-columns: 1fr; } .depoimento{ padding: 30px 24px; } }
-  @media (max-width: 420px){ .metrica{ padding: 24px 18px; } }
+  .numeros{ background: var(--tinta); color: #fff; }
+  .numeros .rotulo{ color: #8fb4f0; }
+  .numeros .titulo-secao .italico{ color: #8fb4f0; }
+  .metricas{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .metrica{ background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 20px; padding: 24px 20px; }
+  .metrica strong{ display: block; color: #fff; font-size: clamp(2rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: -.04em; line-height: 1; }
+  .metrica > span{ display: block; margin-top: 8px; font-size: 12.5px; color: rgba(255,255,255,.72); }
+  .subtitulo{ font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--laranja); margin: 56px 0 16px; }
+  .resultados{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .resultado{ background: var(--branco); color: var(--tinta); border-radius: 20px; padding: 24px 22px; }
+  .resultado-marca{ display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; background: var(--creme); padding: 4px 10px; border-radius: 999px; }
+  .resultado strong{ display: block; font-family: var(--serifa); font-style: italic; font-weight: 900; color: var(--azul); font-size: 38px; line-height: 1; margin: 16px 0 8px; }
+  .resultado p{ margin: 0; color: var(--tinta-suave); font-size: 13.5px; }
+  .depoimentos{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .depoimento{ background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 20px; padding: 26px 24px; display: flex; flex-direction: column; margin: 0; }
+  .estrelas{ color: var(--laranja); letter-spacing: 2px; font-size: 13px; margin-bottom: 10px; }
+  .depoimento blockquote{ margin: 0 0 20px; font-size: 14.5px; line-height: 1.6; color: rgba(255,255,255,.9); flex: 1; }
+  .depoimento figcaption{ display: flex; align-items: center; gap: 12px; font-size: 13px; }
+  .avatar{ width: 38px; height: 38px; border-radius: 50%; flex: none; display: grid; place-items: center; background: var(--azul); color: #fff; font-weight: 800; font-size: 12px; }
+  .depoimento figcaption strong{ display: block; color: #fff; }
+  .depoimento figcaption span{ color: rgba(255,255,255,.65); }
+  @media (max-width: 820px){ .metricas{ grid-template-columns: repeat(2, 1fr); } .resultados{ grid-template-columns: 1fr; } }
+  @media (max-width: 640px){ .depoimentos{ grid-template-columns: 1fr; } }
 
   /* =========================================================
      7. BORA CRIAR JUNTOS
      ========================================================= */
-  .contato{ background: var(--papel); }
-  .contato-grade{ display: grid; grid-template-columns: .9fr 1.1fr; gap: 80px; align-items: start; }
-  .contato-grade .titulo-secao{ margin-bottom: 22px; }
-  .contato-lista{ display: grid; gap: 12px; margin-top: 36px; }
-  .contato-lista a{
-    display: flex; align-items: center; gap: 16px; padding: 16px 20px; border: 1px solid var(--linha); border-radius: var(--raio);
-    text-decoration: none; transition: border-color .25s, background .25s; background: var(--creme);
+  .contato-grade{ display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+  .contato-botoes{ display: grid; gap: 10px; margin-top: 26px; }
+  .contato-botoes a{
+    display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 16px;
+    background: var(--branco); text-decoration: none; box-shadow: var(--sombra); transition: transform .25s ease;
   }
-  .contato-lista a:hover{ border-color: var(--azul); background: #fff; }
-  .contato-lista svg{ width: 22px; height: 22px; flex: none; stroke: var(--azul); fill: none; stroke-width: 1.6; }
-  .contato-lista small{ display: block; font-size: 12px; color: var(--tinta-suave); letter-spacing: .06em; text-transform: uppercase; }
-  .contato-lista span{ font-weight: 600; word-break: break-word; }
-  .formulario{ background: var(--creme); border-radius: var(--raio-g); padding: 44px 40px; box-shadow: var(--sombra); }
-  .campo{ margin-bottom: 20px; }
-  .campo label{ display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+  .contato-botoes a:hover{ transform: translateX(4px); }
+  .contato-icone{ width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; flex: none; background: var(--azul); }
+  .contato-icone.laranja{ background: var(--laranja); }
+  .contato-icone.escuro{ background: var(--tinta); }
+  .contato-icone svg{ width: 18px; height: 18px; stroke: #fff; fill: none; stroke-width: 1.8; }
+  .contato-icone.laranja svg{ stroke: var(--tinta); }
+  .contato-botoes small{ display: block; font-size: 10.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--tinta-suave); }
+  .contato-botoes span{ font-weight: 700; font-size: 14px; word-break: break-word; }
+  .formulario{ background: var(--branco); border-radius: var(--raio-g); padding: 30px 28px; box-shadow: var(--sombra); }
+  .campo{ margin-bottom: 14px; }
+  .campo label{ display: block; font-size: 12px; font-weight: 700; margin-bottom: 6px; }
   .campo input, .campo textarea{
-    width: 100%; padding: 14px 16px; border-radius: var(--raio); border: 1px solid rgba(20,17,13,.22); background: var(--papel);
-    transition: border-color .25s, box-shadow .25s;
+    width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid rgba(20,17,13,.14); background: var(--creme);
+    font-size: 14px; transition: border-color .2s, box-shadow .2s;
   }
-  .campo textarea{ min-height: 140px; resize: vertical; }
-  .campo input:focus, .campo textarea:focus{ outline: none; border-color: var(--azul); box-shadow: 0 0 0 3px rgba(0,73,164,.16); }
-  .formulario .btn{ width: 100%; }
-  .confirmacao{ text-align: center; padding: 24px 0; }
-  .confirmacao .icone-ok{ width: 64px; height: 64px; border-radius: 50%; background: var(--azul); display: grid; place-items: center; margin: 0 auto 22px; }
-  .confirmacao .icone-ok svg{ width: 28px; height: 28px; stroke: #fff; fill: none; stroke-width: 2.2; }
-  .confirmacao h3{ font-size: 30px; margin-bottom: 10px; }
-  .confirmacao p{ color: var(--tinta-suave); }
-  @media (max-width: 860px){
-    .contato-grade{ grid-template-columns: 1fr; gap: 48px; }
-    .formulario{ padding: 32px 22px; }
-  }
+  .campo textarea{ min-height: 120px; resize: vertical; }
+  .campo input:focus, .campo textarea:focus{ outline: none; border-color: var(--azul); box-shadow: 0 0 0 3px rgba(0,73,164,.15); }
+  .formulario .btn, .modal .btn{ width: 100%; margin-top: 4px; }
+  .confirmacao{ text-align: center; padding: 20px 0; }
+  .icone-ok{ width: 56px; height: 56px; border-radius: 50%; background: var(--azul); display: grid; place-items: center; margin: 0 auto 18px; box-shadow: var(--sombra-azul); }
+  .icone-ok svg{ width: 24px; height: 24px; stroke: #fff; fill: none; stroke-width: 2.4; }
+  .confirmacao h3{ font-size: 24px; margin-bottom: 8px; }
+  .confirmacao p{ color: var(--tinta-suave); font-size: 14px; }
+  @media (max-width: 820px){ .contato-grade{ grid-template-columns: 1fr; gap: 36px; } .formulario{ padding: 26px 20px; } }
 
   /* =========================================================
      8. RODAPÉ
      ========================================================= */
-  .rodape{ padding: 72px 0 40px; }
-  .rodape-topo{ display: flex; justify-content: space-between; align-items: end; gap: 32px; flex-wrap: wrap; padding-bottom: 40px; border-bottom: 1px solid var(--linha); }
-  .rodape-nome{ font-family: var(--serifa); font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1; }
-  .rodape-nome em{ color: var(--azul); }
-  .redes{ display: flex; flex-wrap: wrap; gap: 10px 26px; }
-  .redes a{ text-decoration: none; font-size: 15px; font-weight: 500; border-bottom: 1px solid var(--linha); padding-bottom: 2px; }
-  .redes a:hover{ border-color: var(--azul); color: var(--azul); }
-  .rodape-base{ display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 24px; font-size: 13px; color: var(--tinta-suave); }
+  .rodape{ padding: 40px 0 32px; border-top: 1px solid var(--linha); }
+  .rodape-topo{ display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .redes{ display: flex; flex-wrap: wrap; gap: 8px; }
+  .redes a{ display: inline-flex; align-items: center; text-decoration: none; font-size: 12px; font-weight: 700; background: var(--branco); padding: 8px 14px; border-radius: 999px; box-shadow: var(--sombra); transition: color .2s; }
+  .redes a:hover{ color: var(--azul); }
+  .rodape-base{ display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 24px; font-size: 12px; color: var(--tinta-suave); }
 
   @media (max-width: 600px){
-    section{ padding: 84px 0; }
-    .container{ padding: 0 20px; }
-    .secao-topo{ margin-bottom: 40px; }
-    .subtitulo{ margin-top: 64px; }
+    section{ padding: 72px 0; }
+    .secao-junta{ padding-top: 32px; }
+    .container{ padding: 0 18px; }
   }
 
   /* =========================================================
      CARD DE CAPTURA (mídia kit)
      ========================================================= */
   .modal-fundo{
-    position: fixed; inset: 0; z-index: 300; background: rgba(20,17,13,.62);
-    display: grid; place-items: center; padding: 20px;
-    opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility .35s;
+    position: fixed; inset: 0; z-index: 300; background: rgba(20,17,13,.6);
+    display: grid; place-items: center; padding: 18px;
+    opacity: 0; visibility: hidden; transition: opacity .3s ease, visibility .3s;
   }
   .modal-fundo.aberto{ opacity: 1; visibility: visible; }
   .modal{
-    position: relative; width: 100%; max-width: 440px; max-height: calc(100vh - 40px); overflow-y: auto;
-    background: var(--creme); border-radius: var(--raio-g); padding: 44px 36px 36px; box-shadow: var(--sombra-forte);
-    transform: translateY(16px) scale(.98); transition: transform .4s cubic-bezier(.2,.7,.2,1);
+    position: relative; width: 100%; max-width: 400px; max-height: calc(100vh - 36px); overflow-y: auto;
+    background: var(--creme); border-radius: var(--raio-g); padding: 34px 28px 28px; box-shadow: var(--sombra-forte);
+    transform: translateY(14px) scale(.98); transition: transform .35s cubic-bezier(.2,.7,.2,1);
   }
   .modal-fundo.aberto .modal{ transform: none; }
-  .modal::before{ content: ""; position: absolute; top: 0; left: 36px; right: 36px; height: 3px; background: linear-gradient(90deg, var(--azul) 70%, var(--laranja) 70%); border-radius: 0 0 3px 3px; }
-  .modal h2{ font-size: 32px; margin-bottom: 12px; padding-right: 24px; }
-  .modal > p{ color: var(--tinta-suave); font-size: 15px; margin-bottom: 26px; }
+  .modal .pilula{ margin-bottom: 14px; }
+  .modal h2{ font-size: 28px; margin-bottom: 10px; padding-right: 28px; letter-spacing: -.04em; }
+  .modal > p{ color: var(--tinta-suave); font-size: 14px; margin-bottom: 20px; }
   .modal-fechar{
-    position: absolute; top: 14px; right: 14px; width: 40px; height: 40px; border-radius: 50%;
-    border: 1px solid var(--linha); background: transparent; cursor: pointer; display: grid; place-items: center;
+    position: absolute; top: 14px; right: 14px; width: 36px; height: 36px; border-radius: 50%;
+    border: 0; background: var(--branco); box-shadow: var(--sombra); cursor: pointer; display: grid; place-items: center;
   }
-  .modal-fechar:hover{ background: var(--tinta); color: var(--creme); }
-  .modal-fechar svg{ width: 16px; height: 16px; stroke: currentColor; stroke-width: 2; }
-  .modal .btn{ width: 100%; }
-  @media (max-width: 480px){ .modal{ padding: 40px 22px 26px; } }
+  .modal-fechar:hover{ background: var(--tinta); color: #fff; }
+  .modal-fechar svg{ width: 14px; height: 14px; stroke: currentColor; stroke-width: 2.2; }
+  .modal .campo input{ background: var(--branco); }
 
   /* Movimento reduzido: tudo aparece sem animação */
   @media (prefers-reduced-motion: reduce){
     *,*::before,*::after{ animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
     .revela{ opacity: 1; transform: none; }
-    .faixa-trilho{ animation: none; flex-wrap: wrap; width: 100%; }
-    .faixa ul[aria-hidden="true"]{ display: none; }
-    .faixa ul{ flex-wrap: wrap; justify-content: center; padding: 8px 16px; }
+    .trilho{ animation: none !important; width: 100%; }
+    .trilho ul[aria-hidden="true"]{ display: none; }
+    .trilho ul{ flex-wrap: wrap; justify-content: center; }
+    .marcas-janela{ -webkit-mask-image: none; mask-image: none; }
   }
 </style>
 </head>
@@ -433,7 +415,9 @@
      ========================================================= -->
 <header class="menu" id="menu">
   <div class="container">
-    <a href="#topo" class="marca-nome">Isabelle <em>Bueno</em></a>
+    <a href="#topo" class="logo" aria-label="Isabelle Bueno, voltar ao topo">
+      <span class="logo-icone" aria-hidden="true">IB</span>Isabelle Bueno
+    </a>
     <button class="hamburguer" id="hamburguer" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu-links">
       <span></span><span></span><span></span>
     </button>
@@ -441,10 +425,10 @@
       <ul class="menu-links" id="menu-links">
         <li><a href="#sobre">Sobre</a></li>
         <li><a href="#destaques">Destaques</a></li>
-        <li><a href="#trabalhos">Trabalhos</a></li>
+        <li><a href="#trabalhos">Portfólio</a></li>
         <li><a href="#servicos">Serviços</a></li>
         <li><a href="#numeros">Números</a></li>
-        <li><a href="#contato" class="btn btn-azul">Contato</a></li>
+        <li><a href="#contato" class="btn btn-escuro">Fechar parceria</a></li>
       </ul>
     </nav>
   </div>
@@ -456,70 +440,63 @@
        1. CAPA
        ========================================================= -->
   <section class="capa" id="topo" aria-labelledby="titulo-capa">
-    <div class="container">
-      <div class="capa-grade">
-        <div class="revela">
-          <p class="capa-etiqueta">
-            <span><i class="ponto" aria-hidden="true"></i>UGC Creator</span>
-            <span>Guarulhos, SP</span>
-            <span>Disponível para novos projetos</span>
-          </p>
-          <h1 id="titulo-capa">
-            Isabelle
-            <span class="linha-2">Bueno</span>
-            <span class="sobrenome">Isabelle Bueno Ribeiro Vital</span>
-          </h1>
-          <p class="capa-frase">Eu entrego <strong>vídeos de alta qualidade</strong> com toque de <em>criatividade</em>, feitos para a sua marca vender com naturalidade.</p>
-          <div class="capa-botoes">
-            <a href="#contato" class="btn btn-azul">Falar comigo
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-            <a href="#trabalhos" class="btn btn-linha">Ver os trabalhos</a>
-          </div>
-        </div>
-
-        <div class="capa-foto-moldura revela" data-atraso="2">
-          <!-- FOTO DA CAPA: troque o bloco .midia abaixo por
-               <img src="foto-capa.jpg" alt="Isabelle Bueno sorrindo segurando um produto" width="800" height="1000">
-               (formato 4:5, de preferência .webp ou .jpg com menos de 200 KB) -->
-          <div class="midia fria capa-foto" role="img" aria-label="Foto da creator Isabelle Bueno">
-            <span class="midia-legenda">Foto da creator 4:5</span>
-          </div>
-          <div class="capa-selo" aria-hidden="true">vídeos<br>que vendem</div>
+    <div class="container capa-grade">
+      <div class="revela">
+        <span class="pilula">✦ UGC Creator em Guarulhos, SP</span>
+        <h1 id="titulo-capa">Conteúdo<br>que <span class="italico">converte</span><br>pra sua <span class="italico">marca</span>.</h1>
+        <p class="capa-texto">Eu sou <strong>Isabelle Bueno</strong> e entrego <strong>vídeos de alta qualidade</strong> com toque de criatividade, que parecem recomendação de amiga e funcionam como anúncio.</p>
+        <!-- Números curtos da capa (os valores vêm do array METRICAS no script) -->
+        <div class="capa-numeros" id="capa-numeros"></div>
+        <div class="capa-botoes">
+          <a href="#contato" class="btn btn-azul">Falar comigo</a>
+          <a href="#trabalhos" class="btn btn-linha">Ver trabalhos →</a>
         </div>
       </div>
 
-      <!-- Números curtos da capa (os valores vêm do array METRICAS no script) -->
-      <div class="capa-numeros revela" id="capa-numeros"></div>
-    </div>
-
-    <!-- Faixa com os nomes das marcas (lista no array MARCAS no script) -->
-    <div class="faixa" aria-label="Marcas com quem já trabalhei">
-      <div class="faixa-trilho" id="faixa-trilho"></div>
+      <div class="capa-visual revela" data-atraso="2">
+        <!-- FOTO DA CAPA: troque a div .capa-foto abaixo por
+             <img class="capa-foto" src="foto-capa.jpg" alt="Isabelle Bueno segurando um produto">
+             (vertical, de preferência .webp ou .jpg com menos de 200 KB) -->
+        <div class="capa-foto" role="img" aria-label="Espaço para foto ou vídeo vertical da Isabelle Bueno"></div>
+        <span class="pilula pilula-topo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4v16l14-8z"/></svg>9:16 vertical</span>
+        <span class="pilula pilula-base">★ +150 marcas</span>
+      </div>
     </div>
   </section>
+
+  <!-- Faixa escura com os serviços (vem do array SERVICOS no script) -->
+  <div class="faixa-escura" aria-hidden="true">
+    <div class="trilho" id="trilho-servicos"></div>
+  </div>
+
+  <!-- Marcas em pílulas (vem do array MARCAS no script) -->
+  <div class="marcas" role="region" aria-labelledby="titulo-marcas">
+    <p class="marcas-titulo" id="titulo-marcas">Marcas que já confiaram</p>
+    <div class="marcas-janela">
+      <div class="trilho" id="trilho-marcas"></div>
+    </div>
+  </div>
 
   <!-- =========================================================
        2. SOBRE MIM
        ========================================================= -->
   <section id="sobre" aria-labelledby="titulo-sobre">
     <div class="container sobre-grade">
-      <!-- FOTO DO SOBRE: troque o bloco .midia por
-           <img src="foto-sobre.jpg" alt="Isabelle Bueno gravando um vídeo em casa" width="800" height="1000"> -->
-      <div class="midia quente sobre-foto revela" role="img" aria-label="Foto da Isabelle Bueno no dia a dia de gravação">
-        <span class="midia-legenda">Foto da creator 4:5</span>
-      </div>
+      <!-- FOTO DO SOBRE: troque a div .sobre-foto por
+           <img class="sobre-foto" src="foto-sobre.jpg" alt="Isabelle Bueno gravando um vídeo"> -->
+      <div class="sobre-foto revela" role="img" aria-label="Espaço para foto da Isabelle Bueno, formato 4:5"></div>
 
       <div class="sobre-texto revela" data-atraso="1">
-        <p class="sobretitulo">Sobre mim</p>
-        <h2 class="titulo-secao" id="titulo-sobre">Oi, eu sou a <em>Isabelle</em></h2>
-        <p>Sou creator de conteúdo UGC em Guarulhos e transformo produtos em histórias que parecem conversa de amiga. Meu jeito de gravar é leve, verdadeiro e pensado para prender a atenção logo nos primeiros segundos.</p>
-        <p>Já criei mais de 300 vídeos para mais de 150 marcas, de beleza a tech. Cada roteiro nasce do seu objetivo e cada vídeo sai com qualidade de estúdio e toque de criatividade.</p>
+        <span class="rotulo">Sobre</span>
+        <h2 class="titulo-secao" id="titulo-sobre">Sobre mim</h2>
+        <p>Oi, eu sou a <strong>Isabelle</strong>! Sou creator de conteúdo UGC em Guarulhos e transformo produtos em histórias que parecem conversa de amiga, com <strong>qualidade de estúdio</strong> e toque de criatividade.</p>
+        <p>Já foram <strong>mais de 300 vídeos</strong> para <strong>mais de 150 marcas</strong>, de <strong>beleza, skincare, moda, comida e casa</strong> a <strong>maternidade, pet, viagem e tech</strong>. O que me move é criar conteúdo que prende a atenção e gera resultado de verdade.</p>
 
-        <ul class="promessas">
-          <li><span class="num">01</span><span><strong>Roteiro aprovado antes de gravar.</strong> Você vê e ajusta a ideia antes de eu apertar o rec.</span></li>
-          <li><span class="num">02</span><span><strong>Uma rodada de ajuste inclusa.</strong> Se algo não ficou do seu jeito, eu refaço.</span></li>
-          <li><span class="num">03</span><span><strong>Entrega em até 72 horas úteis.</strong> Depois do produto recebido e roteiro aprovado.</span></li>
+        <p class="promessas-titulo">Meu compromisso com você</p>
+        <ul class="chips">
+          <li class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Roteiro aprovado antes de gravar</li>
+          <li class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Uma rodada de ajuste inclusa</li>
+          <li class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Entrega em até 72 horas úteis</li>
         </ul>
 
         <p class="assinatura">Isabelle Bueno<small>Isabelle Bueno Ribeiro Vital, UGC Creator</small></p>
@@ -530,16 +507,14 @@
   <!-- =========================================================
        3. CONTEÚDOS DE DESTAQUE
        (os cards são montados pelo array DESTAQUES no script:
-        lá você troca o link do vídeo, a capa, o número e os textos)
+        lá você troca o LINK DO VÍDEO, a CAPA, o número e os textos)
        ========================================================= -->
-  <section id="destaques" class="destaques" aria-labelledby="titulo-destaques">
+  <section id="destaques" class="secao-junta" aria-labelledby="titulo-destaques">
     <div class="container">
       <div class="secao-topo revela">
-        <div>
-          <p class="sobretitulo">Conteúdos de destaque</p>
-          <h2 class="titulo-secao" id="titulo-destaques">Vídeos que <em>fizeram</em> barulho</h2>
-        </div>
-        <p class="intro-secao">Três trabalhos que mostram o meu jeito de contar histórias. Toque em qualquer card para assistir.</p>
+        <span class="rotulo">Destaques</span>
+        <h2 class="titulo-secao" id="titulo-destaques">Conteúdos de destaque</h2>
+        <p class="intro-secao">Os três vídeos que eu mostro primeiro pra qualquer marca. Toque no card para assistir.</p>
       </div>
       <div class="destaques-grade" id="destaques-grade"></div>
     </div>
@@ -548,14 +523,12 @@
   <!-- =========================================================
        4. TRABALHOS POR NICHO
        ========================================================= -->
-  <section id="trabalhos" aria-labelledby="titulo-trabalhos">
+  <section id="trabalhos" class="secao-junta" aria-labelledby="titulo-trabalhos">
     <div class="container">
       <div class="secao-topo revela">
-        <div>
-          <p class="sobretitulo">Trabalhos por nicho</p>
-          <h2 class="titulo-secao" id="titulo-trabalhos">Um portfólio <em>para cada</em> categoria</h2>
-        </div>
-        <p class="intro-secao">Escolha um nicho e veja só os trabalhos daquela categoria.</p>
+        <span class="rotulo">Portfólio</span>
+        <h2 class="titulo-secao" id="titulo-trabalhos">Trabalhos por nicho</h2>
+        <p class="intro-secao">Filtre pelo segmento e veja como eu adapto o tom pra cada marca.</p>
       </div>
       <div class="filtros revela" id="filtros" role="group" aria-label="Filtrar trabalhos por nicho"></div>
       <div class="galeria" id="galeria" aria-live="polite"></div>
@@ -565,13 +538,11 @@
   <!-- =========================================================
        5. COMO EU TE AJUDO
        ========================================================= -->
-  <section id="servicos" class="servicos" aria-labelledby="titulo-servicos">
+  <section id="servicos" class="secao-junta" aria-labelledby="titulo-servicos">
     <div class="container">
       <div class="secao-topo revela">
-        <div>
-          <p class="sobretitulo">Como eu te ajudo</p>
-          <h2 class="titulo-secao" id="titulo-servicos">Do roteiro ao <em>anúncio</em> pronto</h2>
-        </div>
+        <span class="rotulo">Serviços</span>
+        <h2 class="titulo-secao" id="titulo-servicos">Como eu te <span class="italico">ajudo</span></h2>
         <p class="intro-secao">Serviços que podem ser contratados separados ou combinados em um pacote.</p>
       </div>
       <div class="servicos-grade" id="servicos-grade"></div>
@@ -581,13 +552,11 @@
   <!-- =========================================================
        6. NÚMEROS E DEPOIMENTOS
        ========================================================= -->
-  <section id="numeros" aria-labelledby="titulo-numeros">
+  <section id="numeros" class="numeros" aria-labelledby="titulo-numeros">
     <div class="container">
       <div class="secao-topo revela">
-        <div>
-          <p class="sobretitulo">Números e depoimentos</p>
-          <h2 class="titulo-secao" id="titulo-numeros">Resultados que <em>falam</em> por mim</h2>
-        </div>
+        <span class="rotulo">Números</span>
+        <h2 class="titulo-secao" id="titulo-numeros">Resultados que <span class="italico">falam</span> por mim</h2>
       </div>
       <div class="metricas" id="metricas"></div>
 
@@ -602,24 +571,24 @@
   <!-- =========================================================
        7. BORA CRIAR JUNTOS
        ========================================================= -->
-  <section id="contato" class="contato" aria-labelledby="titulo-contato">
+  <section id="contato" aria-labelledby="titulo-contato">
     <div class="container contato-grade">
       <div class="revela">
-        <p class="sobretitulo">Contato</p>
-        <h2 class="titulo-secao" id="titulo-contato">Bora criar <em>juntos?</em></h2>
+        <span class="rotulo">Contato</span>
+        <h2 class="titulo-secao" id="titulo-contato">Bora criar <span class="italico">juntos?</span></h2>
         <p class="intro-secao">Me conta sobre a sua marca e o seu produto. Eu respondo em até um dia útil com uma proposta.</p>
 
-        <div class="contato-lista">
+        <div class="contato-botoes">
           <a href="https://wa.me/5521999052606" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 11.6a8.5 8.5 0 0 1-12.6 7.4L3.5 20.5l1.5-4.3A8.5 8.5 0 1 1 20.5 11.6Z"/><path d="M9 8.5c0 3.5 2.9 6.5 6.5 6.5l1-1.6-2-1-1 .9c-1-.5-1.9-1.4-2.4-2.4l.9-1-1-2Z"/></svg>
+            <span class="contato-icone"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 11.6a8.5 8.5 0 0 1-12.6 7.4L3.5 20.5l1.5-4.3A8.5 8.5 0 1 1 20.5 11.6Z"/><path d="M9 8.5c0 3.5 2.9 6.5 6.5 6.5l1-1.6-2-1-1 .9c-1-.5-1.9-1.4-2.4-2.4l.9-1-1-2Z"/></svg></span>
             <div><small>WhatsApp</small><span>(21) 99905-2606</span></div>
           </a>
           <a href="mailto:bellevital@icloud.com">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6 8.5 7 8.5-7"/></svg>
+            <span class="contato-icone laranja"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6 8.5 7 8.5-7"/></svg></span>
             <div><small>E-mail</small><span>bellevital@icloud.com</span></div>
           </a>
           <a href="https://instagram.com/bellebuenosilveira" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6"/></svg>
+            <span class="contato-icone escuro"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6"/></svg></span>
             <div><small>Instagram</small><span>@bellebuenosilveira</span></div>
           </a>
         </div>
@@ -628,7 +597,7 @@
       <!-- FORMULÁRIO: hoje ele só mostra a confirmação na tela.
            Para receber as mensagens de verdade, use um serviço como Formspree:
            coloque action="https://formspree.io/f/SEU_CODIGO" e method="POST" na tag form
-           e apague a linha "evento.preventDefault()" no script (função do formulário de contato). -->
+           e apague a linha "evento.preventDefault()" no script (formulário de contato). -->
       <div class="formulario revela" data-atraso="1">
         <form id="form-contato" novalidate>
           <div class="campo">
@@ -643,13 +612,11 @@
             <label for="mensagem">Mensagem</label>
             <textarea id="mensagem" name="mensagem" required placeholder="Conta sobre a marca, o produto e o que você precisa"></textarea>
           </div>
-          <button type="submit" class="btn btn-azul">Enviar mensagem
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </button>
+          <button type="submit" class="btn btn-azul">Enviar mensagem →</button>
         </form>
         <div class="confirmacao" id="confirmacao" hidden tabindex="-1">
           <div class="icone-ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
-          <h3>Mensagem <em>recebida!</em></h3>
+          <h3>Mensagem <span class="italico">recebida!</span></h3>
           <p>Obrigada pelo contato. Eu te respondo em até um dia útil.</p>
         </div>
       </div>
@@ -663,7 +630,7 @@
 <footer class="rodape">
   <div class="container">
     <div class="rodape-topo">
-      <p class="rodape-nome">Isabelle <em>Bueno</em></p>
+      <a href="#topo" class="logo"><span class="logo-icone" aria-hidden="true">IB</span>Isabelle Bueno</a>
       <nav class="redes" aria-label="Redes sociais">
         <a href="https://instagram.com/bellebuenosilveira" target="_blank" rel="noopener">Instagram</a>
         <!-- TROQUE "@seuusuario" pelo seu TikTok, ou apague esta linha -->
@@ -687,7 +654,8 @@
     <button class="modal-fechar" id="modal-fechar" aria-label="Fechar">
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
     </button>
-    <h2 id="modal-titulo">Quer meu <em>mídia kit</em> completo?</h2>
+    <span class="pilula">✦ Mídia kit</span>
+    <h2 id="modal-titulo">Quer meu <span class="italico">mídia kit</span> completo?</h2>
     <p>Deixa seu nome e e-mail que eu te envio o mídia kit com formatos, valores e cases.</p>
     <!-- Para receber estes contatos de verdade, ligue este form a um serviço como Formspree (mesma dica do formulário de contato) -->
     <form id="form-kit" novalidate>
@@ -716,7 +684,7 @@
    Não precisa mexer no HTML.
    ========================================================= */
 
-/* MARCAS: aparecem na faixa que fecha a capa. Adicione, remova ou corrija a grafia à vontade. */
+/* MARCAS: aparecem nas pílulas logo abaixo da capa. Adicione, remova ou corrija a grafia à vontade. */
 const MARCAS = [
   "Pé de Algodão", "Growth", "Glim Acessórios", "Ela É", "The Coffee", "Zeal Company", "Guma", "Muna",
   "The Good Villages", "Tuyo", "Luze Skincare", "Aura Esmalteria", "Rexona", "Batiste", "Duo Gourmet", "Brae",
@@ -732,49 +700,54 @@ const MARCAS = [
   "Barro Minas", "Lucas Carvalho Chile", "PicPay", "Emma Colchões", "Avocado", "Deutsch Pro", "Oral B"
 ];
 
-/* MÉTRICAS: as quatro primeiras aparecem na seção de números com contador animado.
-   "capa: true" marca as que também aparecem na capa (no máximo três).
+/* MÉTRICAS: as quatro aparecem na seção de números com contador animado.
+   "capa: true" marca as que também aparecem na capa (no máximo três); "curto" é o rótulo pequeno da capa.
    valor: número final do contador. Deixe valor: null para mostrar o placeholder "texto".
    TROQUE o placeholder de views pelo seu número real (exemplo: valor: 12, sufixo: "M+"). */
 const METRICAS = [
-  { valor: 300,  sufixo: "+", rotulo: "vídeos entregues", capa: true },
-  { valor: 150,  sufixo: "+", rotulo: "marcas atendidas", capa: true },
-  { valor: null, texto: "00M", rotulo: "views somadas (troque pelo seu número)", capa: true },
-  { valor: 9,    sufixo: "",  rotulo: "nichos atendidos", capa: false }
+  { valor: 300,  prefixo: "+", sufixo: "", rotulo: "vídeos entregues", curto: "vídeos", capa: true },
+  { valor: 150,  prefixo: "+", sufixo: "", rotulo: "marcas atendidas", curto: "marcas", capa: true },
+  { valor: null, texto: "00M+", rotulo: "views somadas (troque pelo seu número)", curto: "views", capa: true },
+  { valor: 9,    prefixo: "",  sufixo: "", rotulo: "nichos atendidos", curto: "nichos", capa: false }
 ];
 
 /* DESTAQUES: os três vídeos grandes.
    link: LINK DO VÍDEO (é o que abre ao clicar no card).
    capa: CAPA DO VÍDEO. Deixe "" para usar o bloco com degradê,
-         ou coloque o caminho de uma imagem vertical 9:16 (exemplo: "capa-video-1.jpg").
-   numero e rotulo: TROQUE pelos números reais de cada vídeo. */
+         ou coloque o caminho de uma imagem vertical (exemplo: "capa-video-1.jpg").
+   nicho: etiqueta escura no canto do card.
+   numero e rotulo: TROQUE pelos números reais de cada vídeo.
+   cor: degradê do bloco provisório ("azul", "laranja", "escuro" ou "misto"). */
 const DESTAQUES = [
   {
     link: "https://youtube.com/shorts/AsP1e2nYx40",
     capa: "",
+    nicho: "nicho",
     numero: "+0,0M",
-    rotulo: "views no shorts (troque pelo número real)",
+    rotulo: "views no shorts",
     titulo: "Título do conteúdo 01",
-    contexto: "Contexto curto: marca, objetivo e formato do vídeo.",
-    estilo: "fria"
+    contexto: "Contexto curto: marca, objetivo e formato.",
+    cor: "azul"
   },
   {
     link: "https://www.youtube.com/shorts/3QobLGWghus",
     capa: "",
+    nicho: "nicho",
     numero: "+0,0M",
-    rotulo: "views no shorts (troque pelo número real)",
+    rotulo: "views no shorts",
     titulo: "Título do conteúdo 02",
-    contexto: "Contexto curto: marca, objetivo e formato do vídeo.",
-    estilo: "quente"
+    contexto: "Contexto curto: marca, objetivo e formato.",
+    cor: "laranja"
   },
   {
     link: "https://youtube.com/shorts/QkLUyYvBK58",
     capa: "",
+    nicho: "nicho",
     numero: "+0,0M",
-    rotulo: "views no shorts (troque pelo número real)",
+    rotulo: "views no shorts",
     titulo: "Título do conteúdo 03",
-    contexto: "Contexto curto: marca, objetivo e formato do vídeo.",
-    estilo: "neutra"
+    contexto: "Contexto curto: marca, objetivo e formato.",
+    cor: "escuro"
   }
 ];
 
@@ -784,36 +757,36 @@ const NICHOS = ["beleza", "skincare", "moda", "comida", "casa e decoração", "m
 /* TRABALHOS: cada item aparece na galeria.
    nicho: precisa ser igual a um dos NICHOS acima.
    link: coloque o link do vídeo ou post ("#" se ainda não tiver).
-   imagem: deixe "" para usar o bloco com degradê, ou coloque o caminho de uma foto 4:5. */
+   imagem: deixe "" para usar o bloco com degradê, ou coloque o caminho de uma imagem vertical 9:16. */
 const TRABALHOS = [
-  { nicho: "beleza",           marca: "Pantene",             titulo: "Vídeo UGC de rotina capilar",        formato: "Vídeo 9:16",  link: "#", imagem: "" },
-  { nicho: "beleza",           marca: "Eudora",              titulo: "Unboxing de maquiagem",              formato: "Vídeo 9:16",  link: "#", imagem: "" },
-  { nicho: "skincare",         marca: "Vichy",               titulo: "Rotina de skincare noturna",         formato: "Vídeo 9:16",  link: "#", imagem: "" },
-  { nicho: "skincare",         marca: "Luze Skincare",       titulo: "Antes e depois de textura",          formato: "Fotos 4:5",   link: "#", imagem: "" },
-  { nicho: "moda",             marca: "Meu Sapato Colorido", titulo: "Provador com três looks",            formato: "Vídeo 9:16",  link: "#", imagem: "" },
-  { nicho: "moda",             marca: "VB Camisetas",        titulo: "Look do dia com peça básica",        formato: "Vídeo 9:16",  link: "#", imagem: "" },
-  { nicho: "comida",           marca: "Duo Gourmet",         titulo: "Receita rápida com o produto",       formato: "Vídeo 9:16",  link: "#", imagem: "" },
-  { nicho: "comida",           marca: "Brigadelícia",        titulo: "Degustação sincera",                 formato: "Vídeo 9:16",  link: "#", imagem: "" },
-  { nicho: "casa e decoração", marca: "Renova Pisos",        titulo: "Transformação de ambiente",          formato: "Vídeo 9:16",  link: "#", imagem: "" },
-  { nicho: "casa e decoração", marca: "Emma Colchões",       titulo: "Review de uso no dia a dia",         formato: "Vídeo 9:16",  link: "#", imagem: "" },
-  { nicho: "maternidade",      marca: "Agora Sou Mãe",       titulo: "Rotina real de mãe",                 formato: "Vídeo 9:16",  link: "#", imagem: "" },
-  { nicho: "maternidade",      marca: "Marina Enxovais",     titulo: "Enxoval em detalhes",                formato: "Fotos 4:5",   link: "#", imagem: "" },
-  { nicho: "pet",              marca: "Marca 01",            titulo: "Título do trabalho pet",             formato: "Vídeo 9:16",  link: "#", imagem: "" },
-  { nicho: "pet",              marca: "Marca 02",            titulo: "Título do trabalho pet",             formato: "Vídeo 9:16",  link: "#", imagem: "" },
-  { nicho: "viagem",           marca: "Gol",                 titulo: "Diário de viagem",                   formato: "Vídeo 9:16",  link: "#", imagem: "" },
-  { nicho: "viagem",           marca: "Real Seguro Viagem",  titulo: "Dica de viagem tranquila",           formato: "Vídeo 9:16",  link: "#", imagem: "" },
-  { nicho: "tech",             marca: "TCL",                 titulo: "Setup e primeiras impressões",       formato: "Vídeo 9:16",  link: "#", imagem: "" },
-  { nicho: "tech",             marca: "PicPay",              titulo: "Tutorial de app em 30 segundos",     formato: "Vídeo 9:16",  link: "#", imagem: "" }
+  { nicho: "beleza",           marca: "Pantene",             titulo: "Vídeo UGC de rotina capilar",    link: "#", imagem: "" },
+  { nicho: "beleza",           marca: "Eudora",              titulo: "Unboxing de maquiagem",          link: "#", imagem: "" },
+  { nicho: "skincare",         marca: "Vichy",               titulo: "Rotina de skincare noturna",     link: "#", imagem: "" },
+  { nicho: "skincare",         marca: "Luze Skincare",       titulo: "Antes e depois de textura",      link: "#", imagem: "" },
+  { nicho: "moda",             marca: "Meu Sapato Colorido", titulo: "Provador com três looks",        link: "#", imagem: "" },
+  { nicho: "moda",             marca: "VB Camisetas",        titulo: "Look do dia com peça básica",    link: "#", imagem: "" },
+  { nicho: "comida",           marca: "Duo Gourmet",         titulo: "Receita rápida com o produto",   link: "#", imagem: "" },
+  { nicho: "comida",           marca: "Brigadelícia",        titulo: "Degustação sincera",             link: "#", imagem: "" },
+  { nicho: "casa e decoração", marca: "Renova Pisos",        titulo: "Transformação de ambiente",      link: "#", imagem: "" },
+  { nicho: "casa e decoração", marca: "Emma Colchões",       titulo: "Review de uso no dia a dia",     link: "#", imagem: "" },
+  { nicho: "maternidade",      marca: "Agora Sou Mãe",       titulo: "Rotina real de mãe",             link: "#", imagem: "" },
+  { nicho: "maternidade",      marca: "Marina Enxovais",     titulo: "Enxoval em detalhes",            link: "#", imagem: "" },
+  { nicho: "pet",              marca: "Marca 01",            titulo: "Título do trabalho pet",         link: "#", imagem: "" },
+  { nicho: "pet",              marca: "Marca 02",            titulo: "Título do trabalho pet",         link: "#", imagem: "" },
+  { nicho: "viagem",           marca: "Gol",                 titulo: "Diário de viagem",               link: "#", imagem: "" },
+  { nicho: "viagem",           marca: "Real Seguro Viagem",  titulo: "Dica de viagem tranquila",       link: "#", imagem: "" },
+  { nicho: "tech",             marca: "TCL",                 titulo: "Setup e primeiras impressões",   link: "#", imagem: "" },
+  { nicho: "tech",             marca: "PicPay",              titulo: "Tutorial de app em 30 segundos", link: "#", imagem: "" }
 ];
 
-/* SERVIÇOS: aparecem em "Como eu te ajudo". */
+/* SERVIÇOS: aparecem em "Como eu te ajudo" e na faixa escura logo abaixo da capa. */
 const SERVICOS = [
-  { titulo: "Vídeo UGC",               descricao: "Vídeo vertical com roteiro, gancho forte e fala natural, pronto para orgânico ou anúncio." },
-  { titulo: "Corte para anúncio",      descricao: "Versões curtas do mesmo vídeo com ganchos diferentes para testar no tráfego pago." },
-  { titulo: "Fotos do produto",        descricao: "Fotos lifestyle e de detalhe, com luz bonita e cara de conteúdo real." },
-  { titulo: "Unboxing",                descricao: "A primeira impressão do produto, da embalagem ao uso, com emoção de verdade." },
+  { titulo: "Vídeo UGC",                descricao: "Vídeo vertical com roteiro, gancho forte e fala natural, pronto para orgânico ou anúncio." },
+  { titulo: "Corte para anúncio",       descricao: "Versões curtas do mesmo vídeo com ganchos diferentes para testar no tráfego pago." },
+  { titulo: "Fotos do produto",         descricao: "Fotos lifestyle e de detalhe, com luz bonita e cara de conteúdo real." },
+  { titulo: "Unboxing",                 descricao: "A primeira impressão do produto, da embalagem ao uso, com emoção de verdade." },
   { titulo: "Publicação no meu perfil", descricao: "O vídeo também vai ao ar no meu Instagram, com collab e direito a impulsionamento." },
-  { titulo: "Pacote mensal",           descricao: "Conteúdo recorrente todo mês, com calendário combinado e prioridade na agenda." }
+  { titulo: "Pacote mensal",            descricao: "Conteúdo recorrente todo mês, com calendário combinado e prioridade na agenda." }
 ];
 
 /* RESULTADOS DE CAMPANHA: TROQUE pelos resultados reais (número, marca e texto). */
@@ -841,55 +814,56 @@ const DEPOIMENTOS = [
   const $ = (sel) => document.querySelector(sel);
   const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
   const formata = (n) => n.toLocaleString("pt-BR");
-  const estilos = ["fria", "quente", "neutra"];
+  const maiuscula = (t) => String(t).charAt(0).toUpperCase() + String(t).slice(1);
+  const cores = ["azul", "laranja", "escuro", "misto"];
+  const iconePlay = '<span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 4v16l14-8z"/></svg></span>';
 
-  /* Monta o conteúdo de uma métrica (contador ou placeholder) */
-  function htmlMetrica(m){
-    if (m.valor === null || m.valor === undefined){
-      return '<strong>' + esc(m.texto || "00") + '</strong>';
-    }
+  /* Número de uma métrica (contador animado ou placeholder) */
+  function htmlNumero(m){
+    if (m.valor === null || m.valor === undefined) return esc(m.texto || "00");
     const inicial = reduzMovimento ? formata(m.valor) : "0";
-    return '<strong><span class="contador" data-alvo="' + m.valor + '">' + inicial + '</span>' + esc(m.sufixo || "") + '</strong>';
+    return esc(m.prefixo || "") + '<span class="contador" data-alvo="' + m.valor + '">' + inicial + '</span>' + esc(m.sufixo || "");
   }
 
   /* Capa: três números curtos */
   $("#capa-numeros").innerHTML = METRICAS.filter((m) => m.capa).slice(0, 3)
-    .map((m) => '<div>' + htmlMetrica(m) + '<span>' + esc(m.rotulo) + '</span></div>').join("");
+    .map((m) => '<div><strong>' + htmlNumero(m) + '</strong><span>' + esc(m.curto || m.rotulo) + '</span></div>').join("");
 
-  /* Faixa de marcas (a lista é duplicada para o movimento ficar contínuo) */
-  const listaMarcas = MARCAS.map((m) => '<li>' + esc(m) + '</li>').join("");
-  $("#faixa-trilho").innerHTML = '<ul>' + listaMarcas + '</ul><ul aria-hidden="true">' + listaMarcas + '</ul>';
+  /* Faixas que deslizam (a lista é duplicada para o movimento ficar contínuo) */
+  function montaTrilho(el, itens, comoItem){
+    const lista = itens.map((t) => '<li>' + comoItem(t) + '</li>').join("");
+    el.innerHTML = '<ul>' + lista + '</ul><ul aria-hidden="true">' + lista + '</ul>';
+  }
+  montaTrilho($("#trilho-servicos"), SERVICOS.concat(SERVICOS), (s) => esc(s.titulo));
+  montaTrilho($("#trilho-marcas"), MARCAS, (m) => '<span class="marca-pilula">' + esc(m) + '</span>');
 
   /* Destaques */
-  const iconePlay = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg>';
   $("#destaques-grade").innerHTML = DESTAQUES.map((d, i) => {
-    const capa = d.capa
-      ? '<img src="' + esc(d.capa) + '" alt="Capa do vídeo: ' + esc(d.titulo) + '" loading="lazy">'
-      : '<span class="midia-legenda">Capa do vídeo 9:16</span>';
+    const capa = d.capa ? '<img src="' + esc(d.capa) + '" alt="Capa do vídeo: ' + esc(d.titulo) + '" loading="lazy">' : "";
     return '' +
       '<a class="destaque revela" data-atraso="' + (i + 1) + '" href="' + esc(d.link) + '" target="_blank" rel="noopener" aria-label="Assistir: ' + esc(d.titulo) + ' (abre em nova aba)">' +
-        '<div class="midia ' + esc(d.estilo || estilos[i % 3]) + ' destaque-capa">' + capa + '<span class="play">' + iconePlay + '</span></div>' +
+        '<div class="destaque-card">' +
+          '<div class="midia ' + esc(d.cor || cores[i % 4]) + ' destaque-capa">' + capa +
+            '<span class="tag-escura">' + esc(maiuscula(d.nicho)) + '</span>' + iconePlay + '</div>' +
+          '<p class="destaque-titulo">' + esc(d.titulo) + '</p>' +
+        '</div>' +
         '<p class="destaque-num">' + esc(d.numero) + '</p>' +
         '<p class="destaque-rotulo">' + esc(d.rotulo) + '</p>' +
-        '<h3>' + esc(d.titulo) + '</h3>' +
-        '<p>' + esc(d.contexto) + '</p>' +
-        '<span class="destaque-ver">Assistir ao vídeo ' +
-          '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>' +
+        '<p class="destaque-contexto">' + esc(d.contexto) + '</p>' +
       '</a>';
   }).join("");
 
   /* Galeria de trabalhos com filtro */
   const galeria = $("#galeria");
   galeria.innerHTML = TRABALHOS.map((t, i) => {
-    const visual = t.imagem
-      ? '<img src="' + esc(t.imagem) + '" alt="' + esc(t.titulo + " para " + t.marca) + '" loading="lazy">'
-      : '<span class="midia-legenda">' + esc(t.formato) + '</span>';
+    const visual = t.imagem ? '<img src="' + esc(t.imagem) + '" alt="' + esc(t.titulo + " para " + t.marca) + '" loading="lazy">' : "";
     const externo = t.link && t.link !== "#" ? ' target="_blank" rel="noopener"' : "";
     return '' +
       '<article class="trabalho" data-nicho="' + esc(t.nicho) + '">' +
         '<a href="' + esc(t.link || "#") + '"' + externo + '>' +
-          '<div class="midia ' + estilos[i % 3] + '"' + (t.imagem ? "" : ' role="img" aria-label="' + esc("Espaço para a imagem do trabalho " + t.titulo) + '"') + '>' + visual + '</div>' +
-          '<span class="trabalho-nicho">' + esc(t.nicho) + '</span>' +
+          '<div class="moldura"><div class="midia ' + cores[i % 4] + '"' +
+            (t.imagem ? "" : ' role="img" aria-label="' + esc("Espaço para a capa vertical 9:16 do trabalho " + t.titulo) + '"') + '>' +
+            visual + '<span class="tag-escura">' + esc(maiuscula(t.nicho)) + '</span>' + iconePlay + '</div></div>' +
           '<h3>' + esc(t.titulo) + '</h3>' +
           '<p>' + esc(t.marca) + '</p>' +
         '</a>' +
@@ -898,8 +872,7 @@ const DEPOIMENTOS = [
 
   const filtros = $("#filtros");
   filtros.innerHTML = ["todos"].concat(NICHOS).map((n, i) =>
-    '<button type="button" class="filtro" data-filtro="' + esc(n) + '" aria-pressed="' + (i === 0) + '">' +
-      esc(n.charAt(0).toUpperCase() + n.slice(1)) + '</button>'
+    '<button type="button" class="filtro" data-filtro="' + esc(n) + '" aria-pressed="' + (i === 0) + '">' + esc(maiuscula(n)) + '</button>'
   ).join("");
 
   filtros.addEventListener("click", (e) => {
@@ -932,7 +905,7 @@ const DEPOIMENTOS = [
 
   /* Métricas, resultados e depoimentos */
   $("#metricas").innerHTML = METRICAS.slice(0, 4).map((m, i) =>
-    '<div class="metrica revela" data-atraso="' + i + '">' + htmlMetrica(m) + '<span>' + esc(m.rotulo) + '</span></div>'
+    '<div class="metrica revela" data-atraso="' + i + '"><strong>' + htmlNumero(m) + '</strong><span>' + esc(m.rotulo) + '</span></div>'
   ).join("");
 
   $("#resultados").innerHTML = RESULTADOS.map((r, i) =>
@@ -946,6 +919,7 @@ const DEPOIMENTOS = [
   const iniciais = (nome) => nome.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]).join("").toUpperCase();
   $("#depoimentos").innerHTML = DEPOIMENTOS.map((d, i) =>
     '<figure class="depoimento revela" data-atraso="' + (i % 2 + 1) + '">' +
+      '<div class="estrelas" aria-hidden="true">★★★★★</div>' +
       '<blockquote>' + esc(d.texto) + '</blockquote>' +
       '<figcaption><span class="avatar" aria-hidden="true">' + esc(iniciais(d.nome)) + '</span>' +
         '<div><strong>' + esc(d.nome) + '</strong><span>' + esc(d.empresa) + '</span></div></figcaption>' +
@@ -977,7 +951,7 @@ const DEPOIMENTOS = [
     document.body.style.overflow = abre ? "hidden" : "";
   });
   links.addEventListener("click", (e) => { if (e.target.closest("a")) fechaMenu(); });
-  window.addEventListener("resize", () => { if (window.innerWidth > 920) fechaMenu(); });
+  window.addEventListener("resize", () => { if (window.innerWidth > 820) fechaMenu(); });
 
   /* Contador animado */
   function animaContador(el){
@@ -987,8 +961,7 @@ const DEPOIMENTOS = [
     const inicio = performance.now();
     function passo(agora){
       const p = Math.min((agora - inicio) / duracao, 1);
-      const suave = 1 - Math.pow(1 - p, 3);
-      el.textContent = formata(Math.round(alvo * suave));
+      el.textContent = formata(Math.round(alvo * (1 - Math.pow(1 - p, 3))));
       if (p < 1) requestAnimationFrame(passo);
     }
     requestAnimationFrame(passo);
