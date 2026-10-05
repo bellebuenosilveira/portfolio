@@ -134,27 +134,30 @@
     transition: box-shadow .3s ease;
   }
   .menu.rolou{ box-shadow: 0 1px 0 var(--linha), 0 8px 24px -16px rgba(20,17,13,.25); }
-  .menu .container{ height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  /* Menu em três colunas: nome à esquerda, links no centro, botão e idioma à direita */
+  .menu .container{ height: 100%; max-width: 1240px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; }
+  .menu .logo{ justify-self: start; }
   .logo{ display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; font-size: 13px; letter-spacing: .01em; text-transform: uppercase; white-space: nowrap; }
   .logo-icone{
     width: 30px; height: 30px; border-radius: 8px; background: var(--manteiga); color: var(--tinta); flex: none;
     display: grid; place-items: center; font-family: var(--serifa); font-style: italic; font-weight: 900; font-size: 13px; letter-spacing: -.02em;
   }
-  .menu .container > nav{ margin-left: auto; }
-  .menu-links{ display: flex; align-items: center; gap: 26px; }
+    .menu-links{ display: flex; align-items: center; gap: 26px; }
   .menu-links a{ text-decoration: none; font-size: 13px; font-weight: 500; color: var(--tinta); transition: color .2s; }
   .menu-links a:hover, .contato-lista a:hover{ text-decoration: underline; text-decoration-color: var(--manteiga-forte); text-decoration-thickness: 3px; text-underline-offset: 5px; }
   .menu-links .btn{ padding: 9px 16px; font-size: 13px; color: #fff; }
   .menu-links .btn:hover{ color: #fff; }
   /* Botão de idioma PT | EN */
-  .menu-acoes{ display: flex; align-items: center; gap: 10px; margin-left: 22px; flex: none; }
+  .menu-acoes{ display: flex; align-items: center; gap: 12px; justify-self: end; flex: none; }
+  .menu-acoes .menu-cta{ padding: 9px 16px; font-size: 13px; }
+  .menu-links .menu-cta-lista{ display: none; }
   .idioma{ display: inline-flex; align-items: center; gap: 2px; background: var(--branco); border-radius: 999px; padding: 3px 3px 3px 9px; box-shadow: var(--sombra); }
   .idioma > svg{ width: 14px; height: 14px; stroke: var(--tinta-suave); fill: none; stroke-width: 1.8; margin-right: 3px; flex: none; }
   .idioma button{ border: 0; background: transparent; cursor: pointer; font-size: 12px; font-weight: 800; letter-spacing: .06em; color: var(--tinta-suave); padding: 7px 10px; border-radius: 999px; line-height: 1; transition: background .2s, color .2s; }
   .idioma button:hover{ color: var(--tinta); }
   .idioma button[aria-pressed="true"]{ background: var(--manteiga); color: var(--tinta); }
   @media (max-width: 480px){
-    .menu-acoes{ margin-left: 8px; gap: 8px; }
+    .menu-acoes{ gap: 8px; }
     .idioma{ padding: 3px; }
     .idioma > svg{ display: none; }
     .idioma button{ padding: 7px 9px; }
@@ -172,7 +175,10 @@
   .hamburguer[aria-expanded="true"] span:nth-child(2){ opacity: 0; }
   .hamburguer[aria-expanded="true"] span:nth-child(3){ transform: translateY(-6px) rotate(-45deg); }
 
-  @media (max-width: 900px){
+  @media (max-width: 1000px){
+    .menu .container{ display: flex; justify-content: space-between; gap: 12px; }
+    .menu-acoes .menu-cta{ display: none; }
+    .menu-links .menu-cta-lista{ display: list-item; }
     .hamburguer{ display: block; }
     .menu-links{
       position: fixed; top: var(--menu-h); left: 0; right: 0; bottom: auto;
@@ -440,10 +446,11 @@
         <li><a href="#trabalhos" data-i18n="menu.trabalhos">Portfólio</a></li>
         <li><a href="#servicos" data-i18n="menu.servicos">Serviços</a></li>
         <li><a href="#numeros" data-i18n="menu.numeros">Números</a></li>
-        <li><a href="#contato" class="btn btn-escuro" data-i18n="menu.parceria">Fechar parceria</a></li>
+        <li class="menu-cta-lista"><a href="#contato" class="btn btn-escuro" data-i18n="menu.parceria">Fechar parceria</a></li>
       </ul>
     </nav>
     <div class="menu-acoes">
+      <a href="#contato" class="btn btn-escuro menu-cta" data-i18n="menu.parceria">Fechar parceria</a>
       <!-- BOTÃO DE IDIOMA: troca o site inteiro entre português e inglês.
            Os textos em inglês ficam no objeto TEXTOS_EN e nos campos terminados em _en, no começo do script. -->
       <div class="idioma" role="group" aria-label="Idioma / Language">
@@ -1172,7 +1179,7 @@ const TEXTOS_PT = {
     document.body.style.overflow = abre ? "hidden" : "";
   });
   links.addEventListener("click", (e) => { if (e.target.closest("a")) fechaMenu(); });
-  window.addEventListener("resize", () => { if (window.innerWidth > 900) fechaMenu(); });
+  window.addEventListener("resize", () => { if (window.innerWidth > 1000) fechaMenu(); });
 
   /* Botão PT | EN: troca o idioma sem recarregar a página */
   document.querySelectorAll("[data-idioma]").forEach((botao) => {
