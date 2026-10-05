@@ -209,10 +209,20 @@
   .capa-numeros div > span{ font-size: 11px; color: var(--tinta-suave); }
   .capa-botoes{ display: flex; flex-wrap: wrap; gap: 12px; }
   .capa-visual{ position: relative; }
-  .capa-foto{ aspect-ratio: 4/5.2; width: 100%; border-radius: var(--raio-g); background: var(--g-capa); box-shadow: var(--sombra-forte); object-fit: cover; object-position: center 30%; height: auto; display: block; }
+  /* Capa animada: duas fotos sem fundo que se alternam, com a base sumindo suave no creme */
+  .capa-animada{
+    position: relative; width: 100%; aspect-ratio: 780 / 1230;
+    -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+  }
+  .capa-animada .quadro{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+  .capa-animada .quadro-1{ animation: quadro-a 3.2s ease-in-out infinite; }
+  .capa-animada .quadro-2{ opacity: 0; animation: quadro-b 3.2s ease-in-out infinite; }
+  @keyframes quadro-a{ 0%, 42%{ opacity: 1; } 50%, 92%{ opacity: 0; } 100%{ opacity: 1; } }
+  @keyframes quadro-b{ 0%, 42%{ opacity: 0; } 50%, 92%{ opacity: 1; } 100%{ opacity: 0; } }
   .capa-visual .pilula{ position: absolute; }
   .capa-visual .pilula-topo{ top: 38px; left: -22px; }
-  .capa-visual .pilula-base{ bottom: 46px; right: -18px; background: var(--manteiga); }
+  .capa-visual .pilula-base{ bottom: 22%; right: -18px; background: var(--manteiga); }
   .capa-visual .pilula svg{ width: 11px; height: 11px; fill: currentColor; }
 
   /* Faixa escura de serviços */
@@ -420,6 +430,8 @@
   @media (prefers-reduced-motion: reduce){
     *,*::before,*::after{ animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
     .revela{ opacity: 1; transform: none; }
+    .capa-animada .quadro{ animation: none !important; }
+    .capa-animada .quadro-2{ display: none; }
     .trilho{ animation: none !important; width: 100%; }
     .trilho ul[aria-hidden="true"]{ display: none; }
     .trilho ul{ flex-wrap: wrap; justify-content: center; }
@@ -485,9 +497,12 @@
       </div>
 
       <div class="capa-visual revela" data-atraso="2">
-        <!-- FOTO DA CAPA: para trocar, suba outra foto vertical na raiz do repositório com o nome foto-capa.jpg
-             (ou mude o src abaixo). object-position no CSS (.capa-foto) controla qual parte da foto aparece. -->
-        <img class="capa-foto" src="foto-capa.jpg" width="850" height="1280" alt="Retrato de perfil da Isabelle Bueno, com coque e brinco dourado" data-i18n-alt="capa.foto">
+        <!-- FOTO DA CAPA ANIMADA: duas fotos sem fundo (capa-1.webp e capa-2.webp) que se alternam em loop.
+             Para trocar, substitua esses dois arquivos por outros PNG/WebP sem fundo, do mesmo tamanho e enquadramento. -->
+        <div class="capa-animada" role="img" aria-label="Retrato animado de perfil da Isabelle Bueno, com coque e brinco dourado" data-i18n-aria="capa.foto">
+          <img class="quadro quadro-1" src="capa-1.webp" width="780" height="1230" alt="" fetchpriority="high">
+          <img class="quadro quadro-2" src="capa-2.webp" width="780" height="1230" alt="">
+        </div>
         <span class="pilula pilula-base" data-i18n="capa.marcas">★ + de 150 marcas</span>
       </div>
     </div>
@@ -894,7 +909,7 @@ const TEXTOS_EN = {
   "capa.texto": "I'm <strong>Isabelle Bueno</strong> and I deliver <strong>high quality videos</strong> with a creative touch, that feel like a friend's recommendation and perform like ads.",
   "capa.botao1": "Talk to me",
   "capa.botao2": "See my work →",
-  "capa.foto": "Profile portrait of Isabelle Bueno, with a hair bun and a gold earring",
+  "capa.foto": "Animated profile portrait of Isabelle Bueno, with a hair bun and a gold earring",
   "capa.marcas": "★ 150+ brands",
   "marcas.titulo": "Brands that trusted me",
   "sobre.foto": "Space for a photo of Isabelle Bueno, 4:5 format",
