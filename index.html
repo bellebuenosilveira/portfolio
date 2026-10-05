@@ -140,11 +140,26 @@
     width: 30px; height: 30px; border-radius: 8px; background: var(--manteiga); color: var(--tinta); flex: none;
     display: grid; place-items: center; font-family: var(--serifa); font-style: italic; font-weight: 900; font-size: 13px; letter-spacing: -.02em;
   }
+  .menu .container > nav{ margin-left: auto; }
   .menu-links{ display: flex; align-items: center; gap: 26px; }
   .menu-links a{ text-decoration: none; font-size: 13px; font-weight: 500; color: var(--tinta); transition: color .2s; }
   .menu-links a:hover, .contato-lista a:hover{ text-decoration: underline; text-decoration-color: var(--manteiga-forte); text-decoration-thickness: 3px; text-underline-offset: 5px; }
   .menu-links .btn{ padding: 9px 16px; font-size: 13px; color: #fff; }
   .menu-links .btn:hover{ color: #fff; }
+  /* Botão de idioma PT | EN */
+  .menu-acoes{ display: flex; align-items: center; gap: 10px; margin-left: 22px; flex: none; }
+  .idioma{ display: inline-flex; align-items: center; gap: 2px; background: var(--branco); border-radius: 999px; padding: 3px 3px 3px 9px; box-shadow: var(--sombra); }
+  .idioma > svg{ width: 14px; height: 14px; stroke: var(--tinta-suave); fill: none; stroke-width: 1.8; margin-right: 3px; flex: none; }
+  .idioma button{ border: 0; background: transparent; cursor: pointer; font-size: 12px; font-weight: 800; letter-spacing: .06em; color: var(--tinta-suave); padding: 7px 10px; border-radius: 999px; line-height: 1; transition: background .2s, color .2s; }
+  .idioma button:hover{ color: var(--tinta); }
+  .idioma button[aria-pressed="true"]{ background: var(--manteiga); color: var(--tinta); }
+  @media (max-width: 480px){
+    .menu-acoes{ margin-left: 8px; gap: 8px; }
+    .idioma{ padding: 3px; }
+    .idioma > svg{ display: none; }
+    .idioma button{ padding: 7px 9px; }
+  }
+  @media (max-width: 360px){ .menu .logo-nome{ display: none; } }
   .hamburguer{
     display: none; width: 42px; height: 42px; border: 0; border-radius: 12px;
     background: var(--branco); box-shadow: var(--sombra); cursor: pointer; position: relative;
@@ -157,10 +172,11 @@
   .hamburguer[aria-expanded="true"] span:nth-child(2){ opacity: 0; }
   .hamburguer[aria-expanded="true"] span:nth-child(3){ transform: translateY(-6px) rotate(-45deg); }
 
-  @media (max-width: 820px){
+  @media (max-width: 900px){
     .hamburguer{ display: block; }
     .menu-links{
-      position: fixed; top: var(--menu-h); left: 0; right: 0; bottom: 0;
+      position: fixed; top: var(--menu-h); left: 0; right: 0; bottom: auto;
+      height: calc(100vh - var(--menu-h)); height: calc(100dvh - var(--menu-h));
       flex-direction: column; align-items: flex-start; gap: 4px;
       background: var(--creme); padding: 28px 24px; overflow-y: auto;
       opacity: 0; visibility: hidden; transform: translateY(-8px);
@@ -407,29 +423,38 @@
 </head>
 <body>
 
-<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<a class="skip" href="#conteudo" data-i18n="pular">Pular para o conteúdo</a>
 
 <!-- =========================================================
      1. MENU FIXO
      ========================================================= -->
 <header class="menu" id="menu">
   <div class="container">
-    <a href="#topo" class="logo" aria-label="Isabelle Bueno, voltar ao topo">
-      <span class="logo-icone" aria-hidden="true">IB</span>Isabelle Bueno
+    <a href="#topo" class="logo" aria-label="Isabelle Bueno, voltar ao topo" data-i18n-aria="logo">
+      <span class="logo-icone" aria-hidden="true">IB</span><span class="logo-nome">Isabelle Bueno</span>
     </a>
-    <button class="hamburguer" id="hamburguer" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu-links">
-      <span></span><span></span><span></span>
-    </button>
-    <nav aria-label="Menu principal">
+    <nav aria-label="Menu principal" data-i18n-aria="menu.rotulo">
       <ul class="menu-links" id="menu-links">
-        <li><a href="#sobre">Sobre</a></li>
-        <li><a href="#destaques">Destaques</a></li>
-        <li><a href="#trabalhos">Portfólio</a></li>
-        <li><a href="#servicos">Serviços</a></li>
-        <li><a href="#numeros">Números</a></li>
-        <li><a href="#contato" class="btn btn-escuro">Fechar parceria</a></li>
+        <li><a href="#sobre" data-i18n="menu.sobre">Sobre</a></li>
+        <li><a href="#destaques" data-i18n="menu.destaques">Destaques</a></li>
+        <li><a href="#trabalhos" data-i18n="menu.trabalhos">Portfólio</a></li>
+        <li><a href="#servicos" data-i18n="menu.servicos">Serviços</a></li>
+        <li><a href="#numeros" data-i18n="menu.numeros">Números</a></li>
+        <li><a href="#contato" class="btn btn-escuro" data-i18n="menu.parceria">Fechar parceria</a></li>
       </ul>
     </nav>
+    <div class="menu-acoes">
+      <!-- BOTÃO DE IDIOMA: troca o site inteiro entre português e inglês.
+           Os textos em inglês ficam no objeto TEXTOS_EN e nos campos terminados em _en, no começo do script. -->
+      <div class="idioma" role="group" aria-label="Idioma / Language">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3Z"/></svg>
+        <button type="button" data-idioma="pt" aria-pressed="true" aria-label="Português">PT</button>
+        <button type="button" data-idioma="en" aria-pressed="false" aria-label="English">EN</button>
+      </div>
+      <button class="hamburguer" id="hamburguer" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu-links">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </div>
 </header>
 
@@ -441,14 +466,14 @@
   <section class="capa" id="topo" aria-labelledby="titulo-capa">
     <div class="container capa-grade">
       <div class="revela">
-        <span class="pilula">✦ UGC Creator &amp; Micro Influ</span>
-        <h1 id="titulo-capa">Conteúdo<br>que <span class="italico">converte</span><br>pra sua <span class="italico">marca</span>.</h1>
-        <p class="capa-texto">Eu sou <strong>Isabelle Bueno</strong> e entrego <strong>vídeos de alta qualidade</strong> com toque de criatividade, que parecem recomendação de amiga e funcionam como anúncio.</p>
+        <span class="pilula" data-i18n="capa.pilula">✦ UGC Creator &amp; Micro Influ</span>
+        <h1 id="titulo-capa" data-i18n="capa.titulo">Conteúdo<br>que <span class="italico">converte</span><br>pra sua <span class="italico">marca</span>.</h1>
+        <p class="capa-texto" data-i18n="capa.texto">Eu sou <strong>Isabelle Bueno</strong> e entrego <strong>vídeos de alta qualidade</strong> com toque de criatividade, que parecem recomendação de amiga e funcionam como anúncio.</p>
         <!-- Números curtos da capa (os valores vêm do array METRICAS no script) -->
         <div class="capa-numeros" id="capa-numeros"></div>
         <div class="capa-botoes">
-          <a href="#contato" class="btn btn-azul">Falar comigo</a>
-          <a href="#trabalhos" class="btn btn-linha">Ver trabalhos →</a>
+          <a href="#contato" class="btn btn-azul" data-i18n="capa.botao1">Falar comigo</a>
+          <a href="#trabalhos" class="btn btn-linha" data-i18n="capa.botao2">Ver trabalhos →</a>
         </div>
       </div>
 
@@ -456,8 +481,8 @@
         <!-- FOTO DA CAPA: troque a div .capa-foto abaixo por
              <img class="capa-foto" src="foto-capa.jpg" alt="Isabelle Bueno segurando um produto">
              (vertical, de preferência .webp ou .jpg com menos de 200 KB) -->
-        <div class="capa-foto" role="img" aria-label="Espaço para foto ou vídeo vertical da Isabelle Bueno"></div>
-        <span class="pilula pilula-base">★ + de 150 marcas</span>
+        <div class="capa-foto" role="img" aria-label="Espaço para foto ou vídeo vertical da Isabelle Bueno" data-i18n-aria="capa.foto"></div>
+        <span class="pilula pilula-base" data-i18n="capa.marcas">★ + de 150 marcas</span>
       </div>
     </div>
   </section>
@@ -469,7 +494,7 @@
 
   <!-- Marcas em pílulas (vem do array MARCAS no script) -->
   <div class="marcas" role="region" aria-labelledby="titulo-marcas">
-    <p class="marcas-titulo" id="titulo-marcas">Marcas que já confiaram</p>
+    <p class="marcas-titulo" id="titulo-marcas" data-i18n="marcas.titulo">Marcas que já confiaram</p>
     <div class="marcas-janela">
       <div class="trilho" id="trilho-marcas"></div>
     </div>
@@ -482,19 +507,19 @@
     <div class="container sobre-grade">
       <!-- FOTO DO SOBRE: troque a div .sobre-foto por
            <img class="sobre-foto" src="foto-sobre.jpg" alt="Isabelle Bueno gravando um vídeo"> -->
-      <div class="sobre-foto revela" role="img" aria-label="Espaço para foto da Isabelle Bueno, formato 4:5"></div>
+      <div class="sobre-foto revela" role="img" aria-label="Espaço para foto da Isabelle Bueno, formato 4:5" data-i18n-aria="sobre.foto"></div>
 
       <div class="sobre-texto revela" data-atraso="1">
-        <span class="rotulo">Sobre</span>
-        <h2 class="titulo-secao" id="titulo-sobre">Sobre mim</h2>
-        <p>Oi, eu sou a <strong>Isabelle</strong>! Sou creator de conteúdo UGC em Guarulhos e transformo produtos em histórias que parecem conversa de amiga, com <strong>qualidade de estúdio</strong> e toque de criatividade.</p>
-        <p>Já foram <strong>mais de 300 vídeos</strong> para <strong>mais de 150 marcas</strong>, de <strong>beleza, skincare, moda, comida e casa</strong> a <strong>maternidade, pet, viagem e tech</strong>. O que me move é criar conteúdo que prende a atenção e gera resultado de verdade.</p>
+        <span class="rotulo" data-i18n="sobre.rotulo">Sobre</span>
+        <h2 class="titulo-secao" id="titulo-sobre" data-i18n="sobre.titulo">Sobre mim</h2>
+        <p data-i18n="sobre.texto1">Oi, eu sou a <strong>Isabelle</strong>! Sou creator de conteúdo UGC em Guarulhos e transformo produtos em histórias que parecem conversa de amiga, com <strong>qualidade de estúdio</strong> e toque de criatividade.</p>
+        <p data-i18n="sobre.texto2">Já foram <strong>mais de 300 vídeos</strong> para <strong>mais de 150 marcas</strong>, de <strong>beleza, skincare, moda, comida e casa</strong> a <strong>maternidade, pet, viagem e tech</strong>. O que me move é criar conteúdo que prende a atenção e gera resultado de verdade.</p>
 
-        <p class="promessas-titulo">Meu compromisso com você</p>
+        <p class="promessas-titulo" data-i18n="sobre.compromisso">Meu compromisso com você</p>
         <ul class="chips">
-          <li class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Roteiro aprovado antes de gravar</li>
-          <li class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Uma rodada de ajuste inclusa</li>
-          <li class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Entrega em até 72 horas úteis</li>
+          <li class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span data-i18n="sobre.promessa1">Roteiro aprovado antes de gravar</span></li>
+          <li class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span data-i18n="sobre.promessa2">Uma rodada de ajuste inclusa</span></li>
+          <li class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span data-i18n="sobre.promessa3">Entrega em até 72 horas úteis</span></li>
         </ul>
 
         <p class="assinatura"><span class="italico">Isabelle Bueno</span><small>UGC Creator</small></p>
@@ -510,9 +535,9 @@
   <section id="destaques" class="secao-junta" aria-labelledby="titulo-destaques">
     <div class="container">
       <div class="secao-topo revela">
-        <span class="rotulo">Destaques</span>
-        <h2 class="titulo-secao" id="titulo-destaques">Conteúdos de destaque</h2>
-        <p class="intro-secao">Os três vídeos que eu mostro primeiro pra qualquer marca. Toque no card para assistir.</p>
+        <span class="rotulo" data-i18n="destaques.rotulo">Destaques</span>
+        <h2 class="titulo-secao" id="titulo-destaques" data-i18n="destaques.titulo">Conteúdos de destaque</h2>
+        <p class="intro-secao" data-i18n="destaques.intro">Os três vídeos que eu mostro primeiro pra qualquer marca. Toque no card para assistir.</p>
       </div>
       <div class="destaques-grade" id="destaques-grade"></div>
     </div>
@@ -524,11 +549,11 @@
   <section id="trabalhos" class="secao-junta" aria-labelledby="titulo-trabalhos">
     <div class="container">
       <div class="secao-topo revela">
-        <span class="rotulo">Portfólio</span>
-        <h2 class="titulo-secao" id="titulo-trabalhos">Trabalhos por nicho</h2>
-        <p class="intro-secao">Filtre pelo segmento e veja como eu adapto o tom pra cada marca.</p>
+        <span class="rotulo" data-i18n="trabalhos.rotulo">Portfólio</span>
+        <h2 class="titulo-secao" id="titulo-trabalhos" data-i18n="trabalhos.titulo">Trabalhos por nicho</h2>
+        <p class="intro-secao" data-i18n="trabalhos.intro">Filtre pelo segmento e veja como eu adapto o tom pra cada marca.</p>
       </div>
-      <div class="filtros revela" id="filtros" role="group" aria-label="Filtrar trabalhos por nicho"></div>
+      <div class="filtros revela" id="filtros" role="group" aria-label="Filtrar trabalhos por nicho" data-i18n-aria="trabalhos.filtros"></div>
       <div class="galeria" id="galeria" aria-live="polite"></div>
     </div>
   </section>
@@ -539,8 +564,8 @@
   <section id="servicos" class="secao-junta" aria-labelledby="titulo-servicos">
     <div class="container">
       <div class="secao-topo revela">
-        <span class="rotulo">Serviços</span>
-        <h2 class="titulo-secao" id="titulo-servicos">Como eu te ajudo</h2>
+        <span class="rotulo" data-i18n="servicos.rotulo">Serviços</span>
+        <h2 class="titulo-secao" id="titulo-servicos" data-i18n="servicos.titulo">Como eu te ajudo</h2>
       </div>
       <div class="servicos-grade" id="servicos-grade"></div>
     </div>
@@ -552,15 +577,15 @@
   <section id="numeros" class="numeros" aria-labelledby="titulo-numeros">
     <div class="container">
       <div class="secao-topo revela">
-        <span class="rotulo">Números</span>
-        <h2 class="titulo-secao" id="titulo-numeros">Resultados que <span class="italico">falam</span> por mim</h2>
+        <span class="rotulo" data-i18n="numeros.rotulo">Números</span>
+        <h2 class="titulo-secao" id="titulo-numeros" data-i18n="numeros.titulo">Resultados que <span class="italico">falam</span> por mim</h2>
       </div>
       <div class="metricas" id="metricas"></div>
 
-      <h3 class="subtitulo revela">Resultados de campanha</h3>
+      <h3 class="subtitulo revela" data-i18n="numeros.campanhas">Resultados de campanha</h3>
       <div class="resultados" id="resultados"></div>
 
-      <h3 class="subtitulo revela">O que as marcas dizem</h3>
+      <h3 class="subtitulo revela" data-i18n="numeros.depoimentos">O que as marcas dizem</h3>
       <div class="depoimentos" id="depoimentos"></div>
     </div>
   </section>
@@ -571,9 +596,9 @@
   <section id="contato" class="contato" aria-labelledby="titulo-contato">
     <div class="container contato-grade">
       <div class="revela">
-        <span class="rotulo">Contato</span>
-        <h2 class="titulo-secao" id="titulo-contato">Bora criar juntos</h2>
-        <p class="intro-secao">Me conta sobre a sua marca, respondo em até 24h.</p>
+        <span class="rotulo" data-i18n="contato.rotulo">Contato</span>
+        <h2 class="titulo-secao" id="titulo-contato" data-i18n="contato.titulo">Bora criar juntos</h2>
+        <p class="intro-secao" data-i18n="contato.intro">Me conta sobre a sua marca, respondo em até 24h.</p>
 
         <!-- Botões de contato: e-mail, WhatsApp, Instagram e cidade -->
         <div class="contato-lista">
@@ -587,7 +612,7 @@
             <span class="contato-icone"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/></svg></span>@bellebuenosilveira
           </a>
           <div>
-            <span class="contato-icone"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.2"/></svg></span>Guarulhos, SP
+            <span class="contato-icone"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.2"/></svg></span><span data-i18n="contato.cidade">Guarulhos, SP</span>
           </div>
         </div>
       </div>
@@ -599,27 +624,27 @@
       <div class="formulario revela" data-atraso="1">
         <form id="form-contato" novalidate>
           <div class="campo">
-            <label for="nome">Seu nome</label>
-            <input id="nome" name="nome" type="text" autocomplete="name" required placeholder="Como te chamo?">
+            <label for="nome" data-i18n="form.nome">Seu nome</label>
+            <input id="nome" name="nome" type="text" autocomplete="name" required placeholder="Como te chamo?" data-i18n-placeholder="form.nomeDica">
           </div>
           <div class="campo">
-            <label for="marca">Marca / empresa</label>
-            <input id="marca" name="marca" type="text" autocomplete="organization" placeholder="Nome da marca">
+            <label for="marca" data-i18n="form.marca">Marca / empresa</label>
+            <input id="marca" name="marca" type="text" autocomplete="organization" placeholder="Nome da marca" data-i18n-placeholder="form.marcaDica">
           </div>
           <div class="campo">
-            <label for="email">E-mail</label>
-            <input id="email" name="email" type="email" autocomplete="email" required placeholder="voce@empresa.com">
+            <label for="email" data-i18n="form.email">E-mail</label>
+            <input id="email" name="email" type="email" autocomplete="email" required placeholder="voce@empresa.com" data-i18n-placeholder="form.emailDica">
           </div>
           <div class="campo">
-            <label for="mensagem">Mensagem</label>
-            <textarea id="mensagem" name="mensagem" required placeholder="Conta um pouco do projeto..."></textarea>
+            <label for="mensagem" data-i18n="form.mensagem">Mensagem</label>
+            <textarea id="mensagem" name="mensagem" required placeholder="Conta um pouco do projeto..." data-i18n-placeholder="form.mensagemDica"></textarea>
           </div>
-          <button type="submit" class="btn btn-azul">Enviar mensagem</button>
+          <button type="submit" class="btn btn-azul" data-i18n="form.enviar">Enviar mensagem</button>
         </form>
         <div class="confirmacao" id="confirmacao" hidden tabindex="-1">
           <div class="icone-ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
-          <h3>Mensagem <span class="italico">recebida!</span></h3>
-          <p>Obrigada pelo contato. Eu te respondo em até um dia útil.</p>
+          <h3 data-i18n="form.okTitulo">Mensagem <span class="italico">recebida!</span></h3>
+          <p data-i18n="form.okTexto">Obrigada pelo contato. Eu te respondo em até um dia útil.</p>
         </div>
       </div>
     </div>
@@ -633,7 +658,7 @@
   <div class="container">
     <div class="rodape-topo">
       <a href="#topo" class="logo"><span class="logo-icone" aria-hidden="true">IB</span>Isabelle Bueno</a>
-      <nav class="redes" aria-label="Redes sociais">
+      <nav class="redes" aria-label="Redes sociais" data-i18n-aria="rodape.redes">
         <a href="https://instagram.com/bellebuenosilveira" target="_blank" rel="noopener">Instagram</a>
         <!-- TROQUE "@seuusuario" pelo seu TikTok, ou apague esta linha -->
         <a href="https://www.tiktok.com/@seuusuario" target="_blank" rel="noopener">TikTok</a>
@@ -642,8 +667,8 @@
       </nav>
     </div>
     <div class="rodape-base">
-      <span>© <span id="ano"></span> Isabelle Bueno. Todos os direitos reservados.</span>
-      <span>UGC Creator em Guarulhos, SP</span>
+      <span>© <span id="ano"></span> <span data-i18n="rodape.direitos">Isabelle Bueno. Todos os direitos reservados.</span></span>
+      <span data-i18n="rodape.cidade">UGC Creator em Guarulhos, SP</span>
     </div>
   </div>
 </footer>
@@ -653,28 +678,28 @@
      ========================================================= -->
 <div class="modal-fundo" id="modal-fundo" aria-hidden="true">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
-    <button class="modal-fechar" id="modal-fechar" aria-label="Fechar">
+    <button class="modal-fechar" id="modal-fechar" aria-label="Fechar" data-i18n-aria="kit.fechar">
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
     </button>
-    <span class="pilula">✦ Mídia kit</span>
-    <h2 id="modal-titulo">Quer meu <span class="italico">mídia kit</span> completo?</h2>
-    <p>Deixa seu nome e e-mail que eu te envio o mídia kit com formatos, valores e cases.</p>
+    <span class="pilula" data-i18n="kit.pilula">✦ Mídia kit</span>
+    <h2 id="modal-titulo" data-i18n="kit.titulo">Quer meu <span class="italico">mídia kit</span> completo?</h2>
+    <p data-i18n="kit.texto">Deixa seu nome e e-mail que eu te envio o mídia kit com formatos, valores e cases.</p>
     <!-- Para receber estes contatos de verdade, ligue este form a um serviço como Formspree (mesma dica do formulário de contato) -->
     <form id="form-kit" novalidate>
       <div class="campo">
-        <label for="kit-nome">Nome</label>
+        <label for="kit-nome" data-i18n="kit.nome">Nome</label>
         <input id="kit-nome" name="nome" type="text" autocomplete="name" required>
       </div>
       <div class="campo">
-        <label for="kit-email">E-mail</label>
+        <label for="kit-email" data-i18n="kit.email">E-mail</label>
         <input id="kit-email" name="email" type="email" autocomplete="email" required>
       </div>
-      <button type="submit" class="btn btn-azul">Quero receber</button>
+      <button type="submit" class="btn btn-azul" data-i18n="kit.botao">Quero receber</button>
     </form>
     <div class="confirmacao" id="kit-confirmacao" hidden tabindex="-1">
       <div class="icone-ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
-      <h3>Prontinho!</h3>
-      <p>Em breve o mídia kit chega no seu e-mail.</p>
+      <h3 data-i18n="kit.okTitulo">Prontinho!</h3>
+      <p data-i18n="kit.okTexto">Em breve o mídia kit chega no seu e-mail.</p>
     </div>
   </div>
 </div>
@@ -705,12 +730,17 @@ const MARCAS = [
 /* MÉTRICAS: as quatro aparecem na seção de números com contador animado.
    "capa: true" marca as que também aparecem na capa (no máximo três); "curto" é o rótulo pequeno da capa.
    valor: número final do contador. Deixe valor: null para mostrar o placeholder "texto".
-   TROQUE o placeholder de views pelo seu número real (exemplo: valor: 12, sufixo: "M+"). */
+   TROQUE o placeholder de views pelo seu número real (exemplo: valor: 12, sufixo: "M+").
+   Os campos terminados em _en são a versão em inglês. */
 const METRICAS = [
-  { valor: 300,  prefixo: "+", sufixo: "", rotulo: "vídeos entregues", curto: "vídeos", capa: true },
-  { valor: 150,  prefixo: "+", sufixo: "", rotulo: "marcas atendidas", curto: "marcas", capa: true },
-  { valor: null, texto: "00M+", rotulo: "views somadas (troque pelo seu número)", curto: "views", capa: true },
-  { valor: 9,    prefixo: "",  sufixo: "", rotulo: "nichos atendidos", curto: "nichos", capa: false }
+  { valor: 300,  prefixo: "+", sufixo: "", rotulo: "vídeos entregues", curto: "vídeos", capa: true,
+    rotulo_en: "videos delivered", curto_en: "videos" },
+  { valor: 150,  prefixo: "+", sufixo: "", rotulo: "marcas atendidas", curto: "marcas", capa: true,
+    rotulo_en: "brands served", curto_en: "brands" },
+  { valor: null, texto: "00M+", rotulo: "views somadas (troque pelo seu número)", curto: "views", capa: true,
+    rotulo_en: "combined views (replace with your number)", curto_en: "views" },
+  { valor: 9,    prefixo: "",  sufixo: "", rotulo: "nichos atendidos", curto: "nichos", capa: false,
+    rotulo_en: "niches served", curto_en: "niches" }
 ];
 
 /* DESTAQUES: os três vídeos grandes.
@@ -719,36 +749,37 @@ const METRICAS = [
          ou coloque o caminho de uma imagem vertical (exemplo: "capa-video-1.jpg").
    nicho: etiqueta escura no canto do card.
    numero e rotulo: TROQUE pelos números reais de cada vídeo.
-   cor: degradê do bloco provisório ("azul", "laranja", "escuro" ou "misto"). */
+   cor: degradê do bloco provisório ("azul", "laranja", "escuro" ou "misto").
+   Os campos terminados em _en são a versão em inglês. */
 const DESTAQUES = [
   {
     link: "https://youtube.com/shorts/AsP1e2nYx40",
     capa: "",
-    nicho: "nicho",
     numero: "+0,0M",
-    rotulo: "views no shorts",
-    titulo: "Título do conteúdo 01",
-    contexto: "Contexto curto: marca, objetivo e formato.",
+    nicho: "nicho",                                     nicho_en: "niche",
+    rotulo: "views no shorts",                          rotulo_en: "views on Shorts",
+    titulo: "Título do conteúdo 01",                    titulo_en: "Content title 01",
+    contexto: "Contexto curto: marca, objetivo e formato.", contexto_en: "Short context: brand, goal and format.",
     cor: "azul"
   },
   {
     link: "https://www.youtube.com/shorts/3QobLGWghus",
     capa: "",
-    nicho: "nicho",
     numero: "+0,0M",
-    rotulo: "views no shorts",
-    titulo: "Título do conteúdo 02",
-    contexto: "Contexto curto: marca, objetivo e formato.",
+    nicho: "nicho",                                     nicho_en: "niche",
+    rotulo: "views no shorts",                          rotulo_en: "views on Shorts",
+    titulo: "Título do conteúdo 02",                    titulo_en: "Content title 02",
+    contexto: "Contexto curto: marca, objetivo e formato.", contexto_en: "Short context: brand, goal and format.",
     cor: "laranja"
   },
   {
     link: "https://youtube.com/shorts/QkLUyYvBK58",
     capa: "",
-    nicho: "nicho",
     numero: "+0,0M",
-    rotulo: "views no shorts",
-    titulo: "Título do conteúdo 03",
-    contexto: "Contexto curto: marca, objetivo e formato.",
+    nicho: "nicho",                                     nicho_en: "niche",
+    rotulo: "views no shorts",                          rotulo_en: "views on Shorts",
+    titulo: "Título do conteúdo 03",                    titulo_en: "Content title 03",
+    contexto: "Contexto curto: marca, objetivo e formato.", contexto_en: "Short context: brand, goal and format.",
     cor: "escuro"
   }
 ];
@@ -756,56 +787,180 @@ const DESTAQUES = [
 /* NICHOS: viram os botões de filtro da galeria. */
 const NICHOS = ["beleza", "skincare", "moda", "comida", "casa e decoração", "maternidade", "pet", "viagem", "tech"];
 
+/* NICHOS_EN: o nome de cada nicho em inglês (a chave é o nome em português). */
+const NICHOS_EN = {
+  "todos": "all", "beleza": "beauty", "skincare": "skincare", "moda": "fashion", "comida": "food",
+  "casa e decoração": "home & decor", "maternidade": "motherhood", "pet": "pets", "viagem": "travel", "tech": "tech"
+};
+
 /* TRABALHOS: cada item aparece na galeria.
    nicho: precisa ser igual a um dos NICHOS acima.
    link: coloque o link do vídeo ou post ("#" se ainda não tiver).
-   imagem: deixe "" para usar o bloco com degradê, ou coloque o caminho de uma imagem vertical 9:16. */
+   imagem: deixe "" para usar o bloco com degradê, ou coloque o caminho de uma imagem vertical 9:16.
+   titulo_en: o título em inglês. */
 const TRABALHOS = [
-  { nicho: "beleza",           marca: "Pantene",             titulo: "Vídeo UGC de rotina capilar",    link: "#", imagem: "" },
-  { nicho: "beleza",           marca: "Eudora",              titulo: "Unboxing de maquiagem",          link: "#", imagem: "" },
-  { nicho: "skincare",         marca: "Vichy",               titulo: "Rotina de skincare noturna",     link: "#", imagem: "" },
-  { nicho: "skincare",         marca: "Luze Skincare",       titulo: "Antes e depois de textura",      link: "#", imagem: "" },
-  { nicho: "moda",             marca: "Meu Sapato Colorido", titulo: "Provador com três looks",        link: "#", imagem: "" },
-  { nicho: "moda",             marca: "VB Camisetas",        titulo: "Look do dia com peça básica",    link: "#", imagem: "" },
-  { nicho: "comida",           marca: "Duo Gourmet",         titulo: "Receita rápida com o produto",   link: "#", imagem: "" },
-  { nicho: "comida",           marca: "Brigadelícia",        titulo: "Degustação sincera",             link: "#", imagem: "" },
-  { nicho: "casa e decoração", marca: "Renova Pisos",        titulo: "Transformação de ambiente",      link: "#", imagem: "" },
-  { nicho: "casa e decoração", marca: "Emma Colchões",       titulo: "Review de uso no dia a dia",     link: "#", imagem: "" },
-  { nicho: "maternidade",      marca: "Agora Sou Mãe",       titulo: "Rotina real de mãe",             link: "#", imagem: "" },
-  { nicho: "maternidade",      marca: "Marina Enxovais",     titulo: "Enxoval em detalhes",            link: "#", imagem: "" },
-  { nicho: "pet",              marca: "Marca 01",            titulo: "Título do trabalho pet",         link: "#", imagem: "" },
-  { nicho: "pet",              marca: "Marca 02",            titulo: "Título do trabalho pet",         link: "#", imagem: "" },
-  { nicho: "viagem",           marca: "Gol",                 titulo: "Diário de viagem",               link: "#", imagem: "" },
-  { nicho: "viagem",           marca: "Real Seguro Viagem",  titulo: "Dica de viagem tranquila",       link: "#", imagem: "" },
-  { nicho: "tech",             marca: "TCL",                 titulo: "Setup e primeiras impressões",   link: "#", imagem: "" },
-  { nicho: "tech",             marca: "PicPay",              titulo: "Tutorial de app em 30 segundos", link: "#", imagem: "" }
+  { nicho: "beleza",           marca: "Pantene",             titulo: "Vídeo UGC de rotina capilar",    titulo_en: "UGC hair care routine video",     link: "#", imagem: "" },
+  { nicho: "beleza",           marca: "Eudora",              titulo: "Unboxing de maquiagem",          titulo_en: "Makeup unboxing",                 link: "#", imagem: "" },
+  { nicho: "skincare",         marca: "Vichy",               titulo: "Rotina de skincare noturna",     titulo_en: "Night skincare routine",          link: "#", imagem: "" },
+  { nicho: "skincare",         marca: "Luze Skincare",       titulo: "Antes e depois de textura",      titulo_en: "Texture before and after",        link: "#", imagem: "" },
+  { nicho: "moda",             marca: "Meu Sapato Colorido", titulo: "Provador com três looks",        titulo_en: "Try-on with three looks",         link: "#", imagem: "" },
+  { nicho: "moda",             marca: "VB Camisetas",        titulo: "Look do dia com peça básica",    titulo_en: "Outfit of the day with a basic tee",link: "#", imagem: "" },
+  { nicho: "comida",           marca: "Duo Gourmet",         titulo: "Receita rápida com o produto",   titulo_en: "Quick recipe with the product",   link: "#", imagem: "" },
+  { nicho: "comida",           marca: "Brigadelícia",        titulo: "Degustação sincera",             titulo_en: "Honest taste test",               link: "#", imagem: "" },
+  { nicho: "casa e decoração", marca: "Renova Pisos",        titulo: "Transformação de ambiente",      titulo_en: "Room makeover",                   link: "#", imagem: "" },
+  { nicho: "casa e decoração", marca: "Emma Colchões",       titulo: "Review de uso no dia a dia",     titulo_en: "Everyday use review",             link: "#", imagem: "" },
+  { nicho: "maternidade",      marca: "Agora Sou Mãe",       titulo: "Rotina real de mãe",             titulo_en: "A real mom routine",              link: "#", imagem: "" },
+  { nicho: "maternidade",      marca: "Marina Enxovais",     titulo: "Enxoval em detalhes",            titulo_en: "Baby essentials in detail",       link: "#", imagem: "" },
+  { nicho: "pet",              marca: "Marca 01",            titulo: "Título do trabalho pet",         titulo_en: "Pet project title",               link: "#", imagem: "" },
+  { nicho: "pet",              marca: "Marca 02",            titulo: "Título do trabalho pet",         titulo_en: "Pet project title",               link: "#", imagem: "" },
+  { nicho: "viagem",           marca: "Gol",                 titulo: "Diário de viagem",               titulo_en: "Travel diary",                    link: "#", imagem: "" },
+  { nicho: "viagem",           marca: "Real Seguro Viagem",  titulo: "Dica de viagem tranquila",       titulo_en: "Stress-free travel tip",          link: "#", imagem: "" },
+  { nicho: "tech",             marca: "TCL",                 titulo: "Setup e primeiras impressões",   titulo_en: "Setup and first impressions",     link: "#", imagem: "" },
+  { nicho: "tech",             marca: "PicPay",              titulo: "Tutorial de app em 30 segundos", titulo_en: "App tutorial in 30 seconds",      link: "#", imagem: "" }
 ];
 
 /* SERVIÇOS: aparecem em "Como eu te ajudo" e na faixa escura logo abaixo da capa.
-   icone: um emoji que aparece no quadradinho do card. */
+   icone: um emoji que aparece no quadradinho do card.
+   Os campos terminados em _en são a versão em inglês. */
 const SERVICOS = [
-  { icone: "🎯", titulo: "Vídeo UGC",                descricao: "Vídeo vertical com roteiro, gancho forte e fala natural, pronto para orgânico ou anúncio." },
-  { icone: "🚀", titulo: "Corte para anúncio",       descricao: "Versões curtas do mesmo vídeo com ganchos diferentes para testar no tráfego pago." },
-  { icone: "📷", titulo: "Fotos do produto",         descricao: "Fotos lifestyle e de detalhe, com luz bonita e cara de conteúdo real." },
-  { icone: "📦", titulo: "Unboxing",                 descricao: "A primeira impressão do produto, da embalagem ao uso, com emoção de verdade." },
-  { icone: "📱", titulo: "Publicação no meu perfil", descricao: "O vídeo também vai ao ar no meu Instagram, com collab e direito a impulsionamento." },
-  { icone: "🗓️", titulo: "Pacote mensal",            descricao: "Conteúdo recorrente todo mês, com calendário combinado e prioridade na agenda." }
+  { icone: "🎯", titulo: "Vídeo UGC",                descricao: "Vídeo vertical com roteiro, gancho forte e fala natural, pronto para orgânico ou anúncio.",
+    titulo_en: "UGC video",                descricao_en: "Vertical video with a script, a strong hook and natural delivery, ready for organic or ads." },
+  { icone: "🚀", titulo: "Corte para anúncio",       descricao: "Versões curtas do mesmo vídeo com ganchos diferentes para testar no tráfego pago.",
+    titulo_en: "Ad cuts",                  descricao_en: "Short versions of the same video with different hooks to test in paid media." },
+  { icone: "📷", titulo: "Fotos do produto",         descricao: "Fotos lifestyle e de detalhe, com luz bonita e cara de conteúdo real.",
+    titulo_en: "Product photos",           descricao_en: "Lifestyle and detail shots with beautiful light and a real content feel." },
+  { icone: "📦", titulo: "Unboxing",                 descricao: "A primeira impressão do produto, da embalagem ao uso, com emoção de verdade.",
+    titulo_en: "Unboxing",                 descricao_en: "The first impression of the product, from packaging to use, with genuine emotion." },
+  { icone: "📱", titulo: "Publicação no meu perfil", descricao: "O vídeo também vai ao ar no meu Instagram, com collab e direito a impulsionamento.",
+    titulo_en: "Post on my profile",       descricao_en: "The video also goes live on my Instagram, with a collab post and boosting rights." },
+  { icone: "🗓️", titulo: "Pacote mensal",            descricao: "Conteúdo recorrente todo mês, com calendário combinado e prioridade na agenda.",
+    titulo_en: "Monthly package",          descricao_en: "Recurring content every month, with an agreed calendar and priority booking." }
 ];
 
-/* RESULTADOS DE CAMPANHA: TROQUE pelos resultados reais (número, marca e texto). */
+/* RESULTADOS DE CAMPANHA: TROQUE pelos resultados reais (número, marca e texto, em português e em inglês). */
 const RESULTADOS = [
-  { marca: "Marca 01", numero: "+00%", texto: "Descreva aqui o resultado da campanha, por exemplo aumento de vendas ou de cliques." },
-  { marca: "Marca 02", numero: "0,0x",  texto: "Descreva aqui o resultado da campanha, por exemplo retorno sobre o investimento." },
-  { marca: "Marca 03", numero: "00K",   texto: "Descreva aqui o resultado da campanha, por exemplo views ou seguidores ganhos." }
+  { marca: "Marca 01", marca_en: "Brand 01", numero: "+00%",
+    texto: "Descreva aqui o resultado da campanha, por exemplo aumento de vendas ou de cliques.",
+    texto_en: "Describe the campaign result here, for example an increase in sales or clicks." },
+  { marca: "Marca 02", marca_en: "Brand 02", numero: "0,0x",
+    texto: "Descreva aqui o resultado da campanha, por exemplo retorno sobre o investimento.",
+    texto_en: "Describe the campaign result here, for example return on ad spend." },
+  { marca: "Marca 03", marca_en: "Brand 03", numero: "00K",
+    texto: "Descreva aqui o resultado da campanha, por exemplo views ou seguidores ganhos.",
+    texto_en: "Describe the campaign result here, for example views or followers gained." }
 ];
 
-/* DEPOIMENTOS: TROQUE pelos depoimentos reais das marcas. */
+/* DEPOIMENTOS: TROQUE pelos depoimentos reais das marcas (texto em português e em inglês). */
 const DEPOIMENTOS = [
-  { texto: "Cole aqui o depoimento real do cliente, com duas ou três frases sobre como foi trabalhar com você.", nome: "Cliente 01", empresa: "Marca 01" },
-  { texto: "Cole aqui o depoimento real do cliente, com duas ou três frases sobre como foi trabalhar com você.", nome: "Cliente 02", empresa: "Marca 02" },
-  { texto: "Cole aqui o depoimento real do cliente, com duas ou três frases sobre como foi trabalhar com você.", nome: "Cliente 03", empresa: "Marca 03" },
-  { texto: "Cole aqui o depoimento real do cliente, com duas ou três frases sobre como foi trabalhar com você.", nome: "Cliente 04", empresa: "Marca 04" }
+  { nome: "Cliente 01", nome_en: "Client 01", empresa: "Marca 01", empresa_en: "Brand 01",
+    texto: "Cole aqui o depoimento real do cliente, com duas ou três frases sobre como foi trabalhar com você.",
+    texto_en: "Paste the client's real testimonial here, two or three sentences about working with you." },
+  { nome: "Cliente 02", nome_en: "Client 02", empresa: "Marca 02", empresa_en: "Brand 02",
+    texto: "Cole aqui o depoimento real do cliente, com duas ou três frases sobre como foi trabalhar com você.",
+    texto_en: "Paste the client's real testimonial here, two or three sentences about working with you." },
+  { nome: "Cliente 03", nome_en: "Client 03", empresa: "Marca 03", empresa_en: "Brand 03",
+    texto: "Cole aqui o depoimento real do cliente, com duas ou três frases sobre como foi trabalhar com você.",
+    texto_en: "Paste the client's real testimonial here, two or three sentences about working with you." },
+  { nome: "Cliente 04", nome_en: "Client 04", empresa: "Marca 04", empresa_en: "Brand 04",
+    texto: "Cole aqui o depoimento real do cliente, com duas ou três frases sobre como foi trabalhar com você.",
+    texto_en: "Paste the client's real testimonial here, two or three sentences about working with you." }
 ];
+
+/* TEXTOS_EN: a versão em inglês dos textos fixos da página.
+   O português fica direto no HTML; aqui você só edita o inglês.
+   Cada chave corresponde a um data-i18n="..." no HTML. */
+const TEXTOS_EN = {
+  "titulo.pagina": "Isabelle Bueno | UGC Creator Portfolio",
+  "descricao.pagina": "UGC portfolio of Isabelle Bueno: high quality videos with a creative touch for beauty, fashion, home, pet, tech brands and more.",
+  "pular": "Skip to content",
+  "logo": "Isabelle Bueno, back to top",
+  "menu.rotulo": "Main menu",
+  "menu.sobre": "About",
+  "menu.destaques": "Highlights",
+  "menu.trabalhos": "Portfolio",
+  "menu.servicos": "Services",
+  "menu.numeros": "Numbers",
+  "menu.parceria": "Work with me",
+  "menu.abrir": "Open menu",
+  "menu.fechar": "Close menu",
+  "capa.pilula": "✦ UGC Creator &amp; Micro Influencer",
+  "capa.titulo": 'Content<br>that <span class="italico">converts</span><br>for your <span class="italico">brand</span>.',
+  "capa.texto": "I'm <strong>Isabelle Bueno</strong> and I deliver <strong>high quality videos</strong> with a creative touch, that feel like a friend's recommendation and perform like ads.",
+  "capa.botao1": "Talk to me",
+  "capa.botao2": "See my work →",
+  "capa.foto": "Space for a vertical photo or video of Isabelle Bueno",
+  "capa.marcas": "★ 150+ brands",
+  "marcas.titulo": "Brands that trusted me",
+  "sobre.foto": "Space for a photo of Isabelle Bueno, 4:5 format",
+  "sobre.rotulo": "About",
+  "sobre.titulo": "About me",
+  "sobre.texto1": "Hi, I'm <strong>Isabelle</strong>! I'm a UGC content creator based in Guarulhos, Brazil, and I turn products into stories that feel like a chat with a friend, with <strong>studio quality</strong> and a creative touch.",
+  "sobre.texto2": "So far that's <strong>300+ videos</strong> for <strong>150+ brands</strong>, from <strong>beauty, skincare, fashion, food and home</strong> to <strong>motherhood, pets, travel and tech</strong>. What drives me is creating content that grabs attention and delivers real results.",
+  "sobre.compromisso": "My commitment to you",
+  "sobre.promessa1": "Script approved before filming",
+  "sobre.promessa2": "One round of revisions included",
+  "sobre.promessa3": "Delivery within 72 business hours",
+  "destaques.rotulo": "Highlights",
+  "destaques.titulo": "Featured content",
+  "destaques.intro": "The three videos I show every brand first. Tap a card to watch.",
+  "trabalhos.rotulo": "Portfolio",
+  "trabalhos.titulo": "Work by niche",
+  "trabalhos.intro": "Filter by segment and see how I adapt the tone for each brand.",
+  "trabalhos.filtros": "Filter work by niche",
+  "trabalhos.vazio": "More work in this niche coming soon.",
+  "servicos.rotulo": "Services",
+  "servicos.titulo": "How I can help",
+  "numeros.rotulo": "Numbers",
+  "numeros.titulo": 'Results that <span class="italico">speak</span> for me',
+  "numeros.campanhas": "Campaign results",
+  "numeros.depoimentos": "What brands say",
+  "contato.rotulo": "Contact",
+  "contato.titulo": "Let's create together",
+  "contato.intro": "Tell me about your brand, I reply within 24h.",
+  "contato.cidade": "Guarulhos, SP, Brazil",
+  "form.nome": "Your name",
+  "form.nomeDica": "What should I call you?",
+  "form.marca": "Brand / company",
+  "form.marcaDica": "Brand name",
+  "form.email": "Email",
+  "form.emailDica": "you@company.com",
+  "form.mensagem": "Message",
+  "form.mensagemDica": "Tell me a bit about the project...",
+  "form.enviar": "Send message",
+  "form.okTitulo": 'Message <span class="italico">received!</span>',
+  "form.okTexto": "Thanks for reaching out. I'll get back to you within one business day.",
+  "rodape.redes": "Social media",
+  "rodape.direitos": "Isabelle Bueno. All rights reserved.",
+  "rodape.cidade": "UGC Creator in Guarulhos, Brazil",
+  "kit.fechar": "Close",
+  "kit.pilula": "✦ Media kit",
+  "kit.titulo": 'Want my full <span class="italico">media kit</span>?',
+  "kit.texto": "Leave your name and email and I'll send you my media kit with formats, rates and case studies.",
+  "kit.nome": "Name",
+  "kit.email": "Email",
+  "kit.botao": "Send it to me",
+  "kit.okTitulo": "All set!",
+  "kit.okTexto": "Your media kit will land in your inbox soon.",
+  "assistir": "Watch",
+  "novaAba": "opens in a new tab",
+  "capaVideo": "Video cover",
+  "espacoTrabalho": "Space for the 9:16 vertical cover of",
+  "para": "for"
+};
+
+/* Textos curtos usados pelo script em português (o inglês está em TEXTOS_EN). */
+const TEXTOS_PT = {
+  "titulo.pagina": document.title,
+  "descricao.pagina": (document.querySelector('meta[name="description"]') || {}).content || "",
+  "menu.abrir": "Abrir menu",
+  "menu.fechar": "Fechar menu",
+  "trabalhos.vazio": "Em breve, trabalhos deste nicho por aqui.",
+  "assistir": "Assistir",
+  "novaAba": "abre em nova aba",
+  "capaVideo": "Capa do vídeo",
+  "espacoTrabalho": "Espaço para a capa vertical 9:16 do trabalho",
+  "para": "para"
+};
 
 /* =========================================================
    A PARTIR DAQUI É O FUNCIONAMENTO DA PÁGINA
@@ -816,118 +971,180 @@ const DEPOIMENTOS = [
   const reduzMovimento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const $ = (sel) => document.querySelector(sel);
   const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
-  const formata = (n) => n.toLocaleString("pt-BR");
+  const formata = (n) => n.toLocaleString(idioma === "en" ? "en-US" : "pt-BR");
   const maiuscula = (t) => String(t).charAt(0).toUpperCase() + String(t).slice(1);
   const cores = ["azul", "laranja", "escuro", "misto"];
   const iconePlay = '<span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 4v16l14-8z"/></svg></span>';
 
-  /* Número de uma métrica (contador animado ou placeholder) */
-  function htmlNumero(m){
-    if (m.valor === null || m.valor === undefined) return esc(m.texto || "00");
-    const inicial = reduzMovimento ? formata(m.valor) : "0";
-    return esc(m.prefixo || "") + '<span class="contador" data-alvo="' + m.valor + '">' + inicial + '</span>' + esc(m.sufixo || "");
+  /* ---------- Idioma ---------- */
+  let idioma = "pt";
+  try {
+    const daUrl = new URLSearchParams(location.search).get("lang");
+    if (daUrl === "en" || daUrl === "pt") idioma = daUrl;
+    else if (localStorage.getItem("idioma") === "en") idioma = "en";
+  } catch (e){ /* sem acesso à URL ou ao armazenamento: fica em português */ }
+
+  const T = (chave) => (idioma === "en" ? TEXTOS_EN[chave] : TEXTOS_PT[chave]) || TEXTOS_PT[chave] || TEXTOS_EN[chave] || "";
+  /* Pega o campo no idioma atual (ex.: titulo ou titulo_en), caindo para o português se faltar o inglês */
+  const campo = (obj, nome) => (idioma === "en" && obj[nome + "_en"] != null) ? obj[nome + "_en"] : obj[nome];
+  const nomeNicho = (n) => idioma === "en" ? (NICHOS_EN[n] || n) : n;
+
+  /* Guarda o texto original em português de cada elemento marcado */
+  const originais = new Map();
+  document.querySelectorAll("[data-i18n]").forEach((el) => originais.set(el, { html: el.innerHTML }));
+  document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => originais.set(el, Object.assign(originais.get(el) || {}, { placeholder: el.getAttribute("placeholder") })));
+  document.querySelectorAll("[data-i18n-aria]").forEach((el) => originais.set(el, Object.assign(originais.get(el) || {}, { aria: el.getAttribute("aria-label") })));
+
+  function traduzTextosFixos(){
+    const en = idioma === "en";
+    originais.forEach((orig, el) => {
+      if (orig.html !== undefined){
+        const k = el.dataset.i18n;
+        el.innerHTML = en && TEXTOS_EN[k] ? TEXTOS_EN[k] : orig.html;
+      }
+      if (orig.placeholder !== undefined){
+        const k = el.dataset.i18nPlaceholder;
+        el.setAttribute("placeholder", en && TEXTOS_EN[k] ? TEXTOS_EN[k] : orig.placeholder);
+      }
+      if (orig.aria !== undefined){
+        const k = el.dataset.i18nAria;
+        el.setAttribute("aria-label", en && TEXTOS_EN[k] ? TEXTOS_EN[k] : orig.aria);
+      }
+    });
+    document.documentElement.lang = en ? "en" : "pt-BR";
+    document.title = T("titulo.pagina");
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute("content", T("descricao.pagina"));
+    document.querySelectorAll("[data-idioma]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.idioma === idioma)));
   }
 
-  /* Capa: três números curtos */
-  $("#capa-numeros").innerHTML = METRICAS.filter((m) => m.capa).slice(0, 3)
-    .map((m) => '<div><strong>' + htmlNumero(m) + '</strong><span>' + esc(m.curto || m.rotulo) + '</span></div>').join("");
+  /* Número de uma métrica (contador animado ou placeholder) */
+  let contadoresProntos = false;
+  function htmlNumero(m){
+    if (m.valor === null || m.valor === undefined) return esc(m.texto || "00");
+    const inicial = (reduzMovimento || contadoresProntos) ? formata(m.valor) : "0";
+    return esc(m.prefixo || "") + '<span class="contador" data-alvo="' + m.valor + '">' + inicial + '</span>' + esc(m.sufixo || "");
+  }
 
   /* Faixas que deslizam (a lista é duplicada para o movimento ficar contínuo) */
   function montaTrilho(el, itens, comoItem){
     const lista = itens.map((t) => '<li>' + comoItem(t) + '</li>').join("");
     el.innerHTML = '<ul>' + lista + '</ul><ul aria-hidden="true">' + lista + '</ul>';
   }
-  montaTrilho($("#trilho-servicos"), SERVICOS.concat(SERVICOS), (s) => esc(s.titulo));
-  montaTrilho($("#trilho-marcas"), MARCAS, (m) => '<span class="marca-pilula">' + esc(m) + '</span>');
 
-  /* Destaques */
-  $("#destaques-grade").innerHTML = DESTAQUES.map((d, i) => {
-    const capa = d.capa ? '<img src="' + esc(d.capa) + '" alt="Capa do vídeo: ' + esc(d.titulo) + '" loading="lazy">' : "";
-    return '' +
-      '<a class="destaque revela" data-atraso="' + (i + 1) + '" href="' + esc(d.link) + '" target="_blank" rel="noopener" aria-label="Assistir: ' + esc(d.titulo) + ' (abre em nova aba)">' +
-        '<div class="destaque-card">' +
-          '<div class="midia ' + esc(d.cor || cores[i % 4]) + ' destaque-capa">' + capa +
-            '<span class="tag-escura">' + esc(maiuscula(d.nicho)) + '</span>' + iconePlay + '</div>' +
-          '<p class="destaque-titulo">' + esc(d.titulo) + '</p>' +
-        '</div>' +
-        '<p class="destaque-num">' + esc(d.numero) + '</p>' +
-        '<p class="destaque-rotulo">' + esc(d.rotulo) + '</p>' +
-        '<p class="destaque-contexto">' + esc(d.contexto) + '</p>' +
-      '</a>';
-  }).join("");
-
-  /* Galeria de trabalhos com filtro */
   const galeria = $("#galeria");
-  galeria.innerHTML = TRABALHOS.map((t, i) => {
-    const visual = t.imagem ? '<img src="' + esc(t.imagem) + '" alt="' + esc(t.titulo + " para " + t.marca) + '" loading="lazy">' : "";
-    const externo = t.link && t.link !== "#" ? ' target="_blank" rel="noopener"' : "";
-    return '' +
-      '<article class="trabalho" data-nicho="' + esc(t.nicho) + '">' +
-        '<a href="' + esc(t.link || "#") + '"' + externo + '>' +
-          '<div class="moldura"><div class="midia ' + cores[i % 4] + '"' +
-            (t.imagem ? "" : ' role="img" aria-label="' + esc("Espaço para a capa vertical 9:16 do trabalho " + t.titulo) + '"') + '>' +
-            visual + '<span class="tag-escura">' + esc(maiuscula(t.nicho)) + '</span>' + iconePlay + '</div></div>' +
-          '<h3>' + esc(t.titulo) + '</h3>' +
-          '<p>' + esc(t.marca) + '</p>' +
-        '</a>' +
-      '</article>';
-  }).join("") + '<p class="galeria-vazia" hidden>Em breve, trabalhos deste nicho por aqui.</p>';
-
   const filtros = $("#filtros");
-  filtros.innerHTML = ["todos"].concat(NICHOS).map((n, i) =>
-    '<button type="button" class="filtro" data-filtro="' + esc(n) + '" aria-pressed="' + (i === 0) + '">' + esc(maiuscula(n)) + '</button>'
-  ).join("");
+  let filtroAtual = "todos";
+
+  function aplicaFiltro(animar){
+    filtros.querySelectorAll(".filtro").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.filtro === filtroAtual)));
+    let visiveis = 0;
+    galeria.querySelectorAll(".trabalho").forEach((item) => {
+      const mostra = filtroAtual === "todos" || item.dataset.nicho === filtroAtual;
+      item.hidden = !mostra;
+      if (mostra){
+        visiveis++;
+        if (animar){
+          item.style.animation = "none";
+          void item.offsetWidth; // reinicia a animação de entrada
+          item.style.animation = "";
+        }
+      }
+    });
+    galeria.querySelector(".galeria-vazia").hidden = visiveis > 0;
+  }
+
+  /* Monta todas as partes que vêm dos arrays de dados, no idioma atual */
+  function renderizaConteudo(){
+    /* Capa: três números curtos */
+    $("#capa-numeros").innerHTML = METRICAS.filter((m) => m.capa).slice(0, 3)
+      .map((m) => '<div><strong>' + htmlNumero(m) + '</strong><span>' + esc(campo(m, "curto") || campo(m, "rotulo")) + '</span></div>').join("");
+
+    montaTrilho($("#trilho-servicos"), SERVICOS.concat(SERVICOS), (s) => esc(campo(s, "titulo")));
+    montaTrilho($("#trilho-marcas"), MARCAS, (m) => '<span class="marca-pilula">' + esc(m) + '</span>');
+
+    /* Destaques */
+    $("#destaques-grade").innerHTML = DESTAQUES.map((d, i) => {
+      const titulo = campo(d, "titulo");
+      const capa = d.capa ? '<img src="' + esc(d.capa) + '" alt="' + esc(T("capaVideo") + ": " + titulo) + '" loading="lazy">' : "";
+      return '' +
+        '<a class="destaque revela" data-atraso="' + (i + 1) + '" href="' + esc(d.link) + '" target="_blank" rel="noopener" aria-label="' + esc(T("assistir") + ": " + titulo + " (" + T("novaAba") + ")") + '">' +
+          '<div class="destaque-card">' +
+            '<div class="midia ' + esc(d.cor || cores[i % 4]) + ' destaque-capa">' + capa +
+              '<span class="tag-escura">' + esc(maiuscula(campo(d, "nicho"))) + '</span>' + iconePlay + '</div>' +
+            '<p class="destaque-titulo">' + esc(titulo) + '</p>' +
+          '</div>' +
+          '<p class="destaque-num">' + esc(d.numero) + '</p>' +
+          '<p class="destaque-rotulo">' + esc(campo(d, "rotulo")) + '</p>' +
+          '<p class="destaque-contexto">' + esc(campo(d, "contexto")) + '</p>' +
+        '</a>';
+    }).join("");
+
+    /* Galeria de trabalhos */
+    galeria.innerHTML = TRABALHOS.map((t, i) => {
+      const titulo = campo(t, "titulo");
+      const marca = campo(t, "marca");
+      const visual = t.imagem ? '<img src="' + esc(t.imagem) + '" alt="' + esc(titulo + " " + T("para") + " " + marca) + '" loading="lazy">' : "";
+      const externo = t.link && t.link !== "#" ? ' target="_blank" rel="noopener"' : "";
+      return '' +
+        '<article class="trabalho" data-nicho="' + esc(t.nicho) + '">' +
+          '<a href="' + esc(t.link || "#") + '"' + externo + '>' +
+            '<div class="moldura"><div class="midia ' + cores[i % 4] + '"' +
+              (t.imagem ? "" : ' role="img" aria-label="' + esc(T("espacoTrabalho") + " " + titulo) + '"') + '>' +
+              visual + '<span class="tag-escura">' + esc(maiuscula(nomeNicho(t.nicho))) + '</span>' + iconePlay + '</div></div>' +
+            '<h3>' + esc(titulo) + '</h3>' +
+            '<p>' + esc(marca) + '</p>' +
+          '</a>' +
+        '</article>';
+    }).join("") + '<p class="galeria-vazia" hidden>' + esc(T("trabalhos.vazio")) + '</p>';
+
+    filtros.innerHTML = ["todos"].concat(NICHOS).map((n) =>
+      '<button type="button" class="filtro" data-filtro="' + esc(n) + '" aria-pressed="false">' + esc(maiuscula(nomeNicho(n))) + '</button>'
+    ).join("");
+    aplicaFiltro(false);
+
+    /* Serviços */
+    $("#servicos-grade").innerHTML = SERVICOS.map((s, i) =>
+      '<article class="servico revela" data-atraso="' + (i % 3) + '">' +
+        '<span class="servico-icone" aria-hidden="true">' + esc(s.icone || "✦") + '</span>' +
+        '<h3>' + esc(campo(s, "titulo")) + '</h3>' +
+        '<p>' + esc(campo(s, "descricao")) + '</p>' +
+      '</article>'
+    ).join("");
+
+    /* Métricas, resultados e depoimentos */
+    $("#metricas").innerHTML = METRICAS.slice(0, 4).map((m, i) =>
+      '<div class="metrica revela" data-atraso="' + i + '"><strong>' + htmlNumero(m) + '</strong><span>' + esc(campo(m, "rotulo")) + '</span></div>'
+    ).join("");
+
+    $("#resultados").innerHTML = RESULTADOS.map((r, i) =>
+      '<article class="resultado revela" data-atraso="' + (i + 1) + '">' +
+        '<span class="resultado-marca">' + esc(campo(r, "marca")) + '</span>' +
+        '<strong>' + esc(r.numero) + '</strong>' +
+        '<p>' + esc(campo(r, "texto")) + '</p>' +
+      '</article>'
+    ).join("");
+
+    const iniciais = (nome) => nome.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]).join("").toUpperCase();
+    $("#depoimentos").innerHTML = DEPOIMENTOS.map((d, i) =>
+      '<figure class="depoimento revela" data-atraso="' + (i % 2 + 1) + '">' +
+        '<div class="estrelas" aria-hidden="true">★★★★★</div>' +
+        '<blockquote>' + esc(campo(d, "texto")) + '</blockquote>' +
+        '<figcaption><span class="avatar" aria-hidden="true">' + esc(iniciais(campo(d, "nome"))) + '</span>' +
+          '<div><strong>' + esc(campo(d, "nome")) + '</strong><span>' + esc(campo(d, "empresa")) + '</span></div></figcaption>' +
+      '</figure>'
+    ).join("");
+  }
+
+  traduzTextosFixos();
+  renderizaConteudo();
 
   filtros.addEventListener("click", (e) => {
     const botao = e.target.closest(".filtro");
     if (!botao) return;
-    const escolhido = botao.dataset.filtro;
-    filtros.querySelectorAll(".filtro").forEach((b) => b.setAttribute("aria-pressed", String(b === botao)));
-    let visiveis = 0;
-    galeria.querySelectorAll(".trabalho").forEach((item) => {
-      const mostra = escolhido === "todos" || item.dataset.nicho === escolhido;
-      item.hidden = !mostra;
-      if (mostra){
-        visiveis++;
-        item.style.animation = "none";
-        void item.offsetWidth; // reinicia a animação de entrada
-        item.style.animation = "";
-      }
-    });
-    galeria.querySelector(".galeria-vazia").hidden = visiveis > 0;
+    filtroAtual = botao.dataset.filtro;
+    aplicaFiltro(true);
   });
-
-  /* Serviços */
-  $("#servicos-grade").innerHTML = SERVICOS.map((s, i) =>
-    '<article class="servico revela" data-atraso="' + (i % 3) + '">' +
-      '<span class="servico-icone" aria-hidden="true">' + esc(s.icone || "✦") + '</span>' +
-      '<h3>' + esc(s.titulo) + '</h3>' +
-      '<p>' + esc(s.descricao) + '</p>' +
-    '</article>'
-  ).join("");
-
-  /* Métricas, resultados e depoimentos */
-  $("#metricas").innerHTML = METRICAS.slice(0, 4).map((m, i) =>
-    '<div class="metrica revela" data-atraso="' + i + '"><strong>' + htmlNumero(m) + '</strong><span>' + esc(m.rotulo) + '</span></div>'
-  ).join("");
-
-  $("#resultados").innerHTML = RESULTADOS.map((r, i) =>
-    '<article class="resultado revela" data-atraso="' + (i + 1) + '">' +
-      '<span class="resultado-marca">' + esc(r.marca) + '</span>' +
-      '<strong>' + esc(r.numero) + '</strong>' +
-      '<p>' + esc(r.texto) + '</p>' +
-    '</article>'
-  ).join("");
-
-  const iniciais = (nome) => nome.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]).join("").toUpperCase();
-  $("#depoimentos").innerHTML = DEPOIMENTOS.map((d, i) =>
-    '<figure class="depoimento revela" data-atraso="' + (i % 2 + 1) + '">' +
-      '<div class="estrelas" aria-hidden="true">★★★★★</div>' +
-      '<blockquote>' + esc(d.texto) + '</blockquote>' +
-      '<figcaption><span class="avatar" aria-hidden="true">' + esc(iniciais(d.nome)) + '</span>' +
-        '<div><strong>' + esc(d.nome) + '</strong><span>' + esc(d.empresa) + '</span></div></figcaption>' +
-    '</figure>'
-  ).join("");
 
   /* Ano automático no rodapé */
   $("#ano").textContent = new Date().getFullYear();
@@ -943,18 +1160,39 @@ const DEPOIMENTOS = [
   function fechaMenu(){
     links.classList.remove("aberto");
     hamburguer.setAttribute("aria-expanded", "false");
-    hamburguer.setAttribute("aria-label", "Abrir menu");
+    hamburguer.setAttribute("aria-label", T("menu.abrir"));
     document.body.style.overflow = "";
   }
+  hamburguer.setAttribute("aria-label", T("menu.abrir"));
   hamburguer.addEventListener("click", () => {
     const abre = hamburguer.getAttribute("aria-expanded") !== "true";
     links.classList.toggle("aberto", abre);
     hamburguer.setAttribute("aria-expanded", String(abre));
-    hamburguer.setAttribute("aria-label", abre ? "Fechar menu" : "Abrir menu");
+    hamburguer.setAttribute("aria-label", abre ? T("menu.fechar") : T("menu.abrir"));
     document.body.style.overflow = abre ? "hidden" : "";
   });
   links.addEventListener("click", (e) => { if (e.target.closest("a")) fechaMenu(); });
-  window.addEventListener("resize", () => { if (window.innerWidth > 820) fechaMenu(); });
+  window.addEventListener("resize", () => { if (window.innerWidth > 900) fechaMenu(); });
+
+  /* Botão PT | EN: troca o idioma sem recarregar a página */
+  document.querySelectorAll("[data-idioma]").forEach((botao) => {
+    botao.addEventListener("click", () => {
+      const novo = botao.dataset.idioma;
+      if (novo === idioma) return;
+      idioma = novo;
+      try { localStorage.setItem("idioma", idioma); } catch (e){ /* navegador sem armazenamento */ }
+      try {
+        const url = new URL(location.href);
+        if (idioma === "en") url.searchParams.set("lang", "en"); else url.searchParams.delete("lang");
+        history.replaceState(null, "", url);
+      } catch (e){ /* aberto direto do computador: sem troca de endereço */ }
+      contadoresProntos = true;
+      traduzTextosFixos();
+      renderizaConteudo();
+      hamburguer.setAttribute("aria-label", hamburguer.getAttribute("aria-expanded") === "true" ? T("menu.fechar") : T("menu.abrir"));
+      document.querySelectorAll(".revela").forEach((el) => el.classList.add("visivel"));
+    });
+  });
 
   /* Contador animado */
   function animaContador(el){
@@ -963,6 +1201,7 @@ const DEPOIMENTOS = [
     const duracao = 1800;
     const inicio = performance.now();
     function passo(agora){
+      if (!el.isConnected) return;
       const p = Math.min((agora - inicio) / duracao, 1);
       el.textContent = formata(Math.round(alvo * (1 - Math.pow(1 - p, 3))));
       if (p < 1) requestAnimationFrame(passo);
