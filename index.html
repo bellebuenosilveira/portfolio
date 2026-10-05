@@ -209,7 +209,7 @@
   .capa-numeros div > span{ font-size: 11px; color: var(--tinta-suave); }
   .capa-botoes{ display: flex; flex-wrap: wrap; gap: 12px; }
   .capa-visual{ position: relative; }
-  .capa-foto{ aspect-ratio: 4/5.2; width: 100%; border-radius: var(--raio-g); background: var(--g-capa); box-shadow: var(--sombra-forte); object-fit: cover; }
+  .capa-foto{ aspect-ratio: 4/5.2; width: 100%; border-radius: var(--raio-g); background: var(--g-capa); box-shadow: var(--sombra-forte); object-fit: cover; object-position: center 30%; height: auto; display: block; }
   .capa-visual .pilula{ position: absolute; }
   .capa-visual .pilula-topo{ top: 38px; left: -22px; }
   .capa-visual .pilula-base{ bottom: 46px; right: -18px; background: var(--manteiga); }
@@ -485,10 +485,9 @@
       </div>
 
       <div class="capa-visual revela" data-atraso="2">
-        <!-- FOTO DA CAPA: troque a div .capa-foto abaixo por
-             <img class="capa-foto" src="foto-capa.jpg" alt="Isabelle Bueno segurando um produto">
-             (vertical, de preferência .webp ou .jpg com menos de 200 KB) -->
-        <div class="capa-foto" role="img" aria-label="Espaço para foto ou vídeo vertical da Isabelle Bueno" data-i18n-aria="capa.foto"></div>
+        <!-- FOTO DA CAPA: para trocar, suba outra foto vertical na raiz do repositório com o nome foto-capa.jpg
+             (ou mude o src abaixo). object-position no CSS (.capa-foto) controla qual parte da foto aparece. -->
+        <img class="capa-foto" src="foto-capa.jpg" width="850" height="1280" alt="Retrato de perfil da Isabelle Bueno, com coque e brinco dourado" data-i18n-alt="capa.foto">
         <span class="pilula pilula-base" data-i18n="capa.marcas">★ + de 150 marcas</span>
       </div>
     </div>
@@ -895,7 +894,7 @@ const TEXTOS_EN = {
   "capa.texto": "I'm <strong>Isabelle Bueno</strong> and I deliver <strong>high quality videos</strong> with a creative touch, that feel like a friend's recommendation and perform like ads.",
   "capa.botao1": "Talk to me",
   "capa.botao2": "See my work →",
-  "capa.foto": "Space for a vertical photo or video of Isabelle Bueno",
+  "capa.foto": "Profile portrait of Isabelle Bueno, with a hair bun and a gold earring",
   "capa.marcas": "★ 150+ brands",
   "marcas.titulo": "Brands that trusted me",
   "sobre.foto": "Space for a photo of Isabelle Bueno, 4:5 format",
@@ -1001,6 +1000,7 @@ const TEXTOS_PT = {
   document.querySelectorAll("[data-i18n]").forEach((el) => originais.set(el, { html: el.innerHTML }));
   document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => originais.set(el, Object.assign(originais.get(el) || {}, { placeholder: el.getAttribute("placeholder") })));
   document.querySelectorAll("[data-i18n-aria]").forEach((el) => originais.set(el, Object.assign(originais.get(el) || {}, { aria: el.getAttribute("aria-label") })));
+  document.querySelectorAll("[data-i18n-alt]").forEach((el) => originais.set(el, Object.assign(originais.get(el) || {}, { alt: el.getAttribute("alt") })));
 
   function traduzTextosFixos(){
     const en = idioma === "en";
@@ -1012,6 +1012,10 @@ const TEXTOS_PT = {
       if (orig.placeholder !== undefined){
         const k = el.dataset.i18nPlaceholder;
         el.setAttribute("placeholder", en && TEXTOS_EN[k] ? TEXTOS_EN[k] : orig.placeholder);
+      }
+      if (orig.alt !== undefined){
+        const k = el.dataset.i18nAlt;
+        el.setAttribute("alt", en && TEXTOS_EN[k] ? TEXTOS_EN[k] : orig.alt);
       }
       if (orig.aria !== undefined){
         const k = el.dataset.i18nAria;
