@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Entrar | Isabelle Bueno</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --creme: #f3eee9;
+    --creme-2: #ece5dd;
+    --branco: #ffffff;
+    --tinta: #14110d;
+    --tinta-suave: #5a5249;
+    --manteiga: #f3dc8f;
+    --manteiga-claro: #fbf0c9;
+    --manteiga-forte: #e6bf4f;
+    --erro-fundo: #fbe3df;
+    --erro-texto: #8f2416;
+    --ok-fundo: #e3eedc;
+    --ok-texto: #2f5d2a;
+    --linha: rgba(20,17,13,.12);
+    --sombra: 0 1px 2px rgba(20,17,13,.05), 0 10px 28px -12px rgba(20,17,13,.18);
+    --sans: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  }
+  *,*::before,*::after{ box-sizing: border-box; }
+  body{
+    margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px 16px;
+    background: var(--creme); color: var(--tinta); font-family: var(--sans); font-size: 14px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible{ outline: 2px solid var(--tinta); outline-offset: 2px; border-radius: 6px; }
+  .cartao{ width: 100%; max-width: 380px; background: var(--branco); border-radius: 22px; padding: 30px 28px 26px; box-shadow: var(--sombra); }
+  .marca{ display: flex; align-items: center; gap: 10px; margin-bottom: 22px; }
+  .marca-icone{ width: 32px; height: 32px; border-radius: 9px; background: var(--manteiga); display: grid; place-items: center; font-weight: 800; font-size: 13px; }
+  .marca strong{ display: block; font-size: 13px; letter-spacing: .02em; text-transform: uppercase; }
+  .marca div span{ display: block; font-size: 12px; color: var(--tinta-suave); }
+  h1{ font-size: 18px; font-weight: 800; margin: 0 0 4px; letter-spacing: -.02em; }
+  .sub{ margin: 0 0 18px; color: var(--tinta-suave); font-size: 13px; }
+  label{ display: block; font-size: 12px; font-weight: 700; margin-bottom: 6px; }
+  .campo{ margin-bottom: 14px; }
+  input{
+    width: 100%; font: inherit; font-size: 14px; padding: 11px 12px; border-radius: 10px;
+    border: 1px solid var(--linha); background: #f7f3ef; color: var(--tinta);
+  }
+  input:focus{ outline: none; border-color: var(--manteiga-forte); box-shadow: 0 0 0 3px rgba(243,220,143,.6); }
+  .btn{
+    width: 100%; border: 0; border-radius: 999px; padding: 12px 18px; font: inherit; font-weight: 700; font-size: 14px;
+    background: var(--manteiga); color: var(--tinta); cursor: pointer; transition: background .2s, color .2s;
+  }
+  .btn:hover{ background: var(--tinta); color: #fff; }
+  .btn[disabled]{ opacity: .6; cursor: wait; }
+  .link{ background: none; border: 0; padding: 0; font: inherit; font-size: 13px; color: var(--tinta-suave); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .link:hover{ color: var(--tinta); }
+  .rodape{ display: flex; justify-content: space-between; align-items: center; margin-top: 14px; gap: 10px; flex-wrap: wrap; }
+  .faixa{ display: none; border-radius: 10px; padding: 10px 12px; font-size: 13px; font-weight: 600; margin-bottom: 14px; }
+  .faixa.erro{ display: block; background: var(--erro-fundo); color: var(--erro-texto); }
+  .faixa.ok{ display: block; background: var(--ok-fundo); color: var(--ok-texto); }
+  [hidden]{ display: none !important; }
+  .voltar{ display: block; text-align: center; margin-top: 18px; font-size: 12px; color: var(--tinta-suave); }
+</style>
+</head>
+<body>
+  <main class="cartao">
+    <div class="marca">
+      <span class="marca-icone" aria-hidden="true">IB</span>
+      <div><strong>Isabelle Bueno</strong><span>Painel do portfólio</span></div>
+    </div>
+
+    <div class="faixa" id="faixa" role="alert" aria-live="polite"></div>
+
+    <!-- Entrar -->
+    <form id="form-entrar" novalidate>
+      <h1>Entrar</h1>
+      <p class="sub">Use o seu e-mail e a sua senha.</p>
+      <div class="campo">
+        <label for="email">E-mail</label>
+        <input id="email" type="email" autocomplete="username" required>
+      </div>
+      <div class="campo">
+        <label for="senha">Senha</label>
+        <input id="senha" type="password" autocomplete="current-password" required>
+      </div>
+      <button class="btn" type="submit" id="botao-entrar">Entrar</button>
+      <div class="rodape">
+        <button class="link" type="button" id="abrir-esqueci">Esqueci minha senha</button>
+      </div>
+    </form>
+
+    <!-- Esqueci a senha -->
+    <form id="form-esqueci" novalidate hidden>
+      <h1>Recuperar senha</h1>
+      <p class="sub">Vou mandar um link para o seu e-mail. Clique nele para criar uma senha nova.</p>
+      <div class="campo">
+        <label for="email-recuperar">E-mail</label>
+        <input id="email-recuperar" type="email" autocomplete="username" required>
+      </div>
+      <button class="btn" type="submit" id="botao-recuperar">Enviar link</button>
+      <div class="rodape">
+        <button class="link" type="button" id="voltar-entrar">Voltar para entrar</button>
+      </div>
+    </form>
+
+    <!-- Senha nova (aparece quando você chega pelo link do e-mail) -->
+    <form id="form-nova" novalidate hidden>
+      <h1>Criar senha nova</h1>
+      <p class="sub">Escolha uma senha com pelo menos 8 caracteres.</p>
+      <div class="campo">
+        <label for="senha-nova">Senha nova</label>
+        <input id="senha-nova" type="password" autocomplete="new-password" minlength="8" required>
+      </div>
+      <button class="btn" type="submit" id="botao-nova">Salvar senha</button>
+    </form>
+
+    <a class="voltar" href="../">Voltar para o portfólio</a>
+  </main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/banco.js"></script>
+<script>
+(function(){
+  "use strict";
+  var $ = function(s){ return document.querySelector(s); };
+  var faixa = $("#faixa");
+  var ADMIN = "../admin/";
+
+  function aviso(texto, tipo){
+    faixa.textContent = texto;
+    faixa.className = "faixa " + (tipo || "erro");
+  }
+  function limpaAviso(){ faixa.className = "faixa"; faixa.textContent = ""; }
+  function mostra(form){
+    ["#form-entrar", "#form-esqueci", "#form-nova"].forEach(function(id){ $(id).hidden = (id !== form); });
+    limpaAviso();
+  }
+
+  var banco = window.banco;
+  if (!banco){
+    aviso("Não consegui conectar ao banco. Confira a sua internet e recarregue a página.");
+    $("#botao-entrar").disabled = true;
+    return;
+  }
+
+  /* Chegou pelo link do e-mail de recuperação: mostra o campo de senha nova */
+  var veioDaRecuperacao = /type=recovery/.test(location.hash) || /recuperar=1/.test(location.search);
+  banco.auth.onAuthStateChange(function(evento){
+    if (evento === "PASSWORD_RECOVERY"){ veioDaRecuperacao = true; mostra("#form-nova"); }
+  });
+
+  /* Se já tem sessão aberta, vai direto para o admin */
+  banco.auth.getSession().then(function(r){
+    var sessao = r && r.data && r.data.session;
+    if (veioDaRecuperacao){ if (sessao) mostra("#form-nova"); return; }
+    if (sessao) location.replace(ADMIN);
+  });
+
+  $("#form-entrar").addEventListener("submit", async function(e){
+    e.preventDefault();
+    limpaAviso();
+    var email = $("#email").value.trim();
+    var senha = $("#senha").value;
+    if (!email || !senha){ aviso("Preencha o e-mail e a senha."); return; }
+    var botao = $("#botao-entrar");
+    botao.disabled = true; botao.textContent = "Entrando...";
+    try {
+      var r = await banco.auth.signInWithPassword({ email: email, password: senha });
+      if (r.error){
+        var msg = String(r.error.message || "").toLowerCase();
+        if (msg.indexOf("invalid") >= 0 || msg.indexOf("credentials") >= 0) aviso("E-mail ou senha incorretos");
+        else if (msg.indexOf("confirm") >= 0) aviso("Este e-mail ainda não foi confirmado no Supabase.");
+        else if (msg.indexOf("fetch") >= 0 || msg.indexOf("network") >= 0) aviso("Sem conexão com o banco. Confira a sua internet.");
+        else aviso("E-mail ou senha incorretos");
+        botao.disabled = false; botao.textContent = "Entrar";
+        return;
+      }
+      location.replace(ADMIN);
+    } catch (err){
+      aviso("Sem conexão com o banco. Confira a sua internet.");
+      botao.disabled = false; botao.textContent = "Entrar";
+    }
+  });
+
+  $("#abrir-esqueci").addEventListener("click", function(){
+    $("#email-recuperar").value = $("#email").value;
+    mostra("#form-esqueci");
+    $("#email-recuperar").focus();
+  });
+  $("#voltar-entrar").addEventListener("click", function(){ mostra("#form-entrar"); });
+
+  $("#form-esqueci").addEventListener("submit", async function(e){
+    e.preventDefault();
+    var email = $("#email-recuperar").value.trim();
+    if (!email){ aviso("Digite o seu e-mail."); return; }
+    var botao = $("#botao-recuperar");
+    botao.disabled = true;
+    try {
+      /* O link do e-mail volta para esta mesma página, que mostra o campo de senha nova */
+      var volta = location.origin + location.pathname + "?recuperar=1";
+      await banco.auth.resetPasswordForEmail(email, { redirectTo: volta });
+    } catch (err){ /* mesmo com erro, mostramos a mesma mensagem */ }
+    botao.disabled = false;
+    aviso("Se esse e-mail estiver cadastrado, o link chega em alguns minutos. Confira também o spam.", "ok");
+  });
+
+  $("#form-nova").addEventListener("submit", async function(e){
+    e.preventDefault();
+    var senha = $("#senha-nova").value;
+    if (senha.length < 8){ aviso("A senha precisa ter pelo menos 8 caracteres."); return; }
+    var botao = $("#botao-nova");
+    botao.disabled = true;
+    var r = await banco.auth.updateUser({ password: senha });
+    botao.disabled = false;
+    if (r.error){ aviso("Não consegui salvar a senha. Peça um link novo e tente de novo."); return; }
+    aviso("Senha salva! Abrindo o painel...", "ok");
+    setTimeout(function(){ location.replace(ADMIN); }, 900);
+  });
+})();
+</script>
+</body>
+</html>

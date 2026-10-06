@@ -377,6 +377,7 @@
   .campo input::placeholder, .campo textarea::placeholder{ color: #8a8178; }
   .campo input:focus, .campo textarea:focus{ outline: none; border-color: var(--manteiga-forte); box-shadow: 0 0 0 3px rgba(243,220,143,.6); }
   .formulario .btn, .modal .btn{ width: 100%; margin-top: 0; padding: 11px 22px; font-size: 13px; }
+  .form-erro{ margin: 12px 0 0; padding: 10px 12px; border-radius: 10px; background: #fbe0db; color: #9a2a19; font-size: 13px; font-weight: 600; }
   .confirmacao{ text-align: center; padding: 20px 0; }
   .icone-ok{ width: 56px; height: 56px; border-radius: 50%; background: var(--manteiga); display: grid; place-items: center; margin: 0 auto 18px; box-shadow: var(--sombra-azul); }
   .icone-ok svg{ width: 24px; height: 24px; stroke: var(--tinta); fill: none; stroke-width: 2.4; }
@@ -438,6 +439,10 @@
     .marcas-janela{ -webkit-mask-image: none; mask-image: none; }
   }
 </style>
+<!-- Conexão com o banco (Supabase). "defer" = carrega sem atrasar a página.
+     Se não carregar, o site continua funcionando com os vídeos fixos do script. -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+<script src="js/banco.js" defer></script>
 </head>
 <body>
 
@@ -811,7 +816,7 @@ const NICHOS = ["beleza", "skincare", "moda", "comida", "casa e decoração", "m
 /* NICHOS_EN: o nome de cada nicho em inglês (a chave é o nome em português). */
 const NICHOS_EN = {
   "todos": "all", "beleza": "beauty", "skincare": "skincare", "moda": "fashion", "comida": "food",
-  "casa e decoração": "home & decor", "maternidade": "motherhood", "pet": "pets", "viagem": "travel", "tech": "tech"
+  "casa e decoração": "home & decor", "maternidade": "motherhood", "pet": "pets", "viagem": "travel", "tech": "tech", "outros": "other"
 };
 
 /* TRABALHOS: cada item aparece na galeria.
@@ -962,6 +967,8 @@ const TEXTOS_EN = {
   "kit.botao": "Send it to me",
   "kit.okTitulo": "All set!",
   "kit.okTexto": "Your media kit will land in your inbox soon.",
+  "form.enviando": "Sending...",
+  "form.erro": "I couldn't send it right now. Please message me on WhatsApp or by email.",
   "assistir": "Watch",
   "novaAba": "opens in a new tab",
   "capaVideo": "Video cover",
@@ -976,6 +983,8 @@ const TEXTOS_PT = {
   "menu.abrir": "Abrir menu",
   "menu.fechar": "Fechar menu",
   "trabalhos.vazio": "Em breve, trabalhos deste nicho por aqui.",
+  "form.enviando": "Enviando...",
+  "form.erro": "Não consegui enviar agora. Me chama no WhatsApp ou por e-mail.",
   "assistir": "Assistir",
   "novaAba": "abre em nova aba",
   "capaVideo": "Capa do vídeo",
@@ -1119,7 +1128,7 @@ const TEXTOS_PT = {
               (t.imagem ? "" : ' role="img" aria-label="' + esc(T("espacoTrabalho") + " " + titulo) + '"') + '>' +
               visual + '<span class="tag-escura">' + esc(maiuscula(nomeNicho(t.nicho))) + '</span>' + iconePlay + '</div></div>' +
             '<h3>' + esc(titulo) + '</h3>' +
-            '<p>' + esc(marca) + '</p>' +
+            '<p>' + esc([marca, t.formato].filter(Boolean).join(" · ")) + '</p>' +
           '</a>' +
         '</article>';
     }).join("") + '<p class="galeria-vazia" hidden>' + esc(T("trabalhos.vazio")) + '</p>';
@@ -1235,27 +1244,29 @@ const TEXTOS_PT = {
     requestAnimationFrame(passo);
   }
 
-  /* Animação de entrada ao rolar (IntersectionObserver) */
-  const revelaveis = document.querySelectorAll(".revela");
-  const contadores = document.querySelectorAll(".contador");
-  if (!("IntersectionObserver" in window) || reduzMovimento){
-    revelaveis.forEach((el) => el.classList.add("visivel"));
-    contadores.forEach((el) => { el.textContent = formata(Number(el.dataset.alvo) || 0); });
-  } else {
-    const obsRevela = new IntersectionObserver((entradas, obs) => {
-      entradas.forEach((en) => {
-        if (en.isIntersecting){ en.target.classList.add("visivel"); obs.unobserve(en.target); }
-      });
-    }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
-    revelaveis.forEach((el) => obsRevela.observe(el));
+  /* Animação de entrada ao rolar (IntersectionObserver).
+     ativaRevela() roda de novo quando os vídeos chegam do banco, para os cards novos também aparecerem. */
+  const temObservador = ("IntersectionObserver" in window) && !reduzMovimento;
+  const obsRevela = temObservador ? new IntersectionObserver((entradas, obs) => {
+    entradas.forEach((en) => {
+      if (en.isIntersecting){ en.target.classList.add("visivel"); obs.unobserve(en.target); }
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }) : null;
+  const obsContador = temObservador ? new IntersectionObserver((entradas, obs) => {
+    entradas.forEach((en) => {
+      if (en.isIntersecting){ animaContador(en.target); obs.unobserve(en.target); }
+    });
+  }, { threshold: 0.6 }) : null;
 
-    const obsContador = new IntersectionObserver((entradas, obs) => {
-      entradas.forEach((en) => {
-        if (en.isIntersecting){ animaContador(en.target); obs.unobserve(en.target); }
-      });
-    }, { threshold: 0.6 });
-    contadores.forEach((el) => obsContador.observe(el));
+  function ativaRevela(){
+    document.querySelectorAll(".revela:not(.visivel)").forEach((el) => { if (obsRevela) obsRevela.observe(el); else el.classList.add("visivel"); });
+    document.querySelectorAll(".contador").forEach((el) => {
+      if (el.dataset.observado) return;
+      el.dataset.observado = "1";
+      if (obsContador && !contadoresProntos) obsContador.observe(el); else el.textContent = formata(Number(el.dataset.alvo) || 0);
+    });
   }
+  ativaRevela();
 
   /* Validação simples dos formulários */
   function valida(form){
@@ -1271,15 +1282,44 @@ const TEXTOS_PT = {
     return ok;
   }
 
-  /* Formulário de contato: mostra a confirmação sem recarregar */
+  /* Manda um contato do site para a tabela marcas do painel, sempre como "Lead" */
+  async function enviaLead(registro){
+    if (!window.banco) throw new Error("sem banco");
+    const r = await window.banco.from("marcas").insert(Object.assign({ situacao: "Lead", ultimo_contato: chaveData(new Date()) }, registro));
+    if (r.error) throw r.error;
+  }
+  const chaveData = (d) => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+
+  /* Formulário de contato: grava no painel e mostra a confirmação sem recarregar */
   const formContato = $("#form-contato");
-  formContato.addEventListener("submit", (evento) => {
+  formContato.addEventListener("submit", async (evento) => {
     evento.preventDefault();
     if (!valida(formContato)) return;
-    formContato.hidden = true;
-    const conf = $("#confirmacao");
-    conf.hidden = false;
-    conf.focus();
+    const botao = formContato.querySelector("button[type=submit]");
+    const textoBotao = botao.innerHTML;
+    const erroAntigo = formContato.querySelector(".form-erro");
+    if (erroAntigo) erroAntigo.remove();
+    botao.disabled = true; botao.textContent = T("form.enviando");
+    const nome = $("#nome").value.trim();
+    const marca = $("#marca").value.trim();
+    try {
+      await enviaLead({
+        nome: (marca || nome).slice(0, 200),
+        email: $("#email").value.trim().slice(0, 200),
+        obs: ("Mensagem pelo site, de " + nome + ":\n" + $("#mensagem").value.trim()).slice(0, 4000)
+      });
+      formContato.hidden = true;
+      const conf = $("#confirmacao");
+      conf.hidden = false;
+      conf.focus();
+    } catch (erro){
+      const aviso = document.createElement("p");
+      aviso.className = "form-erro"; aviso.setAttribute("role", "alert");
+      aviso.textContent = T("form.erro");
+      formContato.appendChild(aviso);
+    } finally {
+      botao.disabled = false; botao.innerHTML = textoBotao;
+    }
   });
 
   /* Card de captura do mídia kit */
@@ -1328,15 +1368,97 @@ const TEXTOS_PT = {
   });
 
   const formKit = $("#form-kit");
-  formKit.addEventListener("submit", (evento) => {
+  formKit.addEventListener("submit", async (evento) => {
     evento.preventDefault();
     if (!valida(formKit)) return;
+    /* Quem pede o mídia kit também entra no painel como Lead (se falhar, a pessoa não vê erro) */
+    try {
+      await enviaLead({
+        nome: $("#kit-nome").value.trim().slice(0, 200),
+        email: $("#kit-email").value.trim().slice(0, 200),
+        obs: "Pediu o mídia kit pelo site."
+      });
+    } catch (erro){ /* segue mostrando a confirmação */ }
     formKit.hidden = true;
     const conf = $("#kit-confirmacao");
     conf.hidden = false;
     conf.focus();
     setTimeout(fechaModal, 3200);
   });
+
+  /* =========================================================
+     LIGAÇÃO COM O PAINEL (Supabase)
+     Roda depois que a página carregou. Se o banco não responder,
+     o site continua com os vídeos fixos lá de cima.
+     ========================================================= */
+
+  /* Vídeos: o site mostra os vídeos visíveis da tabela "videos", na ordem do painel.
+     Os que têm "destaque" preenchido (ex.: "2,4M views") vão para os 3 cards grandes. */
+  async function carregaVideosDoPainel(banco){
+    try {
+      const r = await banco.from("videos").select("*").eq("visivel", true);
+      if (r.error || !Array.isArray(r.data)) return;
+      const videos = r.data
+        .filter((v) => v && v.visivel !== false && !v.exemplo && v.titulo)
+        .sort((a, b) => ((Number(a.ordem) || 0) - (Number(b.ordem) || 0)) || ((Number(a.id) || 0) - (Number(b.id) || 0)));
+      if (!videos.length) return; // painel ainda sem vídeos: fica tudo como está
+
+      TRABALHOS.length = 0;
+      videos.forEach((v) => {
+        const nicho = String(v.nicho || "").trim().toLowerCase();
+        if (nicho && !NICHOS.includes(nicho)) NICHOS.push(nicho);
+        TRABALHOS.push({ nicho: nicho || "outros", marca: v.marca || "", titulo: v.titulo, formato: v.formato || "", link: v.link || "#", imagem: "" });
+      });
+      if (TRABALHOS.some((t) => t.nicho === "outros") && !NICHOS.includes("outros")) NICHOS.push("outros");
+
+      const destaques = videos.filter((v) => String(v.destaque || "").trim()).slice(0, 3);
+      if (destaques.length){
+        const cores = ["azul", "laranja", "escuro"];
+        DESTAQUES.length = 0;
+        destaques.forEach((v, i) => {
+          const partes = String(v.destaque).trim().split(/\s+/);
+          const numero = partes.shift();
+          const rotulo = partes.join(" ");
+          DESTAQUES.push({
+            link: v.link || "#", capa: "", numero: numero, rotulo: rotulo, rotulo_en: rotulo,
+            nicho: v.nicho || "", titulo: v.titulo, contexto: [v.marca, v.formato].filter(Boolean).join(" · "),
+            cor: cores[i % 3]
+          });
+        });
+      }
+      renderizaConteudo();
+      ativaRevela();
+    } catch (erro){ /* sem banco: mantém os vídeos fixos */ }
+  }
+
+  /* Visitas: grava uma linha por página aberta (uma vez por sessão),
+     só com a data, a página e de onde a pessoa veio. Nada sobre o visitante. */
+  async function registraVisita(banco){
+    try {
+      if (!/^https?:$/.test(location.protocol)) return; // aberto direto do computador: não conta
+      const pagina = location.pathname || "/";
+      const chave = "visita:" + pagina;
+      try { if (sessionStorage.getItem(chave)) return; sessionStorage.setItem(chave, "1"); } catch (e){ /* segue */ }
+      let origem = "";
+      try { origem = new URLSearchParams(location.search).get("utm_source") || ""; } catch (e){ /* segue */ }
+      if (!origem && document.referrer){
+        try {
+          const host = new URL(document.referrer).hostname.replace(/^(www|l|lm|m|mobile)\./, "");
+          if (host && host !== location.hostname) origem = host;
+        } catch (e){ /* segue */ }
+      }
+      await banco.from("visitas").insert({ pagina: pagina.slice(0, 300), origem: (origem || "direto").slice(0, 300) });
+    } catch (erro){ /* contador nunca atrapalha o site */ }
+  }
+
+  function ligaBanco(){
+    const banco = window.banco;
+    if (!banco) return;
+    carregaVideosDoPainel(banco);
+    registraVisita(banco);
+  }
+  if (document.readyState === "complete" || document.readyState === "interactive" && window.banco) ligaBanco();
+  else document.addEventListener("DOMContentLoaded", ligaBanco);
 })();
 </script>
 </body>
