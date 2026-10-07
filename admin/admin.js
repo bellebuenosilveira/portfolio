@@ -1279,6 +1279,7 @@
   function analisaLink(bruto){
     const errado = "Esse link não parece certo. Ele precisa começar com https://, do jeito que vem quando você copia o link do vídeo.";
     const t = texto(bruto).trim();
+    if (/^[^\s@\/]+@[^\s@\/]+\.[^\s@\/]+$/.test(t)) return { erro: "Isso é um e-mail, não o link de um vídeo. O navegador pode ter preenchido sozinho: apague e cole o link do reel." };
     if (!/^https?:\/\//i.test(t)) return { erro: errado };
     let u;
     try { u = new URL(t); } catch (e){ return { erro: errado }; }
@@ -1441,7 +1442,7 @@
       return;
     }
     el.innerHTML = '<label for="rot-chave-campo"><strong>🔑 Chave da Supadata</strong></label>' +
-      '<input type="password" id="rot-chave-campo" autocomplete="off" placeholder="cole a sua chave aqui" spellcheck="false">' +
+      '<input type="text" id="rot-chave-campo" name="chave-supadata-painel" class="campo-secreto" autocomplete="off" autocorrect="off" autocapitalize="off" data-lpignore="true" data-1p-ignore="true" data-form-type="other" placeholder="cole a sua chave aqui" spellcheck="false">' +
       '<button class="btn principal-btn pequeno" type="button" data-salvar-chave>Salvar</button>' +
       (chave ? '<button class="btn pequeno" type="button" data-cancelar-chave>Cancelar</button>' : "") +
       '<span class="fraco">Não tem? Crie grátis em <a href="https://supadata.ai" target="_blank" rel="noopener">supadata.ai</a> (100 créditos por mês, sem cartão).</span>';
@@ -1451,6 +1452,11 @@
     const campo = $("#rot-chave-campo");
     const valor = campo ? campo.value.trim() : "";
     if (!valor){ toast("Cole a chave no campo antes de salvar.", "erro"); if (campo) campo.focus(); return; }
+    if (/\s/.test(valor) || valor.includes("@") || valor.length < 16){
+      toast("Isso não parece uma chave da Supadata. Copie a API key no site deles e cole aqui.", "erro");
+      if (campo){ campo.value = ""; campo.focus(); }
+      return;
+    }
     try {
       const r = await banco.from("configuracoes").upsert({ chave: CHAVE_CONFIG, valor: valor, updated_at: new Date().toISOString() });
       if (r.error) throw r.error;
@@ -1664,7 +1670,7 @@
     area.innerHTML = '<div id="rot-raiz">' +
       '<section class="cartao">' +
         '<div class="rot-entrada">' +
-          '<input type="url" id="rot-link" inputmode="url" autocomplete="off" placeholder="Cole aqui: instagram.com/reel/... · tiktok.com/... · youtube.com/..." aria-label="Link do vídeo" value="' + esc(estadoRot.link) + '">' +
+          '<input type="text" id="rot-link" name="link-do-video" inputmode="url" autocomplete="off" autocorrect="off" autocapitalize="off" data-lpignore="true" data-1p-ignore="true" data-form-type="other" spellcheck="false" placeholder=""Cole aqui: instagram.com/reel/... · tiktok.com/... · youtube.com/..." aria-label="Link do vídeo" value="' + esc(estadoRot.link) + '">' +
           '<div class="seletor" role="group" aria-label="De quem é o vídeo">' +
             [["outra", "De outra pessoa"], ["minha", "Meu"]].map(([v, t]) => '<button type="button" data-de-quem="' + v + '" aria-pressed="' + (estadoRot.deQuem === v) + '">' + t + '</button>').join("") +
           '</div>' +

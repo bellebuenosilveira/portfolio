@@ -357,6 +357,7 @@
   .relogio::before{ height: 6px; animation: girar 1.2s linear infinite; }
   .relogio::after{ height: 4px; animation: girar 14s linear infinite; }
   @keyframes girar{ from{ transform: translate(-50%, 0) rotate(180deg); } to{ transform: translate(-50%, 0) rotate(540deg); } }
+  .campo-secreto{ -webkit-text-security: disc; text-security: disc; font-family: var(--sans); }
   .janela .campo textarea.alto{ min-height: 260px; }
   .janela .aviso-form{ grid-column: 1 / -1; background: var(--verde-claro); color: var(--verde-texto); border-radius: 10px; padding: 9px 12px; font-weight: 700; font-size: 12.5px; }
   @media (prefers-reduced-motion: reduce){ .relogio::before, .relogio::after{ animation: none; } }
