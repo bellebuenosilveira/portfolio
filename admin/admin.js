@@ -140,6 +140,7 @@
   function avisoUnico(t){
     return '<div class="aviso" data-tabela="' + esc(t) + '"><span>' + esc(faltando[t]) + ' O resto do painel continua funcionando.' +
       (codigosErro[t] ? ' <span style="font-weight:500;opacity:.8">(código ' + esc(codigosErro[t]) + ')</span>' : "") + '</span>' +
+      (/não existe no banco/.test(faltando[t]) ? '<button type="button" class="btn pequeno" data-recarregar style="margin-left:auto">Já rodei, tentar de novo</button>' : "") +
       '<button type="button" data-fechar-aviso aria-label="Fechar aviso">×</button></div>';
   }
   $("#avisos").addEventListener("click", async (e) => {
