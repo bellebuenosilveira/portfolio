@@ -1106,7 +1106,7 @@ const TEXTOS_PT = {
         '<a class="destaque revela" data-atraso="' + (i + 1) + '" href="' + esc(d.link) + '" target="_blank" rel="noopener" aria-label="' + esc(T("assistir") + ": " + titulo + " (" + T("novaAba") + ")") + '">' +
           '<div class="destaque-card">' +
             '<div class="midia ' + esc(d.cor || cores[i % 4]) + ' destaque-capa">' + capa +
-              '<span class="tag-escura">' + esc(maiuscula(campo(d, "nicho"))) + '</span>' + iconePlay + '</div>' +
+              (campo(d, "nicho") ? '<span class="tag-escura">' + esc(maiuscula(nomeNicho(String(campo(d, "nicho")).toLowerCase()))) + '</span>' : "") + iconePlay + '</div>' +
             '<p class="destaque-titulo">' + esc(titulo) + '</p>' +
           '</div>' +
           '<p class="destaque-num">' + esc(d.numero) + '</p>' +
@@ -1403,13 +1403,16 @@ const TEXTOS_PT = {
         .sort((a, b) => ((Number(a.ordem) || 0) - (Number(b.ordem) || 0)) || ((Number(a.id) || 0) - (Number(b.id) || 0)));
       if (!videos.length) return; // painel ainda sem vídeos: fica tudo como está
 
-      TRABALHOS.length = 0;
-      videos.forEach((v) => {
-        const nicho = String(v.nicho || "").trim().toLowerCase();
-        if (nicho && !NICHOS.includes(nicho)) NICHOS.push(nicho);
-        TRABALHOS.push({ nicho: nicho || "outros", marca: v.marca || "", titulo: v.titulo, formato: v.formato || "", link: v.link || "#", imagem: "" });
-      });
-      if (TRABALHOS.some((t) => t.nicho === "outros") && !NICHOS.includes("outros")) NICHOS.push("outros");
+      /* Galeria por nicho: os vídeos do painel que têm nicho */
+      const daGaleria = videos.filter((v) => String(v.nicho || "").trim());
+      if (daGaleria.length){
+        TRABALHOS.length = 0;
+        daGaleria.forEach((v) => {
+          const nicho = String(v.nicho).trim().toLowerCase();
+          if (!NICHOS.includes(nicho)) NICHOS.push(nicho);
+          TRABALHOS.push({ nicho: nicho, marca: v.marca || "", titulo: v.titulo, formato: v.formato || "", link: v.link || "#", imagem: "" });
+        });
+      }
 
       const destaques = videos.filter((v) => String(v.destaque || "").trim()).slice(0, 3);
       if (destaques.length){

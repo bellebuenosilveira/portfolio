@@ -409,14 +409,19 @@
     const noAr = dados.videos.filter((v) => v.visivel && !v.exemplo);
     const nicho = maisComum(noAr.map((v) => texto(v.nicho).toLowerCase()));
     const origens = maisComum(dados.visitas.map((v) => v.origem || "direto"));
+    const inicio14 = dias[0];
+    const contatosSite = dados.marcas.filter((m) =>
+      /^(Mensagem pelo site|Pediu o mídia kit pelo site)/.test(texto(m.obs)) &&
+      m.criado_em && new Date(m.criado_em) >= inicio14).length;
 
     const faixa =
-      '<div class="faixa-numeros" style="--colunas:5">' +
+      '<div class="faixa-numeros" style="--colunas:6">' +
         '<div><small>Visitas em 14 dias</small><strong>' + inteiro(total14) + '</strong></div>' +
         '<div><small>Visitas hoje</small><strong>' + inteiro(hojeN) + '</strong></div>' +
         '<div><small>Vídeos no ar</small><strong>' + inteiro(noAr.length) + '</strong></div>' +
         '<div><small>Nicho mais forte</small><strong>' + (nicho ? esc(nicho.nome) : '<span class="fraco">sem dados</span>') + '</strong></div>' +
         '<div><small>De onde mais vêm</small><strong>' + (origens && total14 > 0 ? esc(origens.nome) : '<span class="fraco">sem dados</span>') + '</strong></div>' +
+        '<div><small>Contatos pelo site</small><strong>' + inteiro(contatosSite) + '</strong><em><a href="#marcas">ver em Marcas</a></em></div>' +
       '</div>';
 
     let grafico;
@@ -465,12 +470,18 @@
         '<section class="cartao"><h2>Visitas nos últimos 14 dias</h2>' + grafico + '</section>' +
         '<section class="cartao"><h2>Por onde as pessoas chegaram</h2>' + listaOrigens + '</section>' +
       '</div>' +
-      '<div class="ferramentas"><strong style="font-size:13px">Meus vídeos</strong><span class="fraco">O site mostra os vídeos visíveis, nesta ordem. Os que têm destaque preenchido entram nos 3 cards grandes.</span><span class="espaco"></span>' +
+      (dados.videos.some((v) => !v.exemplo) || faltando.videos ? "" :
+        '<div class="aviso leve" style="margin-bottom:12px;align-items:center"><span><strong>Os vídeos que aparecem hoje no seu site ainda não estão aqui.</strong><br>' +
+        'Clique no botão para trazer os 3 destaques e os vídeos da galeria para o painel. Depois disso, tudo o que você mudar aqui muda o site.</span>' +
+        '<button class="btn principal-btn" type="button" id="importar-site" style="margin-left:auto">Trazer os vídeos do site</button></div>') +
+      '<div class="ferramentas"><strong style="font-size:13px">Meus vídeos</strong><span class="fraco">O site mostra os vídeos visíveis, nesta ordem. Com nicho, entram na galeria; com destaque, entram nos 3 cards grandes.</span><span class="espaco"></span>' +
         '<button class="btn principal-btn" type="button" id="novo-video">' + ic("mais") + 'Adicionar vídeo</button></div>' +
       '<div class="tabela-caixa"><table><thead><tr><th></th><th>Título</th><th>Nicho</th><th>Formato</th><th>Marca</th><th>Destaque</th><th></th></tr></thead>' +
       '<tbody id="corpo-videos">' + linhas + '</tbody></table></div>';
 
     $("#novo-video").addEventListener("click", () => formVideo());
+    const importar = $("#importar-site");
+    if (importar) importar.addEventListener("click", () => importaVideosDoSite(importar));
     const corpo = $("#corpo-videos");
     corpo.addEventListener("click", async (e) => {
       const b = e.target.closest("[data-acao]");
@@ -498,7 +509,7 @@
       campos: [
         { nome: "titulo", rotulo: "Título", obrigatorio: true, inteira: true },
         { nome: "link", rotulo: "Link do vídeo", tipo: "url", inteira: true, dica: "Cole o link do YouTube, Instagram ou TikTok." },
-        { nome: "nicho", rotulo: "Nicho", lista: NICHOS_SITE, dica: "Use um dos nichos do site para cair no filtro certo." },
+        { nome: "nicho", rotulo: "Nicho", lista: NICHOS_SITE, dica: "Com nicho, o vídeo entra na galeria do site, no filtro desse nicho." },
         { nome: "formato", rotulo: "Formato", lista: FORMATOS },
         { nome: "marca", rotulo: "Marca" },
         { nome: "destaque", rotulo: "Destaque", dica: 'Ex: "2,4M views". Preenchido, o vídeo vai para os cards grandes do site.' },
@@ -512,6 +523,57 @@
       },
       aoApagar: v ? async () => { const ok = await apagar("videos", v.id); if (ok) mostraPortfolio(); return ok; } : null
     });
+  }
+
+  /* Lê as listas de vídeos que estão escritas no código do portfólio (index.html)
+     e copia para a tabela videos. Assim o painel passa a mostrar o que o site mostra. */
+  function extraiLista(codigo, nome){
+    const inicio = codigo.indexOf("const " + nome + " = [");
+    if (inicio < 0) return [];
+    const abre = codigo.indexOf("[", inicio);
+    const fecha = codigo.indexOf("\n];", abre);
+    if (fecha < 0) return [];
+    const trecho = codigo.slice(abre, fecha + 2);
+    const lista = new Function('"use strict"; return (' + trecho + ');')();
+    return Array.isArray(lista) ? lista : [];
+  }
+
+  async function importaVideosDoSite(botao){
+    if (!confirm("Trazer para o painel os vídeos que aparecem hoje no seu site?")) return;
+    botao.disabled = true; botao.textContent = "Trazendo...";
+    try {
+      const resposta = await fetch("../index.html", { cache: "no-store" });
+      const codigo = await resposta.text();
+      const destaques = extraiLista(codigo, "DESTAQUES");
+      const trabalhos = extraiLista(codigo, "TRABALHOS");
+      const limpaLink = (l) => (l && l !== "#" ? l : null);
+      let ordem = dados.videos.reduce((m, x) => Math.max(m, num(x.ordem)), 0);
+      const linhas = [];
+      destaques.forEach((d) => {
+        linhas.push({
+          titulo: texto(d.titulo) || "Vídeo de destaque", link: limpaLink(d.link), nicho: null, formato: null, marca: null,
+          destaque: [d.numero, d.rotulo].filter(Boolean).join(" ") || null, ordem: ++ordem, visivel: true, exemplo: false
+        });
+      });
+      trabalhos.forEach((t) => {
+        linhas.push({
+          titulo: texto(t.titulo) || "Trabalho", link: limpaLink(t.link), nicho: t.nicho || null, formato: t.formato || null,
+          marca: t.marca || null, destaque: null, ordem: ++ordem, visivel: true, exemplo: false
+        });
+      });
+      if (!linhas.length) throw new Error("Não encontrei vídeos no código do site.");
+      /* não duplica o que já estiver no painel com o mesmo título e link */
+      const ja = new Set(dados.videos.map((v) => texto(v.titulo) + "|" + texto(v.link)));
+      const novas = linhas.filter((l) => !ja.has(texto(l.titulo) + "|" + texto(l.link)));
+      const r = await banco.from("videos").insert(novas).select();
+      if (r.error) throw r.error;
+      await carregar("videos");
+      toast(novas.length + " vídeos trazidos do site. Agora o site lê daqui.");
+      mostraPortfolio();
+    } catch (erro){
+      toast(erro && erro.code ? explicaErro("videos", erro) : "Não consegui trazer os vídeos: " + texto(erro && erro.message), "erro");
+      botao.disabled = false; botao.textContent = "Trazer os vídeos do site";
+    }
   }
 
   /* Arrastar pela alcinha (mouse e dedo) ou mover com as setas do teclado */
