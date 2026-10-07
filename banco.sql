@@ -249,3 +249,10 @@ insert into public.campanhas (campanha, cliente, tipo, status, qtd, valor, prazo
 select 'Exemplo: campanha de lançamento', 'Nome do cliente', 'Conteúdo', 'Briefing',
        1, 0, current_date + 10, 'pendente', true, false, true
 where not exists (select 1 from public.campanhas);
+
+
+-- ---------------------------------------------------------------------
+-- 12. AVISA O SUPABASE QUE TEM TABELA NOVA
+-- Faz o painel enxergar as tabelas na hora, sem esperar.
+-- ---------------------------------------------------------------------
+notify pgrst, 'reload schema';

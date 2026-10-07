@@ -117,14 +117,39 @@
     return 'Não consegui usar a tabela "' + tabela + '": ' + msg;
   }
 
+  const codigosErro = {}; // tabela -> código técnico do erro (ajuda a descobrir o problema)
+
   function mostraAvisos(){
-    const lista = Object.keys(faltando).map((t) =>
-      '<div class="aviso" data-tabela="' + esc(t) + '"><span>' + esc(faltando[t]) + ' O resto do painel continua funcionando.</span>' +
-      '<button type="button" aria-label="Fechar aviso">×</button></div>');
-    $("#avisos").innerHTML = lista.join("");
+    const tabelas = Object.keys(faltando);
+    const semTabela = tabelas.filter((t) => /não existe no banco/.test(faltando[t]));
+    let html = "";
+    if (semTabela.length >= 3){
+      /* Faltam várias tabelas: quase sempre é o banco.sql que ainda não foi rodado. Um aviso só. */
+      html += '<div class="aviso"><span><strong>O banco ainda não tem as tabelas do painel</strong> (' + semTabela.map(esc).join(", ") + ').<br>' +
+        'No Supabase, abra <strong>SQL Editor</strong>, clique em <strong>New query</strong>, cole o arquivo <strong>banco.sql</strong> inteiro e clique em <strong>Run</strong>. ' +
+        'Deve aparecer "Success. No rows returned". Se aparecer uma mensagem de erro em vermelho, me mande um print dela.' +
+        '<br><span style="font-weight:500;opacity:.8">Código: ' + esc(codigosErro[semTabela[0]] || "?") + '</span></span>' +
+        '<button type="button" class="btn pequeno" data-recarregar style="margin-left:auto;font-size:11.5px">Já rodei, tentar de novo</button></div>';
+    } else {
+      html += semTabela.map((t) => avisoUnico(t)).join("");
+    }
+    html += tabelas.filter((t) => !semTabela.includes(t)).map((t) => avisoUnico(t)).join("");
+    $("#avisos").innerHTML = html;
   }
-  $("#avisos").addEventListener("click", (e) => {
-    const b = e.target.closest("button");
+  function avisoUnico(t){
+    return '<div class="aviso" data-tabela="' + esc(t) + '"><span>' + esc(faltando[t]) + ' O resto do painel continua funcionando.' +
+      (codigosErro[t] ? ' <span style="font-weight:500;opacity:.8">(código ' + esc(codigosErro[t]) + ')</span>' : "") + '</span>' +
+      '<button type="button" data-fechar-aviso aria-label="Fechar aviso">×</button></div>';
+  }
+  $("#avisos").addEventListener("click", async (e) => {
+    if (e.target.closest("[data-recarregar]")){
+      $("#avisos").innerHTML = '<div class="aviso leve"><span>Conferindo o banco de novo...</span></div>';
+      await carregarTudo();
+      trocaAba();
+      if (!Object.keys(faltando).length) toast("Tudo certo! O banco está ligado.");
+      return;
+    }
+    const b = e.target.closest("[data-fechar-aviso]");
     if (b) b.closest(".aviso").remove();
   });
 
@@ -148,9 +173,11 @@
       }
       dados[tabela] = Array.isArray(linhas) ? linhas : [];
       delete faltando[tabela];
+      delete codigosErro[tabela];
     } catch (erro){
       dados[tabela] = [];
       faltando[tabela] = explicaErro(tabela, erro);
+      codigosErro[tabela] = texto(erro && (erro.code || erro.message)).slice(0, 60);
     }
   }
 
