@@ -312,6 +312,55 @@
   .carregando{ color: var(--tinta-fraca); padding: 30px 0; text-align: center; }
   .erro-fatal{ max-width: 420px; margin: 18vh auto 0; background: var(--branco); padding: 24px; border-radius: var(--raio-g); box-shadow: var(--sombra); text-align: center; visibility: visible; }
 
+  /* ---------- Aba Roteiros ---------- */
+  .rot-entrada{ display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .rot-entrada input[type="url"]{ flex: 1 1 320px; min-width: 0; padding: 10px 14px; border-radius: 999px; border: 1px solid var(--linha-forte); background: var(--branco); font-size: 13px; }
+  .rot-entrada input[type="url"]:focus, .rot-chave input:focus{ outline: none; border-color: var(--manteiga-forte); box-shadow: 0 0 0 3px rgba(243,220,143,.55); }
+  .seletor{ display: inline-flex; background: var(--branco); border: 1px solid var(--linha); border-radius: 999px; padding: 3px; }
+  .seletor button{ border: 0; background: transparent; padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; color: var(--tinta-suave); cursor: pointer; }
+  .seletor button[aria-pressed="true"]{ background: var(--manteiga-claro); color: var(--tinta); }
+  .rot-chave{ display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12.5px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--linha); }
+  .rot-chave input{ padding: 7px 12px; border-radius: 999px; border: 1px solid var(--linha-forte); background: var(--creme-3); font-size: 12.5px; width: 260px; max-width: 100%; }
+  .rot-aviso{ margin-top: 12px; display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; padding: 10px 14px; border-radius: var(--raio); font-size: 12.5px; font-weight: 600; line-height: 1.55; }
+  .rot-aviso.info{ background: var(--manteiga-claro); color: #5e4807; }
+  .rot-aviso.ok{ background: var(--verde-claro); color: var(--verde-texto); }
+  .rot-aviso.erro{ background: var(--vermelho-claro); color: var(--vermelho-texto); }
+  .rot-aviso .acoes{ display: flex; gap: 6px; flex-wrap: wrap; margin-left: auto; }
+  .rot-aviso a{ color: inherit; }
+  .rot-grade{ display: grid; grid-template-columns: repeat(auto-fill, minmax(440px, 1fr)); gap: 14px; }
+  .rot-card{ background: var(--branco); border-radius: var(--raio-g); box-shadow: var(--sombra); padding: 10px; display: grid; grid-template-columns: 112px 1fr; gap: 14px; min-width: 0; }
+  .rot-card.com-video{ grid-column: 1 / -1; grid-template-columns: minmax(0, 340px) 1fr; }
+  #rot-busca{ width: 300px; }
+  .rot-capa{ position: relative; aspect-ratio: 9 / 16; border-radius: 12px; overflow: hidden; display: grid; place-items: center; color: var(--tinta); text-align: center; }
+  .rot-capa.f-instagram{ background: linear-gradient(160deg, #fbe0e7, #f2b8c6 55%, #e6bf4f); }
+  .rot-capa.f-tiktok{ background: linear-gradient(160deg, #e9e4de, #b9b3ac 60%, #2d261f); color: #fff; }
+  .rot-capa.f-youtube{ background: linear-gradient(160deg, #fbe0db, #f4a58a 60%, #c98f5a); }
+  .rot-capa.f-manual{ background: linear-gradient(160deg, #fbf0c9, #e2d3bb); }
+  .rot-capa .fonte-emoji{ font-size: 28px; }
+  .rot-capa .ver{ position: absolute; left: 8px; right: 8px; bottom: 8px; border: 0; border-radius: 999px; background: rgba(255,255,255,.94); color: var(--tinta); font-size: 11.5px; font-weight: 800; padding: 6px 8px; cursor: pointer; text-decoration: none; }
+  .rot-capa .ver:hover{ background: var(--manteiga); }
+  .rot-card.com-video .rot-capa{ aspect-ratio: auto; height: 600px; width: 100%; background: var(--creme-2); }
+  .rot-capa iframe{ width: 100%; height: 100%; border: 0; }
+  .rot-info{ min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+  .rot-info h3{ margin: 0; font-size: 14px; font-weight: 800; line-height: 1.3; }
+  .rot-meta{ display: flex; gap: 6px; flex-wrap: wrap; align-items: center; font-size: 11.5px; color: var(--tinta-suave); }
+  .p-minha{ background: var(--verde-claro); color: var(--verde-texto); }
+  .p-outra{ background: #ece3f6; color: #5a3a86; }
+  .p-tag{ background: var(--creme-2); color: var(--tinta-suave); font-weight: 600; }
+  .rot-trecho{ font-size: 12.5px; color: var(--tinta-suave); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; white-space: pre-line; margin: 0; }
+  .rot-acoes{ display: flex; gap: 6px; flex-wrap: wrap; margin-top: auto; padding-top: 4px; }
+  .rot-status{ display: flex; gap: 8px; align-items: center; font-size: 12px; font-weight: 600; padding: 8px 10px; border-radius: 10px; }
+  .rot-status.processando{ background: var(--manteiga-claro); color: #5e4807; }
+  .rot-status.falhou{ background: var(--vermelho-claro); color: var(--vermelho-texto); }
+  .relogio{ width: 18px; height: 18px; border-radius: 50%; border: 2px solid currentColor; position: relative; flex: none; }
+  .relogio::before, .relogio::after{ content: ""; position: absolute; left: 50%; top: 50%; width: 2px; background: currentColor; transform-origin: 50% 0; border-radius: 2px; }
+  .relogio::before{ height: 6px; animation: girar 1.2s linear infinite; }
+  .relogio::after{ height: 4px; animation: girar 14s linear infinite; }
+  @keyframes girar{ from{ transform: translate(-50%, 0) rotate(180deg); } to{ transform: translate(-50%, 0) rotate(540deg); } }
+  .janela .campo textarea.alto{ min-height: 260px; }
+  .janela .aviso-form{ grid-column: 1 / -1; background: var(--verde-claro); color: var(--verde-texto); border-radius: 10px; padding: 9px 12px; font-weight: 700; font-size: 12.5px; }
+  @media (prefers-reduced-motion: reduce){ .relogio::before, .relogio::after{ animation: none; } }
+
   /* ---------- Celular: menu vira gaveta ---------- */
   .fundo-gaveta{ display: none; }
   @media (max-width: 900px){
@@ -334,6 +383,15 @@
     .busca input{ width: 100%; }
     .busca{ flex: 1 1 100%; }
     details.bloco > summary .lado .progresso{ display: none; }
+    .rot-entrada{ flex-direction: column; align-items: stretch; }
+    .rot-entrada input[type="url"]{ flex: none; width: 100%; }
+    .rot-entrada .btn{ justify-content: center; }
+    .seletor{ align-self: flex-start; }
+    .rot-grade{ grid-template-columns: 1fr; }
+    .rot-card{ grid-template-columns: 84px 1fr; gap: 10px; }
+    .rot-card.com-video{ grid-template-columns: 1fr; }
+    .rot-card.com-video .rot-capa{ height: 540px; }
+    #rot-busca{ width: 100%; }
     .barra .dia{ font-size: 9px; }
     .barra:nth-child(even) .dia{ visibility: hidden; }
   }
@@ -370,6 +428,10 @@
     <a class="item-menu" href="#checklist" data-aba="checklist">
       <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
       Checklist
+    </a>
+    <a class="item-menu" href="#roteiros" data-aba="roteiros">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h11a2 2 0 0 1 2 2v2h-4"/><path d="M17 7v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2h9v2a2 2 0 0 0 4 0"/><path d="M8 3a2 2 0 0 0-2 2v12M10 8h4M10 12h4"/></svg>
+      Roteiros
     </a>
   </nav>
 

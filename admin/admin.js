@@ -95,7 +95,7 @@
   /* ---------------------------------------------------------
      2. DADOS: carregar e salvar, sem quebrar se faltar algo
      --------------------------------------------------------- */
-  const dados = { videos: [], marcas: [], calendario: [], campanhas: [], marcados: [], visitas: [] };
+  const dados = { videos: [], marcas: [], calendario: [], campanhas: [], marcados: [], visitas: [], roteiros: [], configuracoes: [] };
   const faltando = {}; // tabela -> texto do aviso
 
   function explicaErro(tabela, erro){
@@ -103,7 +103,8 @@
     const codigo = texto(erro && erro.code);
     const col = /'([^']+)' column/.exec(msg) || /column "?([a-z_]+)"? /i.exec(msg);
     if (codigo === "42P01" || codigo === "PGRST205" || /does not exist|Could not find the table/i.test(msg)){
-      return 'A tabela "' + tabela + '" não existe no banco. Rode o arquivo banco.sql no SQL Editor do Supabase.';
+      const arquivo = (tabela === "roteiros" || tabela === "configuracoes") ? "sql-roteiros.sql" : "banco.sql";
+      return 'A tabela "' + tabela + '" não existe no banco. Rode o arquivo ' + arquivo + ' no SQL Editor do Supabase.';
     }
     if (codigo === "PGRST204" || codigo === "42703" || col){
       return 'Falta o campo "' + (col ? col[1] : "?") + '" na tabela "' + tabela + '". Rode o banco.sql de novo no Supabase.';
@@ -259,18 +260,22 @@
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") { fecharJanela(); fechaGaveta(); } });
 
   /* campos: [{ nome, rotulo, tipo: text|email|tel|url|number|date|select|textarea|checkbox, opcoes, obrigatorio, dica, inteira, lista }] */
-  function abrirFormulario({ titulo, campos, valores, aoSalvar, aoApagar }){
+  function abrirFormulario({ titulo, campos, valores, aoSalvar, aoApagar, aviso }){
     valores = valores || {};
-    const html = '<form class="form-grade" novalidate>' + campos.map((c, i) => {
+    const html = '<form class="form-grade" novalidate>' + (aviso ? '<div class="aviso-form" role="status">' + esc(aviso) + '</div>' : "") + campos.map((c, i) => {
       const id = "campo-" + c.nome + "-" + i;
       const v = valores[c.nome];
       const obrig = c.obrigatorio ? " required" : "";
       let entrada;
       if (c.tipo === "select"){
         entrada = '<select id="' + id + '" name="' + c.nome + '"' + obrig + '>' +
-          c.opcoes.map((o) => '<option value="' + esc(o) + '"' + (texto(v) === o ? " selected" : "") + '>' + esc(o) + '</option>').join("") + '</select>';
+          c.opcoes.map((o) => {
+            const valor = typeof o === "object" ? o.valor : o;
+            const rotulo = typeof o === "object" ? o.rotulo : o;
+            return '<option value="' + esc(valor) + '"' + (texto(v) === valor ? " selected" : "") + '>' + esc(rotulo) + '</option>';
+          }).join("") + '</select>';
       } else if (c.tipo === "textarea"){
-        entrada = '<textarea id="' + id + '" name="' + c.nome + '"' + obrig + '>' + esc(v) + '</textarea>';
+        entrada = '<textarea id="' + id + '" name="' + c.nome + '"' + obrig + (c.alto ? ' class="alto"' : "") + '>' + esc(v) + '</textarea>';
       } else if (c.tipo === "checkbox"){
         return '<div class="campo check inteira"><input type="checkbox" id="' + id + '" name="' + c.nome + '"' + (v ? " checked" : "") + '><label for="' + id + '">' + esc(c.rotulo) + '</label></div>';
       } else {
@@ -341,7 +346,8 @@
     marcas:     { titulo: "Marcas",     sub: "Sua base de contatos de empresa",               mostra: () => mostraMarcas() },
     calendario: { titulo: "Calendário", sub: "O que gravar, editar e postar",                 mostra: () => mostraCalendario() },
     campanhas:  { titulo: "Campanhas",  sub: "Trabalhos fechados, prazos e pagamentos",       mostra: () => mostraCampanhas() },
-    checklist:  { titulo: "Checklist",  sub: "Portfólio, referências, roteiros e ideias",     mostra: () => mostraChecklist() }
+    checklist:  { titulo: "Checklist",  sub: "Portfólio, referências, roteiros e ideias",     mostra: () => mostraChecklist() },
+    roteiros:   { titulo: "📜 Roteiros", sub: "Cole o link de um reel e eu transcrevo. Serve pros seus e pros das outras, com etiqueta pra você separar.", mostra: () => mostraRoteiros() }
   };
   const area = $("#area");
 
@@ -1250,8 +1256,548 @@
     }
   }
 
+  /* =========================================================
+     10. ABA ROTEIROS (transcrição pela Supadata)
+     A chave fica na tabela "configuracoes" do Supabase, nunca no código.
+     ========================================================= */
+  const SUPADATA = "https://api.supadata.ai/v1";
+  const CHAVE_CONFIG = "supadata_api_key";
+  const MSG_VAZIO = "Não achei fala nesse vídeo. Costuma ser reel só com música ou só com texto na tela.";
+  const NOMES_FONTE = { instagram: "Instagram", tiktok: "TikTok", youtube: "YouTube", manual: "Escrito na mão" };
+  const EMOJI_FONTE = { instagram: "📸", tiktok: "🎵", youtube: "▶️", manual: "✍️" };
+  const estadoRot = { deQuem: "outra", filtro: "todos", busca: "", link: "", aviso: null, atual: null, saldo: null, editandoChave: false, abertos: new Set() };
+  const emAndamento = new Set(); // roteiros sendo transcritos agora, nesta aba do navegador
+  const espera = (ms) => new Promise((ok) => setTimeout(ok, ms));
+
+  function chaveSupadata(){
+    const c = dados.configuracoes.find((x) => x.chave === CHAVE_CONFIG);
+    return c && c.valor ? String(c.valor).trim() : "";
+  }
+
+  /* Limpa o link e descobre de onde ele é, o @ do perfil (quando aparece) e o id do vídeo */
+  function analisaLink(bruto){
+    const errado = "Esse link não parece certo. Ele precisa começar com https://, do jeito que vem quando você copia o link do vídeo.";
+    const t = texto(bruto).trim();
+    if (!/^https?:\/\//i.test(t)) return { erro: errado };
+    let u;
+    try { u = new URL(t); } catch (e){ return { erro: errado }; }
+    const host = u.hostname.toLowerCase().replace(/^(www|m|vm|vt)\./, "");
+    let fonte = null;
+    if (host === "instagram.com" || host === "instagr.am") fonte = "instagram";
+    else if (host === "tiktok.com") fonte = "tiktok";
+    else if (host === "youtube.com" || host === "youtu.be") fonte = "youtube";
+    if (!fonte) return { erro: "Por enquanto eu só transcrevo vídeos do Instagram, do TikTok e do YouTube." };
+    if (fonte === "instagram") u.pathname = u.pathname.replace(/\/reels\//, "/reel/");
+    Array.from(u.searchParams.keys()).forEach((k) => { if (k === "igsh" || k === "igshid" || /^utm_/i.test(k)) u.searchParams.delete(k); });
+    u.hash = "";
+    const limpo = u.toString().replace(/\?$/, "");
+    const partes = u.pathname.split("/").filter(Boolean);
+    let perfil = null, id = null;
+    if (fonte === "instagram"){
+      const i = partes.findIndex((p) => p === "reel" || p === "p" || p === "tv");
+      if (i >= 0) id = partes[i + 1] || null;
+      if (i === 1) perfil = partes[0];
+    }
+    if (fonte === "tiktok"){
+      if (partes[0] && partes[0].startsWith("@")) perfil = partes[0].slice(1);
+      const i = partes.indexOf("video");
+      if (i >= 0 && /^\d+$/.test(partes[i + 1] || "")) id = partes[i + 1];
+    }
+    if (fonte === "youtube"){
+      if (host === "youtu.be") id = partes[0] || null;
+      else if (u.searchParams.get("v")) id = u.searchParams.get("v");
+      else { const i = partes.findIndex((p) => p === "shorts" || p === "embed" || p === "live"); if (i >= 0) id = partes[i + 1] || null; }
+    }
+    return { url: limpo, fonte, perfil, id };
+  }
+
+  function embedDe(r){
+    if (!r.url) return null;
+    const info = analisaLink(r.url);
+    if (info.erro || !info.id) return null;
+    const id = encodeURIComponent(info.id);
+    if (info.fonte === "instagram") return "https://www.instagram.com/reel/" + id + "/embed";
+    if (info.fonte === "youtube") return "https://www.youtube.com/embed/" + id;
+    if (info.fonte === "tiktok") return "https://www.tiktok.com/embed/v2/" + id;
+    return null;
+  }
+
+  /* ---------- Conversa com a Supadata ---------- */
+  async function lerResposta(r){
+    try { return (await r.json()) || {}; } catch (e){ return {}; }
+  }
+
+  function erroSupadata(status, corpo){
+    corpo = corpo || {};
+    const codigo = texto(corpo.error || corpo.code);
+    const detalhe = texto(corpo.details) + " " + texto(corpo.message);
+    if (codigo === "limit-exceeded" || status === 429){
+      if (/plan usage/i.test(detalhe)) return { tipo: "cota", msg: "Os créditos deste mês da Supadata acabaram. Eles voltam quando o seu plano renovar." };
+      return { tipo: "pressa", msg: "Foram muitos pedidos seguidos. Espera 1 minuto e tenta de novo." };
+    }
+    if (status === 401 || status === 403 || codigo === "unauthorized" || codigo === "forbidden" || /api key/i.test(detalhe)){
+      return { tipo: "chave", msg: "A chave da Supadata não funcionou. Confira se você colou ela inteira no campo 🔑 Chave da Supadata." };
+    }
+    if (status === 206 || codigo === "transcript-unavailable") return { tipo: "vazio" };
+    if (status === 404 || codigo === "not-found") return { tipo: "video", msg: "Não encontrei esse vídeo. Ele pode ser privado, ter sido apagado ou o link estar incompleto." };
+    if (status === 400 || codigo === "invalid-request") return { tipo: "video", msg: "O serviço não aceitou esse link. Confira se você copiou o link do vídeo, e não o do perfil." };
+    return { tipo: "outro", msg: "Algo deu errado na transcrição. Tenta de novo daqui a pouco." };
+  }
+
+  function resultadoTranscricao(corpo){
+    const c = corpo && corpo.content;
+    let textoFinal = "", segmentos = null;
+    if (typeof c === "string") textoFinal = c.trim();
+    else if (Array.isArray(c)){
+      segmentos = c;
+      textoFinal = c.map((s) => texto(s && s.text)).join(" ").replace(/\s+/g, " ").trim();
+    }
+    if (!textoFinal || corpo.lang === "none") return { tipo: "vazio" };
+    return { tipo: "ok", texto: textoFinal, segmentos };
+  }
+
+  async function transcreveSupadata(url, chave){
+    const cabecalho = { "x-api-key": chave };
+    const params = new URLSearchParams({ url: url, mode: "auto", text: "true", lang: "pt" });
+    let r;
+    try { r = await fetch(SUPADATA + "/transcript?" + params.toString(), { headers: cabecalho }); }
+    catch (e){ return { tipo: "rede", msg: "Não consegui falar com o serviço de transcrição. Confira a sua internet e tenta de novo." }; }
+    const corpo = await lerResposta(r);
+
+    /* Vídeo longo: a Supadata devolve um número de pedido e a gente pergunta a cada 5 segundos */
+    if (r.status === 202 && corpo.jobId){
+      const inicio = Date.now();
+      while (Date.now() - inicio < 6 * 60 * 1000){
+        await espera(5000);
+        let rj;
+        try { rj = await fetch(SUPADATA + "/transcript/" + encodeURIComponent(corpo.jobId), { headers: cabecalho }); }
+        catch (e){ continue; } // internet piscou: tenta de novo na próxima volta
+        const cj = await lerResposta(rj);
+        if (!rj.ok && rj.status !== 202) return erroSupadata(rj.status, cj);
+        if (cj.status === "completed") return resultadoTranscricao(cj);
+        if (cj.status === "failed"){
+          const e = erroSupadata(0, typeof cj.error === "object" && cj.error ? cj.error : { error: cj.error, details: cj.details, message: cj.message });
+          return e.tipo === "outro" ? { tipo: "outro", msg: "O serviço não conseguiu transcrever esse vídeo. Tenta de novo daqui a pouco." } : e;
+        }
+      }
+      return { tipo: "demora", msg: "Demorou demais e eu parei de esperar. Tenta de novo daqui a pouco." };
+    }
+    if (!r.ok || r.status === 206) return erroSupadata(r.status, corpo);
+    return resultadoTranscricao(corpo);
+  }
+
+  async function carregaSaldo(){
+    const chave = chaveSupadata();
+    if (!chave){ estadoRot.saldo = null; desenhaChave(); return; }
+    estadoRot.saldo = { carregando: true }; desenhaChave();
+    try {
+      const r = await fetch(SUPADATA + "/me", { headers: { "x-api-key": chave } });
+      const c = await lerResposta(r);
+      if (!r.ok) estadoRot.saldo = { erro: (r.status === 401 || r.status === 403) ? "a chave não funcionou, confira se colou inteira" : "não consegui ver o saldo agora" };
+      else estadoRot.saldo = { plano: texto(c.plan), max: num(c.maxCredits), usado: num(c.usedCredits) };
+    } catch (e){ estadoRot.saldo = { erro: "não consegui ver o saldo agora" }; }
+    desenhaChave();
+  }
+
+  /* ---------- Avisos da aba (andamento e erros) ---------- */
+  function avisa(tipo, html, acoes){
+    estadoRot.aviso = tipo ? { tipo, html, acoes: acoes || [] } : null;
+    desenhaAviso();
+  }
+  function desenhaAviso(){
+    const el = $("#rot-aviso");
+    if (!el) return;
+    const a = estadoRot.aviso;
+    if (!a){ el.hidden = true; el.innerHTML = ""; return; }
+    el.hidden = false;
+    el.className = "rot-aviso " + a.tipo;
+    el.innerHTML = '<span>' + a.html + '</span>' + (a.acoes.length ? '<span class="acoes">' +
+      a.acoes.map((x, i) => '<button class="btn pequeno" type="button" data-aviso-acao="' + i + '">' + esc(x.rotulo) + '</button>').join("") + '</span>' : "");
+  }
+  const tempoPassado = (s) => (s < 60 ? s + "s" : Math.floor(s / 60) + "min " + String(s % 60).padStart(2, "0") + "s");
+  const SEM_CHAVE = 'Para transcrever eu preciso da sua chave da Supadata, o serviço que ouve o vídeo. É rapidinho: ' +
+    '<strong>1.</strong> crie uma conta grátis em <a href="https://supadata.ai" target="_blank" rel="noopener">supadata.ai</a> (100 créditos por mês, sem cartão). ' +
+    '<strong>2.</strong> No painel deles, copie a sua API key. ' +
+    '<strong>3.</strong> Cole no campo 🔑 Chave da Supadata aqui embaixo e clique em Salvar.';
+
+  /* ---------- A chave da Supadata ---------- */
+  function desenhaChave(){
+    const el = $("#rot-chave");
+    if (!el) return;
+    if (faltando.configuracoes){
+      el.innerHTML = '<span class="fraco">🔑 Para guardar a chave da Supadata, rode o arquivo sql-roteiros.sql no Supabase.</span>';
+      return;
+    }
+    const chave = chaveSupadata();
+    if (chave && !estadoRot.editandoChave){
+      const s = estadoRot.saldo;
+      let saldo = "";
+      if (s && s.carregando) saldo = '<span class="fraco">vendo o saldo...</span>';
+      else if (s && s.erro) saldo = '<span class="fraco">' + esc(s.erro) + '</span>';
+      else if (s) saldo = '<strong>' + inteiro(s.usado) + (s.max ? ' de ' + inteiro(s.max) : "") + ' créditos usados</strong>' + (s.plano ? ' <span class="fraco">(plano ' + esc(s.plano) + ')</span>' : "");
+      el.innerHTML = '<span>🔑 Chave da Supadata: <strong>••••' + esc(chave.slice(-4)) + '</strong></span><span class="fraco">·</span>' + saldo +
+        '<span class="espaco" style="flex:1"></span><button class="btn pequeno" type="button" data-trocar-chave>Trocar chave</button>';
+      return;
+    }
+    el.innerHTML = '<label for="rot-chave-campo"><strong>🔑 Chave da Supadata</strong></label>' +
+      '<input type="password" id="rot-chave-campo" autocomplete="off" placeholder="cole a sua chave aqui" spellcheck="false">' +
+      '<button class="btn principal-btn pequeno" type="button" data-salvar-chave>Salvar</button>' +
+      (chave ? '<button class="btn pequeno" type="button" data-cancelar-chave>Cancelar</button>' : "") +
+      '<span class="fraco">Não tem? Crie grátis em <a href="https://supadata.ai" target="_blank" rel="noopener">supadata.ai</a> (100 créditos por mês, sem cartão).</span>';
+  }
+
+  async function salvaChave(){
+    const campo = $("#rot-chave-campo");
+    const valor = campo ? campo.value.trim() : "";
+    if (!valor){ toast("Cole a chave no campo antes de salvar.", "erro"); if (campo) campo.focus(); return; }
+    try {
+      const r = await banco.from("configuracoes").upsert({ chave: CHAVE_CONFIG, valor: valor, updated_at: new Date().toISOString() });
+      if (r.error) throw r.error;
+      dados.configuracoes = dados.configuracoes.filter((x) => x.chave !== CHAVE_CONFIG).concat([{ chave: CHAVE_CONFIG, valor: valor }]);
+      estadoRot.editandoChave = false;
+      toast("🔑 Chave salva.");
+      if (estadoRot.aviso && estadoRot.aviso.html === SEM_CHAVE) avisa(null);
+      carregaSaldo();
+    } catch (erro){ toast(explicaErro("configuracoes", erro), "erro"); }
+  }
+
+  /* ---------- Transcrever ---------- */
+  async function transcrever(){
+    const campo = $("#rot-link");
+    const bruto = campo ? campo.value : estadoRot.link;
+    estadoRot.link = bruto;
+    if (faltando.roteiros){ avisa("erro", "A biblioteca de roteiros ainda não existe no banco. Rode o arquivo sql-roteiros.sql no SQL Editor do Supabase e recarregue o painel."); return; }
+    if (!texto(bruto).trim()){ avisa("erro", "Cole o link de um vídeo no campo acima primeiro."); if (campo) campo.focus(); return; }
+    const info = analisaLink(bruto);
+    if (info.erro){ avisa("erro", esc(info.erro)); if (campo) campo.focus(); return; }
+    if (!chaveSupadata()){
+      estadoRot.editandoChave = true; desenhaChave();
+      avisa("erro", SEM_CHAVE);
+      const c = $("#rot-chave-campo"); if (c) c.focus();
+      return;
+    }
+    const existente = dados.roteiros.find((r) => texto(r.url) === info.url);
+    if (existente && !confirm("Esse vídeo já está na sua biblioteca. Quer transcrever de novo? Isso gasta créditos da Supadata.")) return;
+
+    avisa("info", "⏳ Guardando o link na biblioteca...");
+    const linha = existente
+      ? await salvar("roteiros", { status: "processando", erro: null }, existente.id)
+      : await salvar("roteiros", { fonte: info.fonte, url: info.url, perfil: info.perfil, de_quem: estadoRot.deQuem, status: "processando" });
+    if (!linha || typeof linha !== "object"){ avisa("erro", "Não consegui guardar na biblioteca agora. Confira a sua internet e tenta de novo."); return; }
+    estadoRot.link = "";
+    executaTranscricao(linha);
+  }
+
+  async function executaTranscricao(r){
+    const id = r.id;
+    emAndamento.add(id);
+    estadoRot.atual = id;
+    const inicio = Date.now();
+    const tick = () => {
+      if (estadoRot.atual !== id) return;
+      const s = Math.round((Date.now() - inicio) / 1000);
+      avisa("info", "⏳ Ouvindo o vídeo… " + tempoPassado(s) + ". Costuma levar de 3 a 4 minutos, pode deixar a aba aberta.");
+    };
+    tick();
+    const relogio = setInterval(tick, 5000);
+    if (abaAtual() === "roteiros") mostraRoteiros();
+
+    const res = await transcreveSupadata(r.url, chaveSupadata());
+    clearInterval(relogio);
+    emAndamento.delete(id);
+
+    if (res.tipo === "ok"){
+      await salvar("roteiros", { transcricao: res.texto, segmentos: res.segmentos, status: "pronto", erro: null }, id);
+      carregaSaldo();
+      if (abaAtual() === "roteiros"){
+        mostraRoteiros();
+        if (estadoRot.atual === id) avisa("ok", "✅ Pronto. Revisa, dá um nome e salva.");
+        const atual = dados.roteiros.find((x) => x.id === id);
+        if (atual) formRoteiro(atual, "✅ Pronto. Revisa, dá um nome e salva.");
+      } else toast("✅ Um roteiro ficou pronto na aba Roteiros.");
+      return;
+    }
+
+    const msg = res.tipo === "vazio" ? MSG_VAZIO : res.msg;
+    await salvar("roteiros", { status: "falhou", erro: msg }, id);
+    if (res.tipo !== "rede") carregaSaldo();
+    if (abaAtual() === "roteiros"){
+      mostraRoteiros();
+      if (estadoRot.atual === id){
+        const acoes = res.tipo === "vazio"
+          ? [{ rotulo: "📝 Guardar assim mesmo", fn: () => abreRoteiro(id) }]
+          : (res.tipo === "chave" ? [{ rotulo: "🔑 Trocar chave", fn: () => { estadoRot.editandoChave = true; desenhaChave(); } }] : [{ rotulo: "🔁 Tentar de novo", fn: () => tentarDeNovo(id) }]);
+        avisa("erro", (res.tipo === "vazio" ? "🔇 " : "⚠️ ") + esc(msg), acoes);
+      }
+    } else toast(msg, "erro");
+  }
+
+  async function tentarDeNovo(id){
+    const r = dados.roteiros.find((x) => x.id === id);
+    if (!r) return;
+    if (!r.url){ abreRoteiro(id); return; }
+    if (!chaveSupadata()){ estadoRot.editandoChave = true; desenhaChave(); avisa("erro", SEM_CHAVE); return; }
+    const linha = await salvar("roteiros", { status: "processando", erro: null }, id);
+    if (linha && typeof linha === "object") executaTranscricao(linha);
+  }
+
+  /* ---------- Editar, escrever na mão, copiar, apagar ---------- */
+  function abreRoteiro(id){
+    const r = dados.roteiros.find((x) => x.id === id);
+    if (r) formRoteiro(r);
+  }
+
+  function formRoteiro(r, avisoTopo){
+    const valores = r ? Object.assign({}, r, { tags: (Array.isArray(r.tags) ? r.tags : []).join(", ") }) : { de_quem: estadoRot.deQuem };
+    abrirFormulario({
+      titulo: r ? "✏️ Editar roteiro" : "✍️ Escrever roteiro na mão",
+      aviso: avisoTopo,
+      valores: valores,
+      campos: [
+        { nome: "titulo", rotulo: "Título", inteira: true },
+        { nome: "de_quem", rotulo: "De quem", tipo: "select", opcoes: [{ valor: "outra", rotulo: "De outra pessoa" }, { valor: "minha", rotulo: "Meu" }] },
+        { nome: "perfil", rotulo: "Perfil (@)", dica: "Ex: @perfildacreator" },
+        { nome: "url", rotulo: "Link do vídeo", tipo: "url", inteira: true },
+        { nome: "postado_em", rotulo: "Data de postagem", tipo: "date" },
+        { nome: "tags", rotulo: "Tags", dica: "Separadas por vírgula. Ex: gancho, skincare, humor" },
+        { nome: "legenda", rotulo: "Legenda do post", tipo: "textarea", inteira: true },
+        { nome: "transcricao", rotulo: "Transcrição", tipo: "textarea", inteira: true, alto: true },
+        { nome: "obs", rotulo: "Minhas notas", tipo: "textarea", inteira: true }
+      ],
+      aoSalvar: async (v) => {
+        const saida = Object.assign({}, v);
+        saida.tags = texto(v.tags).split(",").map((t) => t.trim().replace(/^#/, "")).filter(Boolean);
+        saida.perfil = texto(v.perfil).trim().replace(/^@/, "") || null;
+        const link = texto(v.url).trim();
+        if (link){
+          if (!/^https?:\/\//i.test(link)){ toast("O link precisa começar com https://", "erro"); return false; }
+          const info = analisaLink(link);
+          saida.url = info.erro ? link : info.url;
+          saida.fonte = info.erro ? "manual" : info.fonte;
+          if (!saida.perfil && !info.erro && info.perfil) saida.perfil = info.perfil;
+        } else { saida.url = null; saida.fonte = "manual"; }
+        saida.status = "pronto";
+        saida.erro = null;
+        const ok = await salvar("roteiros", saida, r ? r.id : null);
+        if (ok){
+          if (estadoRot.aviso && estadoRot.aviso.tipo !== "info") avisa(null);
+          mostraRoteiros();
+        }
+        return ok;
+      },
+      aoApagar: r ? async () => { const ok = await apagar("roteiros", r.id); if (ok) mostraRoteiros(); return ok; } : null
+    });
+  }
+
+  async function copiaTexto(t){
+    try { await navigator.clipboard.writeText(t); return true; }
+    catch (e){
+      const area2 = document.createElement("textarea");
+      area2.value = t; area2.style.position = "fixed"; area2.style.opacity = "0";
+      document.body.appendChild(area2); area2.select();
+      let ok = false;
+      try { ok = document.execCommand("copy"); } catch (e2){ ok = false; }
+      area2.remove();
+      return ok;
+    }
+  }
+
+  /* ---------- Estudar com o Claude: monta o prompt e copia ---------- */
+  function promptEstudo(){
+    const lista = dados.roteiros
+      .filter((r) => r.de_quem === "outra" && texto(r.transcricao).trim())
+      .sort((a, b) => texto(b.created_at).localeCompare(texto(a.created_at)))
+      .slice(0, 10);
+    if (!lista.length) return null;
+    const videos = lista.map((r, i) =>
+      "VÍDEO " + (i + 1) + "\n" +
+      "Perfil: " + (r.perfil ? "@" + r.perfil : "não informado") + "\n" +
+      "Fonte: " + (NOMES_FONTE[r.fonte] || "não informada") + "\n" +
+      (r.titulo ? "Título: " + r.titulo + "\n" : "") +
+      "Transcrição:\n" + texto(r.transcricao).trim()).join("\n\n");
+    return {
+      n: lista.length,
+      texto:
+        "Oi, Claude! Eu sou a Isabelle Bueno, creator de UGC e micro influenciadora (@bellebuenosilveira). " +
+        "Faço vídeos para marcas de beleza, skincare, moda, comida, casa e decoração, maternidade, pet, viagem e tech.\n\n" +
+        "Abaixo estão as transcrições de " + lista.length + " vídeo" + (lista.length === 1 ? "" : "s") + " de outras creators que eu salvei como referência. " +
+        "Estude esses vídeos e me entregue:\n\n" +
+        "1. Assuntos em alta: os temas que aparecem com mais força nesses vídeos.\n" +
+        "2. Expressões que estão prendendo: frases e jeitos de falar que seguram a atenção, com o trecho de onde você tirou.\n" +
+        "3. Padrões de gancho: os tipos de abertura que se repetem. Para cada padrão, mostre um exemplo real tirado das transcrições.\n" +
+        "4. Cinco roteiros novos no MEU assunto (UGC para os nichos que eu atendo), reaproveitando a ESTRUTURA desses vídeos, e não o conteúdo. " +
+        "Cada roteiro com gancho, desenvolvimento e chamada final, em blocos de tempo, para vídeos de 30 a 60 segundos.\n\n" +
+        "Importante: escreva do jeito que uma pessoa fala de verdade, com naturalidade, sem cara de texto robotizado e sem copiar frases das outras creators.\n\n" +
+        "VÍDEOS DE REFERÊNCIA\n\n" + videos
+    };
+  }
+
+  /* ---------- A tela ---------- */
+  function mostraRoteiros(){
+    const termo = estadoRot.busca.toLowerCase();
+    const todasTags = Array.from(new Set(dados.roteiros.flatMap((r) => (Array.isArray(r.tags) ? r.tags : [])).filter(Boolean)))
+      .sort((a, b) => a.localeCompare(b, "pt-BR"));
+    if (estadoRot.filtro.startsWith("tag:") && !todasTags.includes(estadoRot.filtro.slice(4))) estadoRot.filtro = "todos";
+    const lista = dados.roteiros
+      .filter((r) => {
+        const f = estadoRot.filtro;
+        if (f === "meus") return r.de_quem === "minha";
+        if (f === "outras") return r.de_quem !== "minha";
+        if (f.startsWith("tag:")) return Array.isArray(r.tags) && r.tags.includes(f.slice(4));
+        return true;
+      })
+      .filter((r) => !termo || [r.transcricao, r.perfil, r.titulo, r.obs, r.legenda].concat(Array.isArray(r.tags) ? r.tags : [])
+        .some((x) => texto(x).toLowerCase().includes(termo)))
+      .sort((a, b) => texto(b.created_at).localeCompare(texto(a.created_at)));
+
+    const contaMeus = dados.roteiros.filter((r) => r.de_quem === "minha").length;
+    const chips = [["todos", "Todos", dados.roteiros.length], ["meus", "Meus", contaMeus], ["outras", "De outras", dados.roteiros.length - contaMeus]]
+      .concat(todasTags.map((t) => ["tag:" + t, "#" + t, null]))
+      .map(([v, rot, n]) => '<button class="chip" type="button" data-filtro-rot="' + esc(v) + '" aria-pressed="' + (estadoRot.filtro === v) + '">' + esc(rot) + (n != null ? '<span class="n">' + n + '</span>' : "") + '</button>').join("");
+
+    const cards = lista.length ? '<div class="rot-grade">' + lista.map(cardRoteiro).join("") + '</div>'
+      : '<p class="vazio">' + (dados.roteiros.length
+          ? "Nada encontrado com essa busca ou filtro."
+          : "📜 Sua biblioteca ainda está vazia. Cole o link de um reel lá em cima e clique em Transcrever, ou escreva um roteiro na mão.") + '</p>';
+
+    area.innerHTML = '<div id="rot-raiz">' +
+      '<section class="cartao">' +
+        '<div class="rot-entrada">' +
+          '<input type="url" id="rot-link" inputmode="url" autocomplete="off" placeholder="Cole aqui: instagram.com/reel/... · tiktok.com/... · youtube.com/..." aria-label="Link do vídeo" value="' + esc(estadoRot.link) + '">' +
+          '<div class="seletor" role="group" aria-label="De quem é o vídeo">' +
+            [["outra", "De outra pessoa"], ["minha", "Meu"]].map(([v, t]) => '<button type="button" data-de-quem="' + v + '" aria-pressed="' + (estadoRot.deQuem === v) + '">' + t + '</button>').join("") +
+          '</div>' +
+          '<button class="btn principal-btn" type="button" id="rot-transcrever">🎧 Transcrever</button>' +
+          '<button class="btn" type="button" id="rot-manual">' + ic("mais") + 'Escrever na mão ✍️</button>' +
+        '</div>' +
+        '<div class="rot-aviso" id="rot-aviso" role="status" aria-live="polite" hidden></div>' +
+        '<div class="rot-chave" id="rot-chave"></div>' +
+      '</section>' +
+      '<div class="ferramentas" style="margin-top:16px">' +
+        '<label class="busca">' + ic("busca") + '<input type="search" id="rot-busca" placeholder="Buscar na transcrição, perfil, título ou notas" value="' + esc(estadoRot.busca) + '" aria-label="Buscar roteiros"></label>' +
+        '<div class="chips" role="group" aria-label="Filtrar roteiros">' + chips + '</div>' +
+        '<span class="espaco"></span>' +
+        '<button class="btn" type="button" id="rot-estudar">🧠 Estudar com o Claude</button>' +
+      '</div>' + cards + '</div>';
+
+    desenhaAviso();
+    desenhaChave();
+    if (chaveSupadata() && estadoRot.saldo === null) carregaSaldo();
+    ligaRoteiros();
+  }
+
+  function cardRoteiro(r){
+    const fonte = NOMES_FONTE[r.fonte] ? r.fonte : "manual";
+    const emb = embedDe(r);
+    const aberto = emb && estadoRot.abertos.has(r.id);
+    const capa = aberto
+      ? '<div class="rot-capa"><iframe src="' + esc(emb) + '" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture; clipboard-write" allowfullscreen title="Vídeo: ' + esc(r.titulo || "sem título") + '"></iframe></div>'
+      : '<div class="rot-capa f-' + fonte + '"><span class="fonte-emoji" aria-hidden="true">' + EMOJI_FONTE[fonte] + '</span>' +
+          (emb ? '<button class="ver" type="button" data-ver="' + esc(r.id) + '">▶ ver vídeo</button>'
+               : (r.url ? '<a class="ver" href="' + esc(r.url) + '" target="_blank" rel="noopener">↗ abrir</a>' : "")) + '</div>';
+
+    let estado = "";
+    if (r.status === "processando"){
+      estado = emAndamento.has(r.id)
+        ? '<div class="rot-status processando"><span class="relogio" aria-hidden="true"></span>Transcrevendo... pode continuar usando o painel.</div>'
+        : '<div class="rot-status processando"><span class="relogio" aria-hidden="true"></span>Ficou parado no meio, provavelmente a aba foi fechada.' +
+          '<button class="btn pequeno" type="button" data-tentar="' + esc(r.id) + '" style="margin-left:auto">🔁 Tentar de novo</button></div>';
+    } else if (r.status === "falhou"){
+      estado = '<div class="rot-status falhou"><span>⚠️ ' + esc(r.erro || "A transcrição não deu certo.") + '</span></div>';
+    }
+
+    const quando = r.postado_em ? "postado em " + dataBR(r.postado_em) : (r.created_at ? "salvo em " + new Date(r.created_at).toLocaleDateString("pt-BR") : "");
+    const tags = (Array.isArray(r.tags) ? r.tags : []).map((t) => '<span class="pilula p-tag">#' + esc(t) + '</span>').join("");
+    const temTexto = texto(r.transcricao).trim();
+
+    const acoes = r.status === "falhou"
+      ? '<button class="btn pequeno" type="button" data-editar-rot="' + esc(r.id) + '">📝 Abrir mesmo assim</button>' +
+        (r.url ? '<button class="btn pequeno" type="button" data-tentar="' + esc(r.id) + '">🔁 Tentar de novo</button>' : "")
+      : (temTexto ? '<button class="btn pequeno" type="button" data-copiar="' + esc(r.id) + '">📋 Copiar transcrição</button>' : "") +
+        '<button class="btn pequeno" type="button" data-editar-rot="' + esc(r.id) + '">✏️ Editar</button>';
+
+    return '<article class="rot-card' + (aberto ? " com-video" : "") + '">' + capa +
+      '<div class="rot-info">' +
+        '<h3>' + (r.titulo ? esc(r.titulo) : '<span class="fraco">Sem título</span>') + '</h3>' +
+        '<div class="rot-meta">' +
+          (r.perfil ? '<span>@' + esc(r.perfil) + '</span>' : "") +
+          '<span class="pilula ' + (r.de_quem === "minha" ? "p-minha" : "p-outra") + '">' + (r.de_quem === "minha" ? "Meu" : "De outra") + '</span>' +
+          '<span class="pilula p-cinza">' + EMOJI_FONTE[fonte] + ' ' + NOMES_FONTE[fonte] + '</span>' +
+          (quando ? '<span>' + esc(quando) + '</span>' : "") +
+        '</div>' +
+        (tags ? '<div class="rot-meta">' + tags + '</div>' : "") +
+        estado +
+        (temTexto ? '<p class="rot-trecho">' + esc(temTexto.slice(0, 500)) + '</p>' : "") +
+        '<div class="rot-acoes">' + acoes +
+          (aberto ? '<button class="btn pequeno" type="button" data-fechar-video="' + esc(r.id) + '">✖ Fechar vídeo</button>' : "") +
+          '<button class="btn pequeno perigo" type="button" data-apagar-rot="' + esc(r.id) + '">🗑️ Apagar</button>' +
+        '</div>' +
+      '</div>' +
+    '</article>';
+  }
+
+  function ligaRoteiros(){
+    const raiz = $("#rot-raiz");
+    if (!raiz) return;
+    const link = $("#rot-link");
+    link.addEventListener("input", () => { estadoRot.link = link.value; });
+    link.addEventListener("keydown", (e) => { if (e.key === "Enter"){ e.preventDefault(); transcrever(); } });
+    $("#rot-transcrever").addEventListener("click", transcrever);
+    $("#rot-manual").addEventListener("click", () => {
+      if (faltando.roteiros){ avisa("erro", "A biblioteca de roteiros ainda não existe no banco. Rode o arquivo sql-roteiros.sql no SQL Editor do Supabase e recarregue o painel."); return; }
+      formRoteiro(null);
+    });
+    const busca = $("#rot-busca");
+    busca.addEventListener("input", () => {
+      estadoRot.busca = busca.value;
+      const pos = busca.selectionStart;
+      mostraRoteiros();
+      const nova = $("#rot-busca"); nova.focus(); try { nova.setSelectionRange(pos, pos); } catch (e){ /* ok */ }
+    });
+    $("#rot-estudar").addEventListener("click", async () => {
+      const p = promptEstudo();
+      if (!p){ avisa("erro", "🧠 Ainda não tem roteiros de outras creators com transcrição. Transcreva alguns marcando \"De outra pessoa\" e tenta de novo."); return; }
+      const ok = await copiaTexto(p.texto);
+      if (ok){ avisa("ok", "🧠 Prompt copiado com os " + p.n + " roteiros mais recentes de outras creators. Abra o Claude, cole numa conversa nova e envie."); toast("🧠 Prompt copiado!"); }
+      else avisa("erro", "Não consegui copiar sozinha. Tente de novo pelo Chrome.");
+    });
+
+    raiz.addEventListener("click", async (e) => {
+      const alvo = e.target.closest("button, a");
+      if (!alvo || !raiz.contains(alvo)) return;
+      const d = alvo.dataset;
+      if (d.deQuem){ estadoRot.deQuem = d.deQuem; $$("[data-de-quem]", raiz).forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.deQuem === d.deQuem))); return; }
+      if (d.filtroRot){ estadoRot.filtro = d.filtroRot; mostraRoteiros(); return; }
+      if (d.avisoAcao != null){ const a = estadoRot.aviso && estadoRot.aviso.acoes[num(d.avisoAcao)]; if (a) a.fn(); return; }
+      if ("trocarChave" in d){ estadoRot.editandoChave = true; desenhaChave(); const c = $("#rot-chave-campo"); if (c) c.focus(); return; }
+      if ("cancelarChave" in d){ estadoRot.editandoChave = false; desenhaChave(); return; }
+      if ("salvarChave" in d){ salvaChave(); return; }
+      if (d.ver){ estadoRot.abertos.add(d.ver); mostraRoteiros(); return; }
+      if (d.fecharVideo){ estadoRot.abertos.delete(d.fecharVideo); mostraRoteiros(); return; }
+      if (d.editarRot){ abreRoteiro(d.editarRot); return; }
+      if (d.tentar){ tentarDeNovo(d.tentar); return; }
+      if (d.copiar){
+        const r = dados.roteiros.find((x) => x.id === d.copiar);
+        if (!r) return;
+        const original = alvo.textContent;
+        const ok = await copiaTexto(texto(r.transcricao));
+        alvo.textContent = ok ? "copiado ✓" : "não consegui copiar";
+        setTimeout(() => { alvo.textContent = original; }, 1800);
+        return;
+      }
+      if (d.apagarRot){
+        const r = dados.roteiros.find((x) => x.id === d.apagarRot);
+        if (!r || !confirm('Apagar "' + (r.titulo || "Sem título") + '" da biblioteca? Isso não tem volta.')) return;
+        if (await apagar("roteiros", r.id)){ toast("🗑️ Roteiro apagado."); mostraRoteiros(); }
+      }
+    });
+    raiz.addEventListener("keydown", (e) => {
+      if (e.target && e.target.id === "rot-chave-campo" && e.key === "Enter"){ e.preventDefault(); salvaChave(); }
+    });
+  }
+
   /* ---------------------------------------------------------
-     10. COMEÇAR
+     11. COMEÇAR
      --------------------------------------------------------- */
   trocaAba();          // mostra a aba já (vazia) enquanto carrega
   area.innerHTML = '<p class="carregando">Carregando seus dados...</p>';
